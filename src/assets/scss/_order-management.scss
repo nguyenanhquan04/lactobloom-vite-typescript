@@ -1,0 +1,47 @@
+.order-management-container {
+    padding: 20px;
+  }
+  
+  .order-management-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .order-management-add-button {
+    margin-left: 10px;
+  }
+  
+  .order-management-table-container {
+    margin-top: 20px;
+  }
+  
+  .order-management-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .order-management-table th,
+  .order-management-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .order-management-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .order-management-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 40px;
+  }
+  
+  .order-management-pagination {
+    margin-top: 20px;
+  }
+  

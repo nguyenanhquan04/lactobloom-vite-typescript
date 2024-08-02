@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "image": "/assets/img/icon-img/support-1.png",
+    "title": "Miễn phí vận chuyển",
+    "subtitle": "Miễn phí vận chuyển với mọi đơn hàng"
+  },
+  {
+    "id": 2,
+    "image": "/assets/img/icon-img/support-2.png",
+    "title": "Hỗ trợ 24/7",
+    "subtitle": "Hỗ trợ khách hàng 24/7"
+  },
+  {
+    "id": 3,
+    "image": "/assets/img/icon-img/support-3.png",
+    "title": "Hoàn tiền",
+    "subtitle": "Chính sách hoàn tiền trong 30 ngày nếu có vấn đề với sản phẩm"
+  },
+  {
+    "id": 4,
+    "image": "/assets/img/icon-img/support-4.png",
+    "title": "Ưu đãi giảm giá",
+    "subtitle": "Ưu đãi giảm giá đặc biệt cho thành viên"
+  }
+]

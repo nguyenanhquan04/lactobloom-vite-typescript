@@ -1,0 +1,342 @@
+/*---- 17. Sidebar style  ------*/
+
+.sidebar-style {
+  @media #{$lg-layout} {
+    &.mr-30 {
+      margin-right: 0;
+    }
+  }
+  @media #{$md-layout} {
+    margin-top: 30px;
+    &.mr-30 {
+      margin-right: 0;
+    }
+  }
+  @media #{$xs-layout} {
+    margin-top: 30px;
+    &.mr-30 {
+      margin-right: 0;
+    }
+  }
+  @media #{$lg-layout} {
+    &.ml-30 {
+      margin-left: 0;
+    }
+  }
+  @media #{$md-layout} {
+    margin-top: 30px;
+    &.ml-30 {
+      margin-left: 0;
+    }
+  }
+  @media #{$xs-layout} {
+    margin-top: 30px;
+    &.ml-30 {
+      margin-left: 0;
+    }
+  }
+}
+
+.sidebar-widget {
+  h4.pro-sidebar-title {
+    font-size: 16px;
+    font-weight: 500;
+
+    margin: 0;
+
+    color: #333;
+  }
+  .sidebar-widget-list {
+    ul {
+      li {
+        position: relative;
+
+        align-items: center;
+
+        padding: 0 0 15px;
+        &:last-child {
+          padding: 0 0 0;
+        }
+        .sidebar-widget-list-left {
+          input {
+            position: absolute;
+            z-index: 999;
+
+            width: auto;
+
+            cursor: pointer;
+
+            opacity: 0;
+            &:checked ~ .checkmark {
+              border: 2px solid #fa6bff;
+              background-color: #fa6bff;
+            }
+            &:checked ~ .checkmark::after {
+              display: block;
+            }
+          }
+          .checkmark {
+            position: absolute;
+            left: 0;
+
+            width: 15px;
+            height: 15px;
+
+            border: 2px solid #888888;
+            border-radius: 3px;
+            background-color: #fff;
+            &::after {
+              position: absolute;
+
+              display: none;
+
+              content: "";
+            }
+            &::after {
+              top: 0;
+              left: 3px;
+
+              width: 5px;
+              height: 8px;
+
+              transform: rotate(45deg);
+
+              border: solid white;
+              border-width: 0 2px 2px 0;
+              border-top-width: medium;
+              border-right-width: medium;
+              border-bottom-width: medium;
+              border-left-width: medium;
+            }
+          }
+        }
+        a,
+        button {
+          position: relative;
+
+          display: block;
+
+          width: 100%;
+          padding: 0;
+          padding-left: 30px;
+
+          text-align: left;
+          text-transform: capitalize;
+
+          border: none;
+          background: none;
+          span {
+            font-weight: 500;
+            line-height: 20px;
+
+            position: absolute;
+            top: 50%;
+            right: 0;
+
+            display: inline-block;
+
+            width: 30px;
+            height: 20px;
+
+            transition: all 0.3s ease 0s;
+            transform: translateY(-50%);
+            text-align: center;
+
+            color: #9a9a9a;
+            border-radius: 50px;
+            background-color: #eeeeee;
+          }
+          &:hover,
+          &.active {
+            span {
+              color: #fff;
+              background-color: $theme-color;
+            }
+            & > .checkmark {
+              visibility: visible;
+              border-color: $theme-color;
+              background-color: $theme-color;
+              &:after {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &--blog {
+      ul {
+        li {
+          .sidebar-widget-list-left {
+            .checkmark {
+              top: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .sidebar-widget-tag {
+    ul {
+      li {
+        display: inline-block;
+
+        margin: 0 10px 15px 0;
+        @media #{$lg-layout} {
+          margin: 0 5px 15px 0;
+        }
+        a,
+        button {
+          line-height: 1;
+
+          display: inline-block;
+
+          padding: 9px 17px 12px;
+
+          text-transform: capitalize;
+
+          color: #424242;
+          border: none;
+          border-radius: 50px;
+          background: none;
+          background-color: #f6f6f6;
+          @media #{$lg-layout} {
+            padding: 9px 13px 12px;
+          }
+          &:hover,
+          &.active {
+            color: #fff;
+            background-color: $theme-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+.pro-sidebar-search {
+  .pro-sidebar-search-form {
+    position: relative;
+    input {
+      border-radius: 50px;
+      font-size: 14px;
+
+      height: 43px;
+      padding: 2px 55px 2px 18px;
+
+      color: #000;
+      border: 1px solid #e6e6e6;
+      background: transparent none repeat scroll 0 0;
+    }
+    button {
+      font-size: 20px;
+
+      position: absolute;
+      top: 50%;
+      right: 0;
+
+      padding: 0 15px;
+
+      cursor: pointer;
+      transition: all 0.3s ease 0s;
+      transform: translateY(-50%);
+
+      color: #000;
+      border-width: medium medium medium 1px;
+      border-style: none none none solid;
+      border-color: #a1a5aa;
+      border-image: none;
+      background: transparent none repeat scroll 0 0;
+      &:hover {
+        color: $theme-color;
+      }
+    }
+  }
+}
+
+.single-sidebar-blog {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin: 0 0 20px;
+  padding: 0 0 20px;
+
+  border-bottom: 1px solid #dee0e4;
+  &:last-child {
+    border-bottom: none;
+  }
+  .sidebar-blog-img {
+    flex: 0 0 70px;
+
+    margin: 0 20px 0 0;
+    @media #{$lg-layout} {
+      margin: 0 8px 0 0;
+    }
+    img {
+      width: 100%;
+    }
+  }
+  .sidebar-blog-content {
+    span {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1;
+
+      display: block;
+
+      letter-spacing: 1px;
+      text-transform: uppercase;
+
+      color: #333;
+    }
+    h4 {
+      font-size: 14px;
+
+      margin: 5px 0 0;
+    }
+  }
+}
+
+/* Add this CSS to your stylesheet */
+
+.pro-sidebar-title {
+  font-size: 1.5em; /* Increase font size */
+  font-weight: bold; /* Make text bold */
+  color: #333; /* Set text color */
+  margin-bottom: 20px; /* Add space below the heading */
+  padding-bottom: 10px; /* Add space below the heading */
+  border-bottom: 2px solid #ddd; /* Add a bottom border */
+  text-transform: uppercase; /* Convert text to uppercase */
+}
+
+.sidebar-widget {
+  padding: 20px; /* Add padding inside the widget */
+  margin-bottom: 30px; /* Add space below each widget */
+  background-color: #f9f9f9; /* Light background color */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.sidebar-widget h3 {
+  margin-top: 0; /* Remove default top margin */
+}
+
+.all button, .category button, .brand button {
+  width: 100%; /* Make buttons full width */
+  text-align: left; /* Align text to the left */
+  padding: 10px 15px; /* Add padding inside buttons */
+  background: none; /* Remove default background */
+  border: none; /* Remove default border */
+  cursor: pointer; /* Change cursor on hover */
+  transition: background-color 0.3s; /* Smooth background color change */
+}
+
+.all button.active, .category button.active, .brand button.active {
+  background-color: #e0e0e0; /* Different background for active state */
+}
+
+.all button:hover, .category button:hover, .brand button:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+}

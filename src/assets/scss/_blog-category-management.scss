@@ -1,0 +1,55 @@
+.blog-category-management-container {
+    padding: 20px;
+  }
+  
+  .blog-category-management-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .blog-category-management-add-button {
+    margin-left: 10px;
+  }
+  
+  .blog-category-management-id-cell {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+  }
+  
+  .blog-category-management-table-container {
+    margin-top: 20px;
+  }
+  
+  .blog-category-management-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .blog-category-management-table th,
+  .blog-category-management-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .blog-category-management-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .blog-category-management-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 40px;
+  }
+  
+  .blog-category-management-pagination {
+    margin-top: 20px;
+  }
+  

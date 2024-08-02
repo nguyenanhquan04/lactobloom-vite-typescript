@@ -1,0 +1,48 @@
+.voucher-management-container {
+    padding: 20px;
+  }
+  
+  .voucher-management-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .voucher-management-add-button {
+    margin-left: 10px;
+  }
+  
+  .voucher-management-role-select {
+    min-width: 200px;
+  }
+  
+  .voucher-management-table-container {
+    margin-top: 20px;
+  }
+  
+  .voucher-management-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .voucher-management-table th,
+  .voucher-management-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .voucher-management-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .voucher-management-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .voucher-management-pagination {
+    margin-top: 20px;
+  }
+  

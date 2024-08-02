@@ -1,0 +1,48 @@
+.product-management-container {
+    padding: 20px;
+  }
+  
+  .product-management-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .product-management-add-button {
+    margin-left: 10px;
+  }
+  
+  .product-management-brand-select {
+    min-width: 200px;
+  }
+  
+  .product-management-table-container {
+    margin-top: 20px;
+  }
+  
+  .product-management-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .product-management-table th,
+  .product-management-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .product-management-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .product-management-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .product-management-pagination {
+    margin-top: 20px;
+  }
+  

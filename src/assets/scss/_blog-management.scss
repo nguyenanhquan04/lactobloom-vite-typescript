@@ -1,0 +1,48 @@
+.blog-management-container {
+    padding: 20px;
+  }
+  
+  .blog-management-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .blog-management-add-button {
+    margin-left: 10px;
+  }
+  
+  .blog-management-category-select {
+    min-width: 200px;
+  }
+  
+  .blog-management-table-container {
+    margin-top: 20px;
+  }
+  
+  .blog-management-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .blog-management-table th,
+  .blog-management-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .blog-management-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .blog-management-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .blog-management-pagination {
+    margin-top: 20px;
+  }
+  

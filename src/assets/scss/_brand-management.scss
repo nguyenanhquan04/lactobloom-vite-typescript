@@ -1,0 +1,63 @@
+.brand-management-container {
+    padding: 20px;
+  }
+  
+  .brand-management-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .brand-management-add-button {
+    margin-left: 10px;
+  }
+  
+  .brand-management-table-container {
+    margin-top: 20px;
+  }
+  
+  .brand-management-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .brand-management-table th,
+  .brand-management-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .brand-management-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .brand-management-id-cell {
+    width: 60px; /* Set the width of the TableCell */
+    height: 40px; /* Set the height of the TableCell */
+    text-align: center; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
+    padding: 0; /* Remove padding to fit the size */
+  }
+  
+  .brand-management-actions {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Center the buttons vertically */
+    width: 120px; /* Set the width of the column */
+    height: 40px; /* Set the height of the column */
+  }
+  
+  .brand-management-table .actions-cell {
+    width: 120px; /* Set the width of the TableCell */
+    height: 40px; /* Set the height of the TableCell */
+    padding: 0; /* Remove padding to fit the size */
+    text-align: center; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
+  }  
+  
+  .brand-management-pagination {
+    margin-top: 20px;
+  }
+  

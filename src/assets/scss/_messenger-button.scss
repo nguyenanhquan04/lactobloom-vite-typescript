@@ -1,0 +1,31 @@
+.messenger-button {
+    position: fixed;
+    bottom: 60px; /* Đảm bảo nút Messenger nằm phía trên nút ScrollToTop */
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    z-index: 1001; /* Z-index cao hơn để hiển thị trên nút ScrollToTop */
+  }
+  
+  .messenger-button img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; /* Thêm border-radius để làm tròn nút */
+  }
+  
+  /* Hiệu ứng rung nhẹ */
+  @keyframes shake {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-2px, -2px); }
+    50% { transform: translate(2px, 2px); }
+    75% { transform: translate(-2px, 2px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  .messenger-button:hover {
+    animation: shake 0.3s ease-in-out; /* Áp dụng hiệu ứng rung nhẹ */
+    transform-origin: center; /* Đặt điểm xoay ở giữa nút */
+    box-shadow: none; /* Xóa bỏ box-shadow nếu có */
+  }
+  
