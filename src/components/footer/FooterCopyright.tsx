@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 
 interface FooterCopyrightProps {
-  footerLogo: string;
-  spaceBottomClass: string;
-  colorClass: string;
+  footerLogo?: string;
+  spaceBottomClass?: string;
+  colorClass?: string;
 }
 
 const FooterCopyright: React.FC<FooterCopyrightProps> = ({ footerLogo, spaceBottomClass, colorClass }) => {

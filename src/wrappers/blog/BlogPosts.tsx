@@ -4,21 +4,34 @@ import { getAllBlogs } from "../../utils/BlogService";
 import { getBlogReviewByBlogId } from "../../utils/BlogReviewService";
 import BlogPagination from "./BlogPagination"; // Adjust the import path as needed
 
-const BlogPosts = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [comments, setComments] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [blogsPerPage] = useState(4);
+interface Blog {
+  blogId: number;
+  imageUrl: string;
+  title: string;
+  publishDate: string;
+  shortDescription: string;
+  blogCategoryName: string;
+}
+
+interface BlogReview {
+  length: number;
+}
+
+const BlogPosts: React.FC = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [comments, setComments] = useState<{ [key: number]: number }>({});
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [blogsPerPage] = useState<number>(4);
 
   useEffect(() => {
     getAllBlogs()
       .then(response => {
-        const data = response.data;
+        const data: Blog[] = response.data;
         setBlogs(data);
         data.forEach(blog => {
           getBlogReviewByBlogId(blog.blogId)
             .then(response => {
-              const commentsData = response.data;
+              const commentsData: BlogReview = response.data;
               setComments(prevComments => ({
                 ...prevComments,
                 [blog.blogId]: commentsData.length
@@ -43,7 +56,7 @@ const BlogPosts = () => {
         <div className="col-lg-6 col-md-6 col-sm-12" key={blog.blogId}>
           <div className="blog-wrap-2 mb-30">
             <div className="blog-img-2">
-              <Link to={`${import.meta.env.VITE_PUBLIC_URL}/blog-details/${blog.blogId}`}>
+              <Link to={`/blog-details/${blog.blogId}`}>
                 <img
                   src={blog.imageUrl}
                   alt={blog.title}
@@ -55,31 +68,27 @@ const BlogPosts = () => {
                 <ul>
                   <li>{new Date(blog.publishDate).toLocaleDateString()}</li>
                   <li>
-                    <Link to={`${import.meta.env.VITE_PUBLIC_URL}/blog-details/${blog.blogId}`}>
+                    <Link to={`/blog-details/${blog.blogId}`}>
                       {comments[blog.blogId] || 0} <i className="fa fa-comments-o" />
                     </Link>
                   </li>
-                  
                 </ul>
-                
               </div>
-              
               <h4>
-                <Link to={`${import.meta.env.VITE_PUBLIC_URL}/blog-details/${blog.blogId}`}>
+                <Link to={`/blog-details/${blog.blogId}`}>
                   {blog.title}
                 </Link>
               </h4>
               <h5>
-                Category:{" "}
-                  <Link>
-                      {blog.blogCategoryName}
-                    </Link>
-                  </h5>
-              
+                Danh mục:{" "}
+                <Link to="#">
+                  {blog.blogCategoryName}
+                </Link>
+              </h5>
               <p>{blog.shortDescription}</p>
               <div className="blog-share-comment">
                 <div className="blog-btn-2">
-                  <Link to={`${import.meta.env.VITE_PUBLIC_URL}/blog-details/${blog.blogId}`}>
+                  <Link to={`/blog-details/${blog.blogId}`}>
                     read more
                   </Link>
                 </div>

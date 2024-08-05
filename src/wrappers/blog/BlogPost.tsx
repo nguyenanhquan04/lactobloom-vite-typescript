@@ -38,7 +38,7 @@ const BlogPost = ({ blog }) => {
             <ul>
               <li>{blog.publishDate && new Date(blog.publishDate).toLocaleDateString()}</li>
               <li>
-                <Link>
+                <Link to ="#">
                   {comments[blog.blogId] || 0} <i className="fa fa-comments-o" />
                 </Link>
               </li>
@@ -60,7 +60,7 @@ const BlogPost = ({ blog }) => {
               <div className="dec-img mb-50">
                 <img
                   alt=""
-                  src={import.meta.env.VITE_PUBLIC_URL + image}
+                  src={image}
                 />
               </div>
             </div>
@@ -73,7 +73,7 @@ const BlogPost = ({ blog }) => {
           <ul>
             {blog.tags && blog.tags.map((tag, index) => (
               <li key={index}>
-                <Link to={import.meta.env.VITE_PUBLIC_URL + "/blog-standard"}>
+                <Link to={"/blog-standard"}>
                   {tag} {index < blog.tags.length - 1 && ','}
                 </Link>
               </li>

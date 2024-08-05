@@ -1,9 +1,14 @@
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx";
 import bannerData from "../../data/banner/banner-one.json";
-import BannerOneSingle from "../../components/banner/BannerOneSingle.jsx";
+import BannerOneSingle from "../../components/banner/BannerOneSingle.js";
 
-const BannerOne = ({ spaceTopClass, spaceBottomClass }) => {
+interface BannerOneProps {
+  spaceBottomClass?: string;
+  spaceTopClass?: string;
+};
+
+const BannerOne: React.FC<BannerOneProps> = ({ spaceTopClass, spaceBottomClass }) => {
   return (
     <div className={clsx("banner-area", spaceTopClass, spaceBottomClass)}>
       <div className="container">
@@ -20,11 +25,6 @@ const BannerOne = ({ spaceTopClass, spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-BannerOne.propTypes = {
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default BannerOne;

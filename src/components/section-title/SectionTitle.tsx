@@ -2,12 +2,12 @@ import clsx from "clsx";
 import React from "react";
 
 interface SectionTitleProps {
-  borderClass: string;
-  positionClass: string;
-  spaceClass: string;
-  subtitleText: string;
-  subtitleColorClass: string;
-  titleText: string;
+  borderClass?: string;
+  positionClass?: string;
+  spaceClass?: string;
+  subtitleText?: string;
+  subtitleColorClass?: string;
+  titleText?: string;
 };
 
 const SectionTitle: React.FC<SectionTitleProps> = ({

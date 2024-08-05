@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteBlogReview, getBlogReviewByBlogId, saveBlogReview, updateBlogReview } from "../../utils/BlogReviewService";
-
 import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,10 +8,10 @@ import { faEllipsisV, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-ico
 
 const BlogComment = () => {
   const { blogId } = useParams();
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [newReview, setNewReview] = useState({ comment: "" });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any | null>(null);
   const [actionCommentId, setActionCommentId] = useState(null);
   const [authEmail, setAuthEmail] = useState(null);
   const [editCommentId, setEditCommentId] = useState(null);
@@ -21,7 +20,7 @@ const BlogComment = () => {
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode(token) as any;
       setAuthEmail(decodedToken.sub);
     }
   }, []);
@@ -139,7 +138,7 @@ const BlogComment = () => {
         {comments.map((comment) => (
           <div key={comment.reviewId} className="single-comment-wrapper mt-35">
             <div className="blog-comment-img">
-              <img src={import.meta.env.VITE_PUBLIC_URL + "/assets/img/user.jpg"} alt="" />
+              <img src={"/assets/img/user.jpg"} alt="" />
             </div>
             <div className="blog-comment-content">
               <div className="comment-header">
@@ -200,7 +199,7 @@ const BlogComment = () => {
             </div>
           </form>
         ) : (
-          <p className="login-required">You must login to submit a comment.</p>
+          <p className="login-required">Phải đăng nhập để bình luận.</p>
         )}
       </div>
     </Fragment>

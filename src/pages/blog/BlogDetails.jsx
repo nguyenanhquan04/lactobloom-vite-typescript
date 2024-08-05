@@ -64,7 +64,7 @@ const BlogDetailsStandard = () => {
         <Breadcrumb 
           pages={[
             { label: "Trang chủ", path: import.meta.env.VITE_PUBLIC_URL + "/" },
-            { label: "Blog Post", path: import.meta.env.VITE_PUBLIC_URL + "/blog-details/" + blogId }
+            { label: "Bài Viết", path: import.meta.env.VITE_PUBLIC_URL + "/blog-details/" + blogId }
           ]} 
         />
         <div className="blog-area pt-100 pb-100">

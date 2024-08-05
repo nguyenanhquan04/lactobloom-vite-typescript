@@ -4,9 +4,10 @@ import React from "react";
 
 interface BannerOneSingleProps {
     data: {
+        id: number;
         title: string;
         subtitle: string;
-        price: number;
+        price: string;
         link: string;
         image: string;
     };

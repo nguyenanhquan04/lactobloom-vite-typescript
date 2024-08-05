@@ -7,11 +7,11 @@ import {jwtDecode} from 'jwt-decode'; // Import jwtDecode
 import Cookies from 'js-cookie'; // Import js-cookie
 
 interface LayoutOneProps {
-  children: React.ReactNode;
-  headerContainerClass: string;
-  headerPaddingClass: string;
-  headerPositionClass: string;
-  headerTop: string;
+  children?: React.ReactNode;
+  headerContainerClass?: string;
+  headerPaddingClass?: string;
+  headerPositionClass?: string;
+  headerTop?: string;
 };
 
 interface DecodedToken {

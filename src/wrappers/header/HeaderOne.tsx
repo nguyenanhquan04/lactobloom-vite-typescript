@@ -10,11 +10,11 @@ import MobileMenu from "../../components/header/MobileMenu";
 
 interface HeaderOneProps {
   borderStyle?: string;
-  headerPaddingClass: string;
-  headerPositionClass: string;
+  headerPaddingClass?: string;
+  headerPositionClass?: string;
   headerBgClass?: string;
-  layout: string;
-  top: string;
+  layout?: string;
+  top?: string;
 };
 
 interface DecodedToken {

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import clsx from "clsx";
 import BlogFeaturedSingle from "../../components/blog-featured/BlogFeaturedSingle";
 import SectionTitle from "../../components/section-title/SectionTitle";
 import { getAllBlogs } from "../../utils/BlogService";
 
-const BlogFeatured = ({ spaceTopClass, spaceBottomClass }) => {
-  const [blogPosts, setBlogPosts] = useState([]);
+interface BlogFeaturedProps {
+  spaceBottomClass: string;
+  spaceTopClass: string;
+};
+
+const BlogFeatured: React.FC<BlogFeaturedProps> = ({ spaceTopClass, spaceBottomClass }) => {
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch all blogs
@@ -14,7 +18,7 @@ const BlogFeatured = ({ spaceTopClass, spaceBottomClass }) => {
       .then(response => {
         const data = response.data; // Accessing data directly from Axios response
         // Sort the blogs by publish date in descending order
-        const sortedBlogs = data.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+        const sortedBlogs = data.sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
         // Get the latest 3 blogs
         setBlogPosts(sortedBlogs.slice(0, 3));
       })
@@ -39,11 +43,6 @@ const BlogFeatured = ({ spaceTopClass, spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-BlogFeatured.propTypes = {
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default BlogFeatured;

@@ -3,9 +3,21 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import FooterCopyright from "../../components/footer/FooterCopyright";
 import FooterNewsletter from "../../components/footer/FooterNewsletter";
+import React from "react";
+
+interface FooterOneProps {
+  backgroundColorClass?: string;
+  containerClass?: string;
+  extraFooterClass?: string;
+  sideMenu?: string;
+  spaceBottomClass?: string;
+  spaceTopClass?: string;
+  spaceLeftClass?: string;
+  spaceRightClass?: string;
+};
 
 
-const FooterOne = ({
+const FooterOne: React.FC<FooterOneProps> = ({
   backgroundColorClass,
   spaceTopClass,
   spaceBottomClass,
@@ -42,10 +54,10 @@ const FooterOne = ({
               <div className="footer-list">
                 <ul>
                   <li>
-                    <Link to={import.meta.env.VITE_PUBLIC_URL + "/about"}>Về chúng tôi</Link>
+                    <Link to={"/about"}>Về chúng tôi</Link>
                   </li>
                   <li>
-                    <Link to={import.meta.env.VITE_PUBLIC_URL + "/contact"}>
+                    <Link to={"/contact"}>
                       Liên hệ
                     </Link>
                   </li>
@@ -133,17 +145,6 @@ const FooterOne = ({
       </div>
     </footer>
   );
-};
-
-FooterOne.propTypes = {
-  backgroundColorClass: PropTypes.string,
-  containerClass: PropTypes.string,
-  extraFooterClass: PropTypes.string,
-  sideMenu: PropTypes.bool,
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string,
-  spaceLeftClass: PropTypes.string,
-  spaceRightClass: PropTypes.string
 };
 
 export default FooterOne;

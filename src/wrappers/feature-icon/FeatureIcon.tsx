@@ -2,8 +2,14 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import featureIconData from "../../data/feature-icons/feature-icon.json";
 import FeatureIconSingle from "../../components/feature-icon/FeatureIconSingle";
+import React from "react";
 
-const FeatureIcon = ({ spaceTopClass, spaceBottomClass }) => {
+interface FeatureIconProps{
+  spaceBottomClass: string;
+  spaceTopClass: string;
+};
+
+const FeatureIcon: React.FC<FeatureIconProps> = ({ spaceTopClass, spaceBottomClass }) => {
   return (
     <div className={clsx("support-area", spaceTopClass, spaceBottomClass)}>
       <div className="container">
@@ -19,11 +25,6 @@ const FeatureIcon = ({ spaceTopClass, spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-FeatureIcon.propTypes = {
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default FeatureIcon;

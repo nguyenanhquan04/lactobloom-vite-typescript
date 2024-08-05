@@ -1,8 +1,15 @@
-import PropTypes from "prop-types";
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { Link } from "react-router-dom";
+import React from "react";
 
-const BreadcrumbWrap = ({pages}) => {
+interface BreadcrumbWrapProps {
+  pages: {
+    label: string;
+    path: string;
+  }[];
+}
+
+const BreadcrumbWrap: React.FC<BreadcrumbWrapProps> = ({pages}) => {
   return (
     <div className="breadcrumb-area pt-35 pb-35 bg-gray-3">
       <div className="container">
@@ -21,12 +28,5 @@ const BreadcrumbWrap = ({pages}) => {
     </div>
   );
 };
-
-BreadcrumbWrap.propTypes = {
-  pages: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired
-  })).isRequired
-}
 
 export default BreadcrumbWrap;
