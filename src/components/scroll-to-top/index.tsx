@@ -1,4 +1,5 @@
 import useScrollTop from "../../hooks/use-scroll-top";
+import React from "react";
 
 const ScrollToTop = () => {
     const { stick, onClickHandler } = useScrollTop();

@@ -1,28 +1,42 @@
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllCategories } from "../../utils/CategoryService";
 import { getAllBrands } from "../../utils/BrandService";
 import { setActiveSort } from "../../helpers/product";
 
-const ShopCategoryAndBrand = ({
+interface Brand {
+  brandId: number;
+  brandName: string;
+}
+
+interface Category {
+  categoryId: number;
+  categoryName: string;
+}
+
+interface ShopCategoryAndBrandProps {
+  onBrandSelect: (brandId: number | null) => void;
+  onCategorySelect: (categoryId: number | null) => void;
+}
+
+const ShopCategoryAndBrand: React.FC<ShopCategoryAndBrandProps> = ({
   onCategorySelect,
   onBrandSelect,
 }) => {
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingBrands, setLoadingBrands] = useState(true);
-  const [errorCategories, setErrorCategories] = useState(null);
-  const [errorBrands, setErrorBrands] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [errorCategories, setErrorCategories] = useState<string | null>(null);
+  const [errorBrands, setErrorBrands] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await getAllCategories();
         setCategories(response.data);
-      } catch (error) {
+      } catch (error: any) {
         setErrorCategories(error.message);
       } finally {
         setLoadingCategories(false);
@@ -33,7 +47,7 @@ const ShopCategoryAndBrand = ({
       try {
         const response = await getAllBrands();
         setBrands(response.data);
-      } catch (error) {
+      } catch (error: any) {
         setErrorBrands(error.message);
       } finally {
         setLoadingBrands(false);
@@ -44,36 +58,36 @@ const ShopCategoryAndBrand = ({
     fetchBrands();
   }, []);
 
-  const handleAllCategories = (e) => {
+  const handleAllCategories = (e: React.MouseEvent<HTMLButtonElement>) => {
     setSelectedCategories([]);
-    onCategorySelect([]);
+    onCategorySelect(null);
     setActiveSort(e, "category");
   };
 
-  const handleAllBrands = (e) => {
+  const handleAllBrands = (e: React.MouseEvent<HTMLButtonElement>) => {
     setSelectedBrands([]);
-    onBrandSelect([]);
+    onBrandSelect(null);
     setActiveSort(e, "brand");
   };
 
-  const handleCategorySelect = (categoryId, e) => {
+  const handleCategorySelect = (categoryId: number, e: React.MouseEvent<HTMLButtonElement>) => {
     if (categoryId === null) {
       setSelectedCategories([]);
-      onCategorySelect([]);
+      onCategorySelect(null);
     } else {
       setSelectedCategories([categoryId]);
-      onCategorySelect([categoryId]);
+      onCategorySelect(categoryId);
     }
     setActiveSort(e, "category");
   };
 
-  const handleBrandSelect = (brandId, e) => {
+  const handleBrandSelect = (brandId: number, e: React.MouseEvent<HTMLButtonElement>) => {
     if (brandId === null) {
       setSelectedBrands([]);
-      onBrandSelect([]);
+      onBrandSelect(null);
     } else {
       setSelectedBrands([brandId]);
-      onBrandSelect([brandId]);
+      onBrandSelect(brandId);
     }
     setActiveSort(e, "brand");
   };
@@ -165,11 +179,6 @@ const ShopCategoryAndBrand = ({
       </div>
     </div>
   );
-};
-
-ShopCategoryAndBrand.propTypes = {
-  onCategorySelect: PropTypes.func.isRequired,
-  onBrandSelect: PropTypes.func.isRequired,
 };
 
 export default ShopCategoryAndBrand;

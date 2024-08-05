@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import React from "react";
 
 import {
   getIndividualCategories,
@@ -8,7 +9,12 @@ import {
   setActiveSort
 } from "../../helpers/product";
 
-const ShopTopFilter = ({ products, getSortParams }) => {
+interface ShopTopFilterProps {
+  getSortParams: any;
+  products: any[];
+}
+
+const ShopTopFilter: React.FC<ShopTopFilterProps> = ({ products, getSortParams }) => {
   const uniqueCategories = getIndividualCategories(products);
   const uniqueColors = getIndividualColors(products);
   const uniqueSizes = getProductsIndividualSizes(products);
@@ -130,86 +136,4 @@ const ShopTopFilter = ({ products, getSortParams }) => {
   );
 };
 
-ShopTopFilter.propTypes = {
-  getSortParams: PropTypes.func,
-  products: PropTypes.array
-};
-
 export default ShopTopFilter;
-
-
-// import PropTypes from "prop-types";
-// import { getIndividualCategories, getIndividualBrands, setActiveSort } from "../../helpers/product";
-
-// const ShopTopFilter = ({ products, getSortParams }) => {
-//   const uniqueCategories = getIndividualCategories(products);
-//   const uniqueBrands = getIndividualBrands(products);
-
-//   return (
-//     <div className="product-filter-wrapper" id="product-filter-wrapper">
-//       <div className="product-filter-wrapper__inner">
-//         <div className="row">
-//           {/* Product Filter */}
-//           <div className="col-md-6 col-sm-12 col-xs-12 mb-30">
-//             <div className="product-filter">
-//               <h5>Categories</h5>
-//               {uniqueCategories.length ? (
-//                 <ul>
-//                   {uniqueCategories.map((category, key) => {
-//                     return (
-//                       <li key={key}>
-//                         <button
-//                           onClick={e => {
-//                             getSortParams("category", category);
-//                             setActiveSort(e);
-//                           }}
-//                         >
-//                           {category}
-//                         </button>
-//                       </li>
-//                     );
-//                   })}
-//                 </ul>
-//               ) : (
-//                 "No categories found"
-//               )}
-//             </div>
-//           </div>
-//           {/* Product Filter */}
-//           <div className="col-md-6 col-sm-12 col-xs-12 mb-30">
-//             <div className="product-filter product-filter--brand">
-//               <h5>Brands</h5>
-//               {uniqueBrands.length ? (
-//                 <ul>
-//                   {uniqueBrands.map((brand, key) => {
-//                     return (
-//                       <li key={key}>
-//                         <button
-//                           onClick={e => {
-//                             getSortParams("brand", brand);
-//                             setActiveSort(e);
-//                           }}
-//                         >
-//                           {brand}
-//                         </button>
-//                       </li>
-//                     );
-//                   })}
-//                 </ul>
-//               ) : (
-//                 "No brands found"
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// ShopTopFilter.propTypes = {
-//   getSortParams: PropTypes.func.isRequired,
-//   products: PropTypes.array.isRequired
-// };
-
-// export default ShopTopFilter;

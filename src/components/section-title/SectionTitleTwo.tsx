@@ -1,7 +1,14 @@
-import PropTypes from "prop-types";
-import clsx from "clsx"
+import clsx from "clsx";
+import React from "react";
 
-const SectionTitleTwo = ({
+interface SectionTitleTwoProps {
+  positionClass: string;
+  spaceClass: string;
+  subTitleText: string;
+  titleText: string;
+};
+
+const SectionTitleTwo: React.FC<SectionTitleTwoProps> = ({
   titleText,
   subTitleText,
   positionClass,
@@ -13,13 +20,6 @@ const SectionTitleTwo = ({
       <p>{subTitleText}</p>
     </div>
   );
-};
-
-SectionTitleTwo.propTypes = {
-  positionClass: PropTypes.string,
-  spaceClass: PropTypes.string,
-  subTitleText: PropTypes.string,
-  titleText: PropTypes.string
 };
 
 export default SectionTitleTwo;

@@ -1,12 +1,21 @@
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllBrands } from "../../utils/BrandService";
 import { setActiveSort } from "../../helpers/product";
 
-const ShopBrand = ({ getSortParams, onBrandSelect }) => {
-  const [brands, setBrands] = useState([]);
+interface Brand {
+  brandId: number;
+  brandName: string;
+}
+
+interface ShopBrandProps {
+  getSortParams: (sortType: string, sortValue: string) => void;
+  onBrandSelect: (brandId: number | null) => void;
+}
+
+const ShopBrand: React.FC<ShopBrandProps> = ({ getSortParams, onBrandSelect }) => {
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -23,10 +32,9 @@ const ShopBrand = ({ getSortParams, onBrandSelect }) => {
     fetchBrands();
   }, []);
 
-  const handleBrandSelect = async (brandId) => {
+  const handleBrandSelect = (brandId: number | null) => {
     onBrandSelect(brandId);
   };
-
 
   return (
     <div className="sidebar-widget mt-50">
@@ -56,7 +64,7 @@ const ShopBrand = ({ getSortParams, onBrandSelect }) => {
                 <div className="sidebar-widget-list-left">
                   <button
                     onClick={e => {
-                      handleBrandSelect(brand.brandId)
+                      handleBrandSelect(brand.brandId);
                       setActiveSort(e);
                     }}
                   >
@@ -72,12 +80,6 @@ const ShopBrand = ({ getSortParams, onBrandSelect }) => {
       </div>
     </div>
   );
-};
-
-
-ShopBrand.propTypes = {
-  getSortParams: PropTypes.func,
-  onBrandSelect: PropTypes.func
 };
 
 export default ShopBrand;

@@ -1,12 +1,22 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllCategories } from "../../utils/CategoryService";
 import { setActiveSort } from "../../helpers/product";
 
-const ShopCategories = ({ getSortParams, onCategorySelect }) => {
-  const [categories, setCategories] = useState([]);
+interface Category {
+  categoryId: number;
+  categoryName: string;
+}
+
+interface ShopCategoryProps {
+  getSortParams: (sortType: string, sortValue: string) => void;
+  onCategorySelect: (categoryId: number | null) => void;
+}
+
+const ShopCategories: React.FC<ShopCategoryProps> = ({ getSortParams, onCategorySelect }) => {
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -23,7 +33,7 @@ const ShopCategories = ({ getSortParams, onCategorySelect }) => {
     fetchCategories();
   }, []);
 
-  const handleCategorySelect = async (categoryId) => {
+  const handleCategorySelect = async (categoryId: number | null) => {
     onCategorySelect(categoryId);
   };
 
@@ -71,11 +81,6 @@ const ShopCategories = ({ getSortParams, onCategorySelect }) => {
       </div>
     </div>
   );
-};
-
-ShopCategories.propTypes = {
-  onCategorySelect: PropTypes.func,
-  getSortParams: PropTypes.func
 };
 
 export default ShopCategories;

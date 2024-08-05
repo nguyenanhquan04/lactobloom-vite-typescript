@@ -98,7 +98,7 @@ const Cart: React.FC = () => {
                             <th>Hình Ảnh</th>
                             <th>Tên Sản Phẩm</th>
                             <th>Đơn giá</th>
-                            <th>SL</th>
+                            <th>Số Lượng</th>
                             <th>Thành Tiền</th>
                             <th></th>
                           </tr>
@@ -218,7 +218,7 @@ const Cart: React.FC = () => {
                         <Link to="/shop">Tiếp tục mua hàng</Link>
                       </div>
                       <div className="cart-clear">
-                        <button onClick={() => dispatch(deleteAllFromCart())}>Xóa đơn hàng</button>
+                        <button onClick={() => dispatch(deleteAllFromCart())}>Xóa giỏ hàng</button>
                       </div>
                     </div>
                   </div>

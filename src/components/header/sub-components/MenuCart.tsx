@@ -71,7 +71,7 @@ const MenuCart: React.FC = () => {
                         {item.productName}
                       </Link>
                     </h4>
-                    <h6>Qty: {item.quantity}</h6>
+                    <h6>SL: {item.quantity}</h6>
                     <span>
                       {discountedPrice !== null
                         ? finalDiscountedPrice.toLocaleString("vi-VN") + " VND"

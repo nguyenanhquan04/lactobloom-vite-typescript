@@ -239,15 +239,11 @@ function ProductModal({
                   />
                   <button
                     onClick={() => {
-                      // if ((product.stock <= 0 && product.preOrder && authToken)) {
-                      //   setQuantityCount(quantityCount + 1);
-                      // } else {
                       setQuantityCount(
                         quantityCount < product.stock - productCartQty
                           ? quantityCount + 1
                           : quantityCount
                       );
-                      // }
                     }}
                     className="inc qtybutton"
                   >

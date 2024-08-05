@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
-const StarRating = ({ rating, onRatingChange }) => {
-  const [hoverRating, setHoverRating] = useState(0);
+interface StarRatingProps {
+  rating: number;
+  onRatingChange: (rating: number) => void;
+}
 
-  const handleMouseEnter = (index) => {
+const StarRating: React.FC<StarRatingProps> = ({ rating, onRatingChange }) => {
+  const [hoverRating, setHoverRating] = useState<number>(0);
+
+  const handleMouseEnter = (index: number) => {
     setHoverRating(index);
   };
 
@@ -12,12 +16,12 @@ const StarRating = ({ rating, onRatingChange }) => {
     setHoverRating(0);
   };
 
-  const handleClick = (index) => {
+  const handleClick = (index: number) => {
     onRatingChange(index);
   };
 
   const renderStars = () => {
-    const stars = [];
+    const stars: JSX.Element[] = [];
     for (let i = 1; i <= 5; i++) {
       stars.push(
         <i
@@ -34,11 +38,6 @@ const StarRating = ({ rating, onRatingChange }) => {
   };
 
   return <div className="ratting-star">{renderStars()}</div>;
-};
-
-StarRating.propTypes = {
-  rating: PropTypes.number.isRequired,
-  onRatingChange: PropTypes.func.isRequired,
 };
 
 export default StarRating;

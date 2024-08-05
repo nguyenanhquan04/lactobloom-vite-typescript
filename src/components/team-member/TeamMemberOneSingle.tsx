@@ -1,12 +1,26 @@
-import PropTypes from "prop-types";
 import clsx from "clsx";
+import React from "react";
 
-const TeamMemberOneSingle = ({ data, spaceBottomClass }) => {
+interface Data {
+  image: string;
+  fbLink: string;
+  twitterLink: string;
+  instagramLink: string;
+  name: string;
+  position: string;
+};
+
+interface TeamMemberOneSingleProps {
+  data: Data;
+  spaceBottomClass: string;
+};
+
+const TeamMemberOneSingle: React.FC<TeamMemberOneSingleProps> = ({ data, spaceBottomClass }) => {
   return (
       <div className={clsx("team-wrapper", spaceBottomClass)}>
         <div className="team-img">
           <img
-            src={import.meta.env.VITE_PUBLIC_URL + data.image}
+            src={data.image}
             alt=""
             className="img-fluid"
           />
@@ -45,9 +59,6 @@ const TeamMemberOneSingle = ({ data, spaceBottomClass }) => {
   );
 };
 
-TeamMemberOneSingle.propTypes = {
-  data: PropTypes.shape({}),
-  spaceBottomClass: PropTypes.string
-};
+
 
 export default TeamMemberOneSingle;

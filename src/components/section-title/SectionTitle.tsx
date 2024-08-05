@@ -1,7 +1,16 @@
-import PropTypes from "prop-types";
-import clsx from "clsx"
+import clsx from "clsx";
+import React from "react";
 
-const SectionTitle = ({
+interface SectionTitleProps {
+  borderClass: string;
+  positionClass: string;
+  spaceClass: string;
+  subtitleText: string;
+  subtitleColorClass: string;
+  titleText: string;
+};
+
+const SectionTitle: React.FC<SectionTitleProps> = ({
   titleText,
   subtitleText,
   subtitleColorClass,
@@ -17,15 +26,6 @@ const SectionTitle = ({
       </p>
     </div>
   );
-};
-
-SectionTitle.propTypes = {
-  borderClass: PropTypes.string,
-  positionClass: PropTypes.string,
-  spaceClass: PropTypes.string,
-  subtitleText: PropTypes.string,
-  subtitleColorClass: PropTypes.string,
-  titleText: PropTypes.string
 };
 
 export default SectionTitle;

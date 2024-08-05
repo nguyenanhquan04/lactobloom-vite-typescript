@@ -1,7 +1,12 @@
-import PropTypes from "prop-types";
 import clsx from "clsx";
+import React from "react";
 
-const SectionTitleWithText = ({ spaceTopClass, spaceBottomClass }) => {
+interface SectionTitleWithTextProps {
+  spaceBottomClass: string;
+  spaceTopClass: string;
+};
+
+const SectionTitleWithText: React.FC<SectionTitleWithTextProps> = ({ spaceTopClass, spaceBottomClass }) => {
   return (
     <div className={clsx("welcome-area", spaceTopClass, spaceBottomClass)}>
       <div className="container">
@@ -18,11 +23,6 @@ const SectionTitleWithText = ({ spaceTopClass, spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-SectionTitleWithText.propTypes = {
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default SectionTitleWithText;

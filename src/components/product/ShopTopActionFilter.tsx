@@ -3,7 +3,15 @@ import React, { Fragment } from "react";
 import ShopTopFilter from "./ShopTopFilter";
 import { toggleShopTopFilter } from "../../helpers/product";
 
-const ShopTopActionFilter = ({
+interface ShopTopActionFilterProps {
+  getFilterSortParams: any;
+  getSortParams: any;
+  productCount: number;
+  products: any[];
+  sortedProductCount: number;
+}
+
+const ShopTopActionFilter: React.FC<ShopTopActionFilterProps> = ({
   getFilterSortParams,
   productCount,
   sortedProductCount,
@@ -39,14 +47,6 @@ const ShopTopActionFilter = ({
       <ShopTopFilter products={products} getSortParams={getSortParams} />
     </Fragment>
   );
-};
-
-ShopTopActionFilter.propTypes = {
-  getFilterSortParams: PropTypes.func,
-  getSortParams: PropTypes.func,
-  productCount: PropTypes.number,
-  products: PropTypes.array,
-  sortedProductCount: PropTypes.number
 };
 
 export default ShopTopActionFilter;

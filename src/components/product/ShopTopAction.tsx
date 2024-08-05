@@ -1,8 +1,14 @@
-import PropTypes from "prop-types";
-
+import React from "react";
 import { setActiveLayout } from "../../helpers/product";
 
-const ShopTopAction = ({
+interface ShopTopActionProps {
+  getFilterSortParams: any;
+  getLayout: any;
+  productCount: number;
+  sortedProductCount: number;
+}
+
+const ShopTopAction: React.FC<ShopTopActionProps> = ({
   getLayout
 }) => {
   return (
@@ -30,13 +36,6 @@ const ShopTopAction = ({
       </div>
     </div>
   );
-};
-
-ShopTopAction.propTypes = {
-  getFilterSortParams: PropTypes.func,
-  getLayout: PropTypes.func,
-  productCount: PropTypes.number,
-  sortedProductCount: PropTypes.number
 };
 
 export default ShopTopAction;
