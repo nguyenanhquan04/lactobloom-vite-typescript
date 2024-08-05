@@ -5,7 +5,7 @@ import React from "react";
 
 interface NavMenuProps {
   menuWhiteClass?: string;
-  sidebarMenu: boolean;
+  sidebarMenu?: boolean;
 }
 
 const NavMenu: React.FC<NavMenuProps> = ({ menuWhiteClass, sidebarMenu }) => {

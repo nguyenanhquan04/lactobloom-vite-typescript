@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const getReturnValues = (countDown) => {
+const getReturnValues = (countDown: number) => {
     const isExpired = countDown <= 0;
     // calculate time left
     if (!isExpired) {
@@ -18,7 +18,7 @@ const getReturnValues = (countDown) => {
     return [0, 0, 0, 0];
 };
 
-const useCountdown = (targetDate) => {
+const useCountdown = (targetDate: Date) => {
     const countDownDate = new Date(targetDate).getTime();
 
     const [countDown, setCountDown] = useState(

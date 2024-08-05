@@ -11,7 +11,7 @@ import { deleteAllFromCart } from "../../store/slices/cart-slice";
 import { deleteAllFromWishlist } from "../../store/slices/wishlist-slice";
 
 interface IconGroupProps {
-  iconWhiteClass: string;
+  iconWhiteClass?: string;
 }
 
 interface CustomJwtPayload {

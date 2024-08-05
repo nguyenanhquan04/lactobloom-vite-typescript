@@ -1,12 +1,24 @@
 import PropTypes from "prop-types";
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import HeaderOne from "../wrappers/header/HeaderOne";
 import FooterOne from "../wrappers/footer/FooterOne";
 import ScrollToTop from "../components/scroll-to-top";
 import {jwtDecode} from 'jwt-decode'; // Import jwtDecode
 import Cookies from 'js-cookie'; // Import js-cookie
 
-const LayoutOne = ({
+interface LayoutOneProps {
+  children: React.ReactNode;
+  headerContainerClass: string;
+  headerPaddingClass: string;
+  headerPositionClass: string;
+  headerTop: string;
+};
+
+interface DecodedToken {
+  role: string;
+}
+
+const LayoutOne: React.FC<LayoutOneProps> = ({
   children,
   headerContainerClass,
   headerTop,
@@ -19,7 +31,7 @@ const LayoutOne = ({
     const token = Cookies.get('authToken');
     if (token) {
       try {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<DecodedToken>(token);
         setIsAdminOrStaff(decodedToken.role === 'ADMIN' || decodedToken.role === 'STAFF');
       } catch (error) {
         console.error('Token decoding failed:', error);
@@ -49,12 +61,6 @@ const LayoutOne = ({
   );
 };
 
-LayoutOne.propTypes = {
-  children: PropTypes.node,
-  headerContainerClass: PropTypes.string,
-  headerPaddingClass: PropTypes.string,
-  headerPositionClass: PropTypes.string,
-  headerTop: PropTypes.string
-};
+
 
 export default LayoutOne;
