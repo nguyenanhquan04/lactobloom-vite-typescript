@@ -12,20 +12,43 @@ import { orderProducts } from "../../utils/OrderDetailService";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import { cancelOrderByOrderId } from "../../utils/OrderService";
 
-const OrderHistory = () => {
+// Define interfaces for orders and order details
+interface Order {
+  orderId: number;
+  orderDate: string;
+  totalPrice: number;
+  status: string;
+  cod: boolean;
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  shippingFee: number;
+  note: string;
+}
+
+interface OrderDetail {
+  orderDetailId: number;
+  productName: string;
+  quantity: number;
+  totalPrice: number;
+  preOrder: boolean;
+}
+
+const OrderHistory: React.FC = () => {
   let { pathname } = useLocation();
   let navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isEmpty, setIsEmpty] = useState(false);
-  const [orderDetails, setOrderDetails] = useState({});
-  const [selectedStatus, setSelectedStatus] = useState("ALL");
-  const [deleteIndex, setDeleteIndex] = useState(null);
-  const [orderToCancel, setOrderToCancel] = useState(null);
+  const [orderDetails, setOrderDetails] = useState<{ [key: number]: OrderDetail[] }>({});
+  const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [orderToCancel, setOrderToCancel] = useState<number | null>(null);
 
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken: any = jwtDecode(token);
       const userRole = decodedToken.role;
       if (userRole !== "MEMBER") {
         navigate("/admin");
@@ -53,7 +76,7 @@ const OrderHistory = () => {
     }
   }, [navigate]);
 
-  const fetchOrderDetails = (orderId) => {
+  const fetchOrderDetails = (orderId: number) => {
     const token = Cookies.get("authToken");
     orderProducts(orderId, {
       headers: {
@@ -77,37 +100,39 @@ const OrderHistory = () => {
 
   const cancelOrder = () => {
     const token = Cookies.get("authToken");
-    cancelOrderByOrderId(token, orderToCancel)
-      .then(response => {
-        setOrders(prevOrders => prevOrders.map(order => {
-          if (order.orderId === orderToCancel) {
-            return { ...order, status: order.status };
-          }
-          return order;
-        }));
-        setDeleteIndex(null);
-        setOrderToCancel(null);
+    if (orderToCancel !== null) {
+      cancelOrderByOrderId(token, orderToCancel)
+        .then(response => {
+          setOrders(prevOrders => prevOrders.map(order => {
+            if (order.orderId === orderToCancel) {
+              return { ...order, status: order.status };
+            }
+            return order;
+          }));
+          setDeleteIndex(null);
+          setOrderToCancel(null);
 
-        // Fetch the updated orders
-        myOrders({
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-          .then(response => {
-            setOrders(response.data);
-            setIsEmpty(response.data.length === 0);
+          // Fetch the updated orders
+          myOrders({
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           })
-          .catch(error => {
-            console.error("There was an error fetching the order data!", error);
-          });
-      })
-      .catch(error => {
-        console.error("There was an error canceling the order!", error);
-      });
+            .then(response => {
+              setOrders(response.data);
+              setIsEmpty(response.data.length === 0);
+            })
+            .catch(error => {
+              console.error("There was an error fetching the order data!", error);
+            });
+        })
+        .catch(error => {
+          console.error("There was an error canceling the order!", error);
+        });
+    }
   };
 
-  const translateStatus = (status) => {
+  const translateStatus = (status: string) => {
     switch (status) {
       case "PENDING":
         return "Đang chờ xử lý";
@@ -120,7 +145,7 @@ const OrderHistory = () => {
     }
   };
 
-  const statusColor = (status) => {
+  const statusColor = (status: string) => {
     switch (status) {
       case "PENDING":
         return "";
@@ -133,7 +158,7 @@ const OrderHistory = () => {
     }
   };
 
-  const handleStatusChange = (event) => {
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value);
   };
 

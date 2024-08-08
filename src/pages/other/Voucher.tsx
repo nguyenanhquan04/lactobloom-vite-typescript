@@ -17,7 +17,7 @@ const Voucher = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -39,7 +39,7 @@ const Voucher = () => {
     fetchVouchers();
   }, []);
 
-  const handleExchange = async (voucherId) => {
+  const handleExchange = async (voucherId : number) => {
     try {
       const response = await exchangeVoucher(voucherId, { headers: { Authorization: `Bearer ${authToken}` } });
       alert(response.data);
@@ -70,7 +70,7 @@ const Voucher = () => {
         {/* Voucher List */}
         <div className="voucher-list">
           {vouchers.length > 0 ? (
-            vouchers.map((voucher) => (
+            vouchers.map((voucher: any) => (
               <div key={voucher.voucherId} className="voucher">
                 <div className="voucher-details">
                   <h3>Giảm giá {voucher.discount}%</h3>

@@ -27,11 +27,10 @@ const MyAccount = () => {
 
   useEffect(() => {
     const token = Cookies.get("authToken");
-    const decodedToken = jwtDecode(token);
     if (!token) {
       navigate("/login");
     } else {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<any>(token);
       setEmail(decodedToken.sub);
     }
   }, [navigate]);
@@ -52,7 +51,7 @@ const MyAccount = () => {
     fetchUserInfo();
   }, []);
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async (e: any) => {
     e.preventDefault();
     const token = Cookies.get("authToken");
 
@@ -77,7 +76,7 @@ const MyAccount = () => {
     }
   };
 
-  const handleChangePassword = async (e) => {
+  const handleChangePassword = async (e: any) => {
     e.preventDefault();
     if (newPassword !== confirmNewPassword) {
       setPasswordError("New Password and Confirm New Password do not match");
@@ -100,7 +99,7 @@ const MyAccount = () => {
         }
       );
       alert(response.data);
-    } catch (error) {
+    } catch (error: any) {
       alert(error.response.data); // Alert the error response message
     }
   };

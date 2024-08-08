@@ -24,7 +24,7 @@ const Login = () => {
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<any>(token);
       const userRole = decodedToken.role;
       if (userRole !== "MEMBER") {
         navigate("/admin");
@@ -34,12 +34,12 @@ const Login = () => {
     }
   }, [navigate]);
 
-  const handleLoginChange = (e) => {
+  const handleLoginChange = (e: any) => {
     const { name, value } = e.target;
     setLoginData({ ...loginData, [name]: value });
   };
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = async (e: any) => {
     e.preventDefault();
     setErrorMessage(""); // Reset error message
     try {
@@ -53,8 +53,8 @@ const Login = () => {
       alert("Đăng nhập thành công");
       dispatch(deleteAllFromCart());
       dispatch(deleteAllFromWishlist());
-      const authToken = Cookies.get("authToken");
-      const decodedToken = jwtDecode(authToken);
+      const authToken = Cookies.get("authToken") as string;
+      const decodedToken = jwtDecode<any>(authToken);
       // console.log("Login successful", response.data);
       // Navigate to a different page on successful login
       const userRole = decodedToken.role;
@@ -64,7 +64,7 @@ const Login = () => {
       } else {
         navigate("/"); // Redirect to homepage if role is "MEMBER"
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.response && error.response.status === 403) {
         setErrorMessage("Username or password is incorrect or does not exist");
       } else {

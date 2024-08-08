@@ -4,7 +4,7 @@ const getAllBlogCategories = () => {
     return request.get(`blog-category/all`);
 };
 
-const deleteBlogCategory = (token, blogCategoryId) => {
+const deleteBlogCategory = (token: string, blogCategoryId: number) => {
     return request.delete(`blog-category/delete/${blogCategoryId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -12,11 +12,11 @@ const deleteBlogCategory = (token, blogCategoryId) => {
       });
 };
 
-const getBlogCategoryByBlogId = (blogId) => {
+const getBlogCategoryByBlogId = (blogId: number) => {
   return request.get(`blog-category/getByBlogId/${blogId}`);
 };
 
-const updateBlogCategoryByBlogCategoryId = (token, blogCategory, blogCategoryId) => {
+const updateBlogCategoryByBlogCategoryId = (token: string, blogCategory: any, blogCategoryId: number) => {
   return request.put(`blog-category/update/${blogCategoryId}`, blogCategory, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -24,7 +24,7 @@ const updateBlogCategoryByBlogCategoryId = (token, blogCategory, blogCategoryId)
   });
 }
 
-const saveBlogCategory = (token, blogCategory) => {
+const saveBlogCategory = (token: string, blogCategory: any) => {
   return request.post(`blog-category/save`, blogCategory, {
     headers: {
       Authorization: `Bearer ${token}`,

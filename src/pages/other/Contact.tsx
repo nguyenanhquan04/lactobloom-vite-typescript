@@ -14,7 +14,7 @@ const Contact = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");

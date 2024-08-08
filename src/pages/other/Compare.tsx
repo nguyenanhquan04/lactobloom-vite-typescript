@@ -12,20 +12,28 @@ import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode";
 
+interface ImagesMap {
+  [key: string]: string;
+}
+
+interface compareImages {
+  [key: string]: string;
+}
+
 const Compare = () => {
   const dispatch = useDispatch();
   let { pathname } = useLocation();
 
-  const { compareItems } = useSelector((state) => state.compare);
-  const { cartItems } = useSelector((state) => state.cart);
+  const { compareItems } = useSelector((state: any) => state.compare);
+  const { cartItems } = useSelector((state: any) => state.cart);
 
-  const [compareImages, setCompareImages] = useState({});
+  const [compareImages, setCompareImages] = useState<compareImages>({});
   let navigate = useNavigate();
     // Check for authToken cookie and redirect to homepage if it exists
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -35,7 +43,7 @@ const Compare = () => {
 
   useEffect(() => {
     const fetchCompareImages = async () => {
-      const imagesMap = {};
+      const imagesMap: ImagesMap = {};
       for (const compareItem of compareItems) {
         try {
           const response = await getImagesByProductId(compareItem.productId);
@@ -78,7 +86,7 @@ const Compare = () => {
                         <tbody>
                           <tr>
                             <th className="title-column">Thông tin sản phẩm</th>
-                            {compareItems.map((compareItem, key) => {
+                            {compareItems.map((compareItem: any, key: any) => {
                               const cartItem = cartItems.find(
                                 item => item.productId === compareItem.productId
                               );
@@ -177,7 +185,7 @@ const Compare = () => {
                           </tr>
                           <tr>
                             <th className="title-column">Giá</th>
-                            {compareItems.map((compareItem, key) => {
+                            {compareItems.map((compareItem: any, key: any) => {
                               const discountedPrice = getDiscountPrice(
                                 compareItem.price,
                                 compareItem.discount
@@ -185,9 +193,7 @@ const Compare = () => {
                               const finalProductPrice = (
                                 compareItem.price * 1
                               );
-                              const finalDiscountedPrice = (
-                                discountedPrice * 1
-                              );
+                              const finalDiscountedPrice = discountedPrice as number;
                               return (
                                 <td className="product-price" key={key}>
                                   {discountedPrice !== null ? (
@@ -211,7 +217,7 @@ const Compare = () => {
 
                           <tr>
                             <th className="title-column">Mô tả</th>
-                            {compareItems.map((compareItem, key) => {
+                            {compareItems.map((compareItem: any, key: any) => {
                               return (
                                 <td className="product-desc" key={key}>
                                   <p>
@@ -226,7 +232,7 @@ const Compare = () => {
 
                           <tr>
                             <th className="title-column">Đánh giá</th>
-                            {compareItems.map((compareItem, key) => {
+                            {compareItems.map((compareItem: any, key: any) => {
                               return (
                                 <td className="product-rating" key={key}>
                                   <Rating ratingValue={compareItem.rating} />

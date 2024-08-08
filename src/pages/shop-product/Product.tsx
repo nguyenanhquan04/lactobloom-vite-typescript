@@ -13,14 +13,14 @@ import {jwtDecode} from "jwt-decode";
 const Product = () => {
   let { pathname } = useLocation();
   let { id } = useParams();
-  const { products } = useSelector((state) => state.product);
+  const { products } = useSelector((state: any) => state.product);
   const product = products.find(product => String(product.productId) === id);
   let navigate = useNavigate();
     // Check for authToken cookie and redirect to homepage if it exists
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");

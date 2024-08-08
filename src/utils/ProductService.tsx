@@ -4,15 +4,15 @@ const getAllProducts = () => {
     return request.get(`product/all`);
 };
 
-const getProductsByCategoryId = (categoryId) => {
+const getProductsByCategoryId = (categoryId: number) => {
     return request.get(`product/category/${categoryId}`);
 };
 
-const getProductsByBrandId = (brandId) => {
+const getProductsByBrandId = (brandId: number) => {
     return request.get(`product/brand/${brandId}`);
 }
 
-const getProductByProductId = (productId) => {
+const getProductByProductId = (productId: number) => {
     return request.get(`product/get/${productId}`);
 }
 
@@ -20,7 +20,7 @@ const get4RandomProducts = () => {
     return request.get(`product/random`);
 };
 
-const deleteProductByProductId = (token, productId) => {
+const deleteProductByProductId = (token: string, productId: number) => {
     return request.delete(`product/delete/${productId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,11 +28,11 @@ const deleteProductByProductId = (token, productId) => {
       });
 };
 
-const searchProducts = (params) => {
+const searchProducts = (params: any) => {
     return request.get(`product/search`, params);
 };
 
-const updateProductByProductId = (token, data, productId, brandId, categoryId) => {
+const updateProductByProductId = (token: string, data: any, productId: number, brandId: number, categoryId: number) => {
     return request.put(`product/update/${productId}/brand/${brandId}/category/${categoryId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const updateProductByProductId = (token, data, productId, brandId, categoryId) =
       });
 };
 
-const saveProduct= (token, data, brandId, categoryId) => {
+const saveProduct= (token: string, data: any, brandId: number, categoryId: number) => {
     return request.post(`product/save/brand/${brandId}/category/${categoryId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,

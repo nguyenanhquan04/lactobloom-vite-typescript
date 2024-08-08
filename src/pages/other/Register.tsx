@@ -19,7 +19,7 @@ const Register = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -35,12 +35,12 @@ const Register = () => {
     }
   }, [navigate]);
 
-  const handleRegisterChange = (e) => {
+  const handleRegisterChange = (e: any) => {
     const { name, value } = e.target;
     setRegisterData({ ...registerData, [name]: value });
   };
 
-  const handleRegisterSubmit = async (e) => {
+  const handleRegisterSubmit = async (e: any) => {
     e.preventDefault();
     if (registerData.password !== registerData.confirmPassword) {
       setError("Mật khẩu không khớp!");

@@ -27,7 +27,7 @@ const ForgotPassword = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -43,7 +43,7 @@ const ForgotPassword = () => {
   }, [navigate]);
 
   useEffect(() => {
-    let timer;
+    let timer: number = 0;
     if (countdown > 0) {
       timer = setInterval(() => {
         setCountdown((prevCountdown) => prevCountdown - 1);
@@ -63,7 +63,7 @@ const ForgotPassword = () => {
     }
   }, [successMessage, navigate]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -77,7 +77,7 @@ const ForgotPassword = () => {
         setCountdown(60);
         setErrorMessage("");
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.response && error.response.status === 403) {
         setErrorMessage("Email does not exist or server is temporarily unavailable");
       } else {
@@ -88,7 +88,7 @@ const ForgotPassword = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -111,7 +111,7 @@ const ForgotPassword = () => {
         setSuccessMessage("Password successfully changed! Back to login in 5s.");
         setErrorMessage("");
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.response && error.response.status === 403) {
         setErrorMessage("Invalid OTP or password mismatch.");
       } else {

@@ -16,8 +16,8 @@ import { searchProducts } from "../../utils/ProductService";
 const ShopGridStandard = () => {
   const [layout, setLayout] = useState("grid three-column");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<number|null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<number|null>(null);
   const [products, setProducts] = useState([]);
   const [currentData, setCurrentData] = useState([]);
   const [offset, setOffset] = useState(0);
@@ -30,7 +30,7 @@ const ShopGridStandard = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -38,7 +38,7 @@ const ShopGridStandard = () => {
       }
     }, [navigate]);
 
-  const fetchProducts = useCallback(async (searchQuery) => {
+  const fetchProducts = useCallback(async (searchQuery: any) => {
     try {
       const params = {
         productName: searchQuery || "",
@@ -80,8 +80,8 @@ const ShopGridStandard = () => {
               <div className="col-lg-3 order-2 order-lg-1">
                 <ShopSearch
                   searchTerm={searchTerm}
-                  handleSearchChange={(e) => setSearchTerm(e.target.value)}
-                  handleSubmit={(e) => {
+                  handleSearchChange={(e: any) => setSearchTerm(e.target.value)}
+                  handleSubmit={(e: any) => {
                     e.preventDefault();
                     fetchProducts(searchTerm);
                   }}

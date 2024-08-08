@@ -14,15 +14,23 @@ import {jwtDecode} from "jwt-decode";
 import { deleteWishlist, myWishlist } from "../../utils/WishlistService";
 import { getProductByProductId } from "../../utils/ProductService";
 
+interface ImagesMap {
+  [key: string]: any;
+}
+
+interface WishlistImages {
+  [key: string]: any;
+}
+
 const Wishlist = () => {
   const dispatch = useDispatch();
   let { pathname } = useLocation();
 
-  const { wishlistItems: reduxWishlistItems } = useSelector((state) => state.wishlist);
-  const { cartItems } = useSelector((state) => state.cart);
+  const { wishlistItems: reduxWishlistItems } = useSelector((state: any) => state.wishlist);
+  const { cartItems } = useSelector((state: any) => state.cart);
 
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [wishlistImages, setWishlistImages] = useState({});
+  const [wishlistImages, setWishlistImages] = useState<WishlistImages>({});
   const [loading, setLoading] = useState(true);
 
   const authToken = Cookies.get("authToken");
@@ -32,7 +40,7 @@ const Wishlist = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -55,7 +63,7 @@ const Wishlist = () => {
             };
           });
 
-          const productsWithWishlistId = await Promise.all(productPromises);
+          const productsWithWishlistId = await Promise.all(productPromises) as any;
           setWishlistItems(productsWithWishlistId);
         } catch (error) {
           console.error("Error fetching wishlist items:", error);
@@ -71,8 +79,8 @@ const Wishlist = () => {
 
   useEffect(() => {
     const fetchWishlistImages = async () => {
-      const imagesMap = {};
-      for (const wishlistItem of wishlistItems) {
+      const imagesMap: ImagesMap = {};
+      for (const wishlistItem of wishlistItems as any) {
         try {
           const response = await getImagesByProductId(wishlistItem.productId);
           imagesMap[wishlistItem.productId] = response.data.length > 0 ? response.data[0].imageUrl : "/assets/img/no-image.png";
@@ -89,7 +97,7 @@ const Wishlist = () => {
     }
   }, [wishlistItems]);
 
-  const handleRemoveFromWishlist = async (wishlistId, productId) => {
+  const handleRemoveFromWishlist = async (wishlistId: number, productId: number) => {
     if (authToken) {
       try {
         await deleteWishlist(authToken, wishlistId);
@@ -139,7 +147,7 @@ const Wishlist = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {wishlistItems.map((wishlistItem, key) => {
+                          {wishlistItems.map((wishlistItem: any, key: any) => {
                             const discountedPrice = getDiscountPrice(
                               wishlistItem.price,
                               wishlistItem.discount
@@ -147,9 +155,7 @@ const Wishlist = () => {
                             const finalProductPrice = (
                               wishlistItem.price * 1
                             );
-                            const finalDiscountedPrice = (
-                              discountedPrice * 1
-                            );
+                            const finalDiscountedPrice = discountedPrice as number;
                             const cartItem = cartItems.find(
                               item => item.productId === wishlistItem.productId
                             );
