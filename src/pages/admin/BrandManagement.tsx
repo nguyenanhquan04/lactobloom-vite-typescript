@@ -11,15 +11,33 @@ import BrandForm from './form/BrandForm'; // Make sure to import your BrandForm 
 import { deleteBrandByBrandId, getAllBrands } from '../../utils/BrandService';
 import { getProductsByBrandId } from '../../utils/ProductService';
 
+interface CountMap {
+  [key: string]: any;
+}
+
+interface ProductCountMap {
+  [key: string]: any;
+}
+
+interface UpdateCountMap {
+  [key: string]: any;
+}
+
+interface Brand {
+  brandId: number;
+  brandName: string;
+  // Add any other properties if needed
+}
+
 const BrandManagement = () => {
-  const [brands, setBrands] = useState([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [openForm, setOpenForm] = useState(false);
   const [formMode, setFormMode] = useState('add'); // 'add' or 'edit'
   const [selectedBrand, setSelectedBrand] = useState(null);
-  const [productCounts, setProductCounts] = useState({}); // State to store product counts
+  const [productCounts, setProductCounts] = useState<ProductCountMap>({}); // State to store product counts
 
   // Define fetchBrands function
   const fetchBrands = async () => {
@@ -29,7 +47,7 @@ const BrandManagement = () => {
       setBrands(brandsData);
 
       // Fetch product counts for each brand
-      const counts = {};
+      const counts: CountMap = {};
       for (const brand of brandsData) {
         try {
           const productResponse = await getProductsByBrandId(brand.brandId);
@@ -49,17 +67,17 @@ const BrandManagement = () => {
     fetchBrands();
   }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (brandId) => {
-    const token = Cookies.get("authToken");
+  const handleDelete = async (brandId: number) => {
+    const token = Cookies.get("authToken") as string;
     if (window.confirm('Bạn có chắc muốn xóa thương hiệu này?')) {
       try {
         await deleteBrandByBrandId(token, brandId);
         setBrands(brands.filter(brand => brand.brandId !== brandId));
-        const updatedCounts = { ...productCounts };
+        const updatedCounts: UpdateCountMap = { ...productCounts };
         delete updatedCounts[brandId];
         setProductCounts(updatedCounts);
       } catch (error) {
@@ -68,7 +86,7 @@ const BrandManagement = () => {
     }
   };
 
-  const handleOpenForm = (mode, brand = null) => {
+  const handleOpenForm = (mode: any, brand = null) => {
     setFormMode(mode);
     setSelectedBrand(brand);
     setOpenForm(true);
@@ -85,11 +103,11 @@ const BrandManagement = () => {
     fetchBrands(); // Ensure fetchBrands is called
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -135,7 +153,7 @@ const BrandManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedBrands.map((brand) => (
+            {paginatedBrands.map((brand: any) => (
               <TableRow key={brand.brandId}>
                 <TableCell className="brand-management-id-cell">{brand.brandId}</TableCell>
                 <TableCell>{brand.brandName}</TableCell>

@@ -17,7 +17,12 @@ import Dashboard from "./Dashboard";
 import VoucherManagement from "./VoucherManagement";
 import BlogCategoryManagement from "./BlogCategoryManagement";
 
-const Sidebar = ({ onSelect, role }) => {
+interface SidebarProps {
+  onSelect: (value: any) => void; // Update the type of `onSelect` according to your actual use case
+  role: any; // Update the type of `role` if it can be something other than string
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onSelect, role }) => {
   let navigate = useNavigate();
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false); // State for product submenu
   const [isBlogMenuOpen, setIsBlogMenuOpen] = useState(false); // State for blog submenu

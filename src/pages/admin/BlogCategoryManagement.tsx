@@ -11,22 +11,40 @@ import BlogCategoryForm from './form/BlogCategoryForm'; // Import your BlogCateg
 import { deleteBlogCategory, getAllBlogCategories } from '../../utils/BlogCategoryService';
 import { getBlogByBlogCategoryId } from '../../utils/BlogService';
 
+interface CountMap {
+  [key: string]: any;
+}
+
+interface UpdateCountMap {
+  [key: string]: any;
+}
+
+interface PostCountMap {
+  [key: string]: any;
+}
+
+interface BlogCategory {
+  blogCategoryName: string;
+  blogCategoryId: number;
+  // Add any other properties if needed
+}
+
 const BlogCategoryManagement = () => {
-  const [blogCategories, setBlogCategories] = useState([]);
+  const [blogCategories, setBlogCategories] = useState<BlogCategory[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [openForm, setOpenForm] = useState(false);
   const [formMode, setFormMode] = useState('add'); // 'add' or 'edit'
   const [selectedBlogCategory, setSelectedBlogCategory] = useState(null);
-  const [postCounts, setPostCounts] = useState({});
+  const [postCounts, setPostCounts] = useState<PostCountMap>({});
 
   useEffect(() => {
     const fetchBlogCategories = async () => {
       try {
         const response = await getAllBlogCategories();
         setBlogCategories(response.data);
-        const counts = {};
+        const counts: CountMap = {};
         for (const category of response.data) {
           const postsResponse = await getBlogByBlogCategoryId(category.blogCategoryId);
           counts[category.blogCategoryId] = postsResponse.data.length;
@@ -40,17 +58,17 @@ const BlogCategoryManagement = () => {
     fetchBlogCategories();
   }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (blogCategoryId) => {
-    const token = Cookies.get("authToken");
+  const handleDelete = async (blogCategoryId: number) => {
+    const token = Cookies.get("authToken") as string;
     if (window.confirm('Bạn có chắc muốn xóa danh mục này?')) {
       try {
         await deleteBlogCategory(token, blogCategoryId);
         setBlogCategories(blogCategories.filter(blogCategory => blogCategory.blogCategoryId !== blogCategoryId));
-        const updatedCounts = { ...postCounts };
+        const updatedCounts: UpdateCountMap = { ...postCounts };
         delete updatedCounts[blogCategoryId];
         setPostCounts(updatedCounts);
       } catch (error) {
@@ -59,7 +77,7 @@ const BlogCategoryManagement = () => {
     }
   };
 
-  const handleOpenForm = (mode, blogCategory = null) => {
+  const handleOpenForm = (mode: any, blogCategory = null) => {
     setFormMode(mode);
     setSelectedBlogCategory(blogCategory);
     setOpenForm(true);
@@ -80,7 +98,7 @@ const BlogCategoryManagement = () => {
     try {
       const response = await getAllBlogCategories();
       setBlogCategories(response.data);
-      const counts = {};
+      const counts: CountMap = {};
       for (const category of response.data) {
         const postsResponse = await getBlogByBlogCategoryId(category.blogCategoryId);
         counts[category.blogCategoryId] = postsResponse.data.length;
@@ -91,11 +109,11 @@ const BlogCategoryManagement = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -141,7 +159,7 @@ const BlogCategoryManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedBlogCategories.map((blogCategory) => (
+            {paginatedBlogCategories.map((blogCategory: any) => (
               <TableRow key={blogCategory.blogCategoryId}>
                 <TableCell className="blog-category-management-id-cell">{blogCategory.blogCategoryId}</TableCell>
                 <TableCell>{blogCategory.blogCategoryName}</TableCell>

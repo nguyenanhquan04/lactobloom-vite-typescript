@@ -12,9 +12,24 @@ import BlogForm from './form/BlogForm';
 import { getAllBlogCategories } from '../../utils/BlogCategoryService';
 import { deleteBlogByBlogId, getAllBlogs } from '../../utils/BlogService';
 
+interface Category {
+  blogCategoryName: string;
+  blogCategoryId: number;
+  // Add any other properties if needed
+}
+
+interface Blog {
+  blogId: number;
+  title: string;
+  blogTitle: string;
+  blogCategoryName: string;
+  blogCategoryId: number;
+  // Add any other properties if needed
+}
+
 const BlogManagement = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -45,12 +60,12 @@ const BlogManagement = () => {
     fetchBlogs();
   }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (blogId) => {
-    const token = Cookies.get("authToken");
+  const handleDelete = async (blogId: number) => {
+    const token = Cookies.get("authToken") as string;
     if (window.confirm('Bạn có chắc muốn xóa Blog?')) {
       try {
         await deleteBlogByBlogId(token, blogId);
@@ -61,16 +76,16 @@ const BlogManagement = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleCategoryChange = (event) => {
+  const handleCategoryChange = (event: any) => {
     setSelectedCategory(event.target.value);
     setPage(0);
   };
@@ -80,7 +95,7 @@ const BlogManagement = () => {
     setOpen(true);
   };
 
-  const handleEditBlog = (blog) => {
+  const handleEditBlog = (blog: any) => {
     setEditingBlog(blog);
     setOpen(true);
   };
@@ -158,7 +173,7 @@ const BlogManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedBlogs.map((blog) => (
+            {paginatedBlogs.map((blog: any) => (
               <TableRow key={blog.blogId}>
                 <TableCell>{blog.blogId}</TableCell>
                 <TableCell>{blog.blogCategoryName}</TableCell>

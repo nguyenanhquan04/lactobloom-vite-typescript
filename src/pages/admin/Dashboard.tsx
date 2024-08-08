@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Grid,
-  Paper,
   Typography,
   List,
   ListItem,
@@ -59,12 +58,12 @@ const Dashboard = () => {
   }, [selectedMonth]);
 
   const fetchTopSellingProducts = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       const response = await getTop5SellingProducts(token);
       const products = response.data;
       
-      const productDetailsPromises = products.map(async (product) => {
+      const productDetailsPromises = products.map(async (product: any) => {
         const productResponse = await getProductByProductId(product.productId);
         return {
           productId: product.productId,
@@ -73,7 +72,7 @@ const Dashboard = () => {
         };
       });
 
-      const productDetails = await Promise.all(productDetailsPromises);
+      const productDetails = await Promise.all(productDetailsPromises) as any;
       setTopSellingProducts(productDetails);
     } catch (error) {
       console.error('Error fetching top selling products:', error);
@@ -81,7 +80,7 @@ const Dashboard = () => {
   };
 
   const fetchRecentOrders = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       const response = await getTop5RecentOrders(token);
       const orders = response.data.map(order => ({
@@ -97,7 +96,7 @@ const Dashboard = () => {
   };
 
   const fetchRevenueData = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     const now = new Date();
     const month = now.getMonth() + 1;
     const year = now.getFullYear();
@@ -117,7 +116,7 @@ const Dashboard = () => {
   };
 
   const fetchSalesData = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       const year = new Date().getFullYear();
       const response = await getSalesByMonthOfYear(token, year);
@@ -142,7 +141,7 @@ const Dashboard = () => {
   };
 
   const fetchNumberOfMembers = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       const response = await getShopMembers(token);
       setNumberOfMembers(response.data.length); 
@@ -152,7 +151,7 @@ const Dashboard = () => {
   };
 
   const fetchNumberOfTodayOrders = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       const response = await getTodayOrders(token);
       setNumberOfTodayOrders(response.data.length);
@@ -161,7 +160,7 @@ const Dashboard = () => {
     }
   };
   const fetchSalesByDate = async () => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       const year = new Date().getFullYear();
       const response = await getSalesByDayOfMonth(token, selectedMonth, year);
@@ -290,7 +289,7 @@ const Dashboard = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip formatter={(value, name) => name === 'Doanh Thu (Triệu)' ? (value * 1000000).toLocaleString("vi-VN") + " VND" : value} />
+                  <Tooltip formatter={(value: number, name) => name === 'Doanh Thu (Triệu)' ? (value * 1000000).toLocaleString("vi-VN") + " VND" : value} />
                   <Legend />
                   <Bar dataKey="Doanh Thu (Triệu)" fill="#8884d8" />
                   <Bar dataKey="Số Đơn Hàng" fill="#82ca9d" />
@@ -313,7 +312,7 @@ const Dashboard = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis/>
-                  <Tooltip formatter={(value, name) => name === 'Doanh Thu (Triệu)' ? (value * 1000000).toLocaleString("vi-VN") + " VND" : value} />
+                  <Tooltip formatter={(value: number, name) => name === 'Doanh Thu (Triệu)' ? (value * 1000000).toLocaleString("vi-VN") + " VND" : value} />
                   <Legend />
                   <Line type="monotone" dataKey="Doanh Thu (Triệu)" stroke="#8884d8" />
                   <Line type="monotone" dataKey="Số Đơn Hàng" stroke="#82ca9d" />
@@ -331,7 +330,7 @@ const Dashboard = () => {
                   Top Sản Phẩm Bán Chạy
                 </Typography>
                 <List>
-                  {topSellingProducts.map((product) => (
+                  {topSellingProducts.map((product: any) => (
                     <ListItem key={product.productId}>
                       <ListItemText
                         primary={product.productName}
@@ -351,7 +350,7 @@ const Dashboard = () => {
                   Đơn Hàng Hiện Tại
                 </Typography>
                 <List>
-                  {recentOrders.map((order) => (
+                  {recentOrders.map((order: any) => (
                     <ListItem key={order.id}>
                       <ListItemText
                         primary={` ID: ${order.id}`}

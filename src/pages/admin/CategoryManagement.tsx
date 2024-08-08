@@ -11,9 +11,21 @@ import CategoryForm from './form/CategoryForm'; // Make sure to import your Cate
 import { deleteCategorydByCategoryId, getAllCategories } from '../../utils/CategoryService';
 import { getProductsByCategoryId } from '../../utils/ProductService';
 
+interface CountMap {
+  [key: string]: any;
+}
+
+interface UpdatedCountMap {
+  [key: string]: any;
+}
+
+interface ProductCountMap {
+  [key: string]: any;
+}
+
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
-  const [productCounts, setProductCounts] = useState({});
+  const [productCounts, setProductCounts] = useState<ProductCountMap>({});
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -32,7 +44,7 @@ const CategoryManagement = () => {
       setCategories(categoriesData);
 
       // Fetch product count for each category
-      const counts = {};
+      const counts: CountMap = {};
       for (const category of categoriesData) {
         const countResponse = await getProductsByCategoryId(category.categoryId);
         counts[category.categoryId] = countResponse.data.length;
@@ -43,17 +55,17 @@ const CategoryManagement = () => {
     }
   };
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (categoryId) => {
-    const token = Cookies.get("authToken");
+  const handleDelete = async (categoryId: number) => {
+    const token = Cookies.get("authToken") as string;
     if (window.confirm('Bạn có chắc muốn xóa danh mục này?')) {
       try {
         await deleteCategorydByCategoryId(token, categoryId);
         setCategories(categories.filter(category => category.categoryId !== categoryId));
-        const updatedCounts = { ...productCounts };
+        const updatedCounts: UpdatedCountMap = { ...productCounts };
         delete updatedCounts[categoryId];
         setProductCounts(updatedCounts);
       } catch (error) {
@@ -62,7 +74,7 @@ const CategoryManagement = () => {
     }
   };
 
-  const handleOpenForm = (mode, category = null) => {
+  const handleOpenForm = (mode: any, category = null) => {
     setFormMode(mode);
     setSelectedCategory(category);
     setOpenForm(true);
@@ -79,11 +91,11 @@ const CategoryManagement = () => {
     await fetchCategories();
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -129,7 +141,7 @@ const CategoryManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedCategories.map((category) => (
+            {paginatedCategories.map((category: any) => (
               <TableRow key={category.categoryId}>
                 <TableCell className="category-management-id-cell">{category.categoryId}</TableCell>
                 <TableCell>{category.categoryName}</TableCell>
