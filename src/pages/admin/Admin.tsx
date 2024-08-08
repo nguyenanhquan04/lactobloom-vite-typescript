@@ -37,69 +37,17 @@ const Sidebar = ({ onSelect, role }) => {
     setIsBlogMenuOpen(!isBlogMenuOpen); // Toggle blog submenu
   };
 
-  // return (
-  //   <div className="col-lg-2">
-  //     <div className="sidebar">
-  //       <ul className="nav flex-column">
-  //       <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("dashboard")}>
-  //             Biểu đồ
-  //           </Link>
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("product")}>
-  //             Quản lý sản phẩm
-  //           </Link>
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("blog")}>
-  //             Quản lý bài viết
-  //           </Link>
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("category")}>
-  //             Quản lý danh mục
-  //           </Link>
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("brand")}>
-  //             Quản lý thương hiệu
-  //           </Link>
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("order")}>
-  //             Quản lý đơn hàng
-  //           </Link>
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="sidebar-link" onClick={() => onSelect("voucher")}>
-  //             Quản lý Voucher
-  //           </Link>
-  //         </li>
-  //         {role === "ADMIN" && (
-  //           <li className="nav-item">
-  //             <Link className="sidebar-link" onClick={() => onSelect("user")}>
-  //               Quản lý người dùng
-  //             </Link>
-  //           </li>
-  //         )}
-  //       </ul>
-  //     </div>
-  //   </div>
-  // );
-
-
   return (
     <div className="col-lg-2">
       <div className="sidebar">
         <ul className="nav flex-column">
           <li className="nav-item">
-            <Link className="sidebar-link" onClick={() => onSelect("dashboard")}>
+            <Link to = "#" className="sidebar-link" onClick={() => onSelect("dashboard")}>
               Biểu đồ
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="sidebar-link" onClick={toggleProductMenu}>
+            <Link to = "#" className="sidebar-link" onClick={toggleProductMenu}>
               Quản lý sản phẩm
               <FontAwesomeIcon 
                 icon={isProductMenuOpen ? faChevronUp : faChevronDown} 
@@ -109,17 +57,17 @@ const Sidebar = ({ onSelect, role }) => {
             {isProductMenuOpen && (
               <ul className="nav flex-column submenu">
                 <li className="nav-item">
-                  <Link className="sidebar-link" onClick={() => onSelect("product")}>
+                  <Link to = "#" className="sidebar-link" onClick={() => onSelect("product")}>
                     Sản phẩm
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="sidebar-link" onClick={() => onSelect("category")}>
+                  <Link to = "#" className="sidebar-link" onClick={() => onSelect("category")}>
                     Danh mục
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="sidebar-link" onClick={() => onSelect("brand")}>
+                  <Link to = "#" className="sidebar-link" onClick={() => onSelect("brand")}>
                     Thương hiệu
                   </Link>
                 </li>
@@ -127,7 +75,7 @@ const Sidebar = ({ onSelect, role }) => {
             )}
           </li>
           <li className="nav-item">
-            <Link className="sidebar-link" onClick={toggleBlogMenu}>
+            <Link to = "#" className="sidebar-link" onClick={toggleBlogMenu}>
               Quản lý bài viết
               <FontAwesomeIcon 
                 icon={isBlogMenuOpen ? faChevronUp : faChevronDown} 
@@ -137,36 +85,31 @@ const Sidebar = ({ onSelect, role }) => {
             {isBlogMenuOpen && (
               <ul className="nav flex-column submenu">
                 <li className="nav-item">
-                  <Link className="sidebar-link" onClick={() => onSelect("blog")}>
+                  <Link to = "#" className="sidebar-link" onClick={() => onSelect("blog")}>
                     Bài Viết
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="sidebar-link" onClick={() => onSelect("blog-category")}>
+                  <Link to = "#" className="sidebar-link" onClick={() => onSelect("blog-category")}>
                     Danh mục
                   </Link>
                 </li>
               </ul>
             )}
           </li>
-          {/* <li className="nav-item">
-            <Link className="sidebar-link" onClick={() => onSelect("blog")}>
-              Quản lý bài viết
-            </Link>
-          </li> */}
           <li className="nav-item">
-            <Link className="sidebar-link" onClick={() => onSelect("order")}>
+            <Link to = "#" className="sidebar-link" onClick={() => onSelect("order")}>
               Quản lý đơn hàng
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="sidebar-link" onClick={() => onSelect("voucher")}>
+            <Link to = "#" className="sidebar-link" onClick={() => onSelect("voucher")}>
               Quản lý Voucher
             </Link>
           </li>
           {role === "ADMIN" && (
             <li className="nav-item">
-              <Link className="sidebar-link" onClick={() => onSelect("user")}>
+              <Link to = "#" className="sidebar-link" onClick={() => onSelect("user")}>
                 Quản lý người dùng
               </Link>
             </li>
@@ -186,7 +129,7 @@ const Admin = () => {
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<any>(token);
       setRole(decodedToken.role); // Set the user role
       if (decodedToken.role === "MEMBER") {
         navigate("/"); // Redirect to homepage

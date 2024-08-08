@@ -1,10 +1,10 @@
 import request from "./axios";
 
-const getImagesByProductId = (productId) => {
+const getImagesByProductId = (productId: number) => {
   return request.get(`image/get/product/${productId}`);
 };
 
-const deleteImageByImageId = (token, imageId) => {
+const deleteImageByImageId = (token: string, imageId: number) => {
   return request.delete(`image/delete/${imageId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -12,7 +12,7 @@ const deleteImageByImageId = (token, imageId) => {
   });
 };
 
-const saveImageByProductId = (token, formData, productId) => {
+const saveImageByProductId = (token: string, formData: any, productId: number) => {
     return request.post(
         `image/save/product/${productId}`,
         formData,

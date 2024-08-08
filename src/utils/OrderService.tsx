@@ -1,10 +1,10 @@
 import request from './axios';
 
-const saveOrderInfo = (voucherId, data, config) => {
+const saveOrderInfo = (voucherId: number, data: any, config: any) => {
     return request.post(`order/save${voucherId ? `?voucherId=${voucherId}` : ""}`, data, config);
 }
 
-const getAllOrders = (token) => {
+const getAllOrders = (token: string) => {
     return request.get('order/all', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -12,7 +12,7 @@ const getAllOrders = (token) => {
       });
 }
 
-const getStaffOrders = (token) => {
+const getStaffOrders = (token: string) => {
     return request.get('order/staffOrders', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -20,7 +20,7 @@ const getStaffOrders = (token) => {
       });
 }
 
-const deleteOrderByOrderId = (token, orderId) => {
+const deleteOrderByOrderId = (token: string, orderId: number) => {
     return request.delete(`order/delete/${orderId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,7 +28,7 @@ const deleteOrderByOrderId = (token, orderId) => {
       });
 }
 
-const deliverOrderByOrderId = (token, orderId) => {
+const deliverOrderByOrderId = (token: string, orderId: number) => {
     return request.put(`order/deliver/${orderId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ const deliverOrderByOrderId = (token, orderId) => {
       });
 }
 
-const updateOrder = (token, data, orderId, selectedStaffId) => {
+const updateOrder = (token: string, data:any , orderId: number, selectedStaffId: number) => {
   return request.put(`order/update/${orderId}${selectedStaffId ? `?staffId=${selectedStaffId}` : ""}`,data, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const updateOrder = (token, data, orderId, selectedStaffId) => {
   });
 }
 
-const cancelOrderByOrderId = (token, orderId) => {
+const cancelOrderByOrderId = (token: string, orderId: number) => {
   return request.put(`order/cancel/${orderId}`,{}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ const cancelOrderByOrderId = (token, orderId) => {
   });
 }
 
-const calculateOrderTotal = (token, orderId) => {
+const calculateOrderTotal = (token: string, orderId: number) => {
   return request.put(`order/${orderId}/total`,{}, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });

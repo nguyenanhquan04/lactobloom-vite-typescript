@@ -1,6 +1,6 @@
 import request from './axios';
 
-const getTop5SellingProducts = (token) => {
+const getTop5SellingProducts = (token: string) => {
     return request.get('dashboard/top5SellingProducts', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -8,7 +8,7 @@ const getTop5SellingProducts = (token) => {
       });
 }
 
-const getTop5RecentOrders = (token) => {
+const getTop5RecentOrders = (token: string) => {
     return request.get('dashboard/top5RecentOrders', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -16,7 +16,7 @@ const getTop5RecentOrders = (token) => {
       });
 }
 
-const getTotalRevenue = (token) => {
+const getTotalRevenue = (token: string) => {
     return request.get('dashboard/totalRevenue', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -24,7 +24,7 @@ const getTotalRevenue = (token) => {
       });
 }
 
-const getTodayRevenue = (token) => {
+const getTodayRevenue = (token: string) => {
     return request.get('dashboard/todayRevenue', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ const getTodayRevenue = (token) => {
       });
 }
 
-const getMonthRevenue = (token, month, year) => {
+const getMonthRevenue = (token: string, month: number, year: number) => {
     return request.get(`dashboard/monthRevenue?month=${month}&year=${year}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const getMonthRevenue = (token, month, year) => {
       });
 }
 
-const getSalesByMonthOfYear= (token, year) => {
+const getSalesByMonthOfYear= (token: string, year: number) => {
     return request.get(`dashboard/salesByMonthOfYear?year=${year}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const getSalesByMonthOfYear= (token, year) => {
       });
 }
 
-const getTodayOrders = (token) => {
+const getTodayOrders = (token: string) => {
     return request.get('dashboard/todayOrders', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ const getTodayOrders = (token) => {
       });
 }
 
-const getSalesByDayOfMonth= (token, month, year) => {
+const getSalesByDayOfMonth= (token: string, month: number, year: number) => {
     return request.get(`dashboard/salesByDayOfMonth?month=${month}&year=${year}`, {
         headers: {
           Authorization: `Bearer ${token}`,
