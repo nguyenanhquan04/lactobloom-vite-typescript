@@ -1,19 +1,24 @@
-import PropTypes from "prop-types";
+import React from "react";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductImageGallerySlider from "../../components/product/ProductImageGallerySlider";
 import ProductDescriptionInfoSlider from "../../components/product/ProductDescriptionInfoSlider";
 
-const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, product }) => {
-  const currency = useSelector((state) => state.currency);
-  const { cartItems } = useSelector((state) => state.cart);
-  const { wishlistItems } = useSelector((state) => state.wishlist);
-  const { compareItems } = useSelector((state) => state.compare);
-  const wishlistItem = wishlistItems.find(item => item.productId === product.productId);
-  const compareItem = compareItems.find(item => item.productId === product.productId);
+interface ProductImageDescriptionProps {
+  product: any;
+  spaceBottomClass: string;
+  spaceTopClass: string;
+};
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
+const ProductImageDescription: React.FC<ProductImageDescriptionProps> = ({ spaceTopClass, spaceBottomClass, product }) => {
+  const { cartItems } = useSelector((state: any) => state.cart);
+  const { wishlistItems } = useSelector((state: any) => state.wishlist);
+  const { compareItems } = useSelector((state: any) => state.compare);
+  const wishlistItem = wishlistItems.find((item: any) => item.productId === product.productId);
+  const compareItem = compareItems.find((item: any) => item.productId === product.productId);
+
+  const discountedPrice = getDiscountPrice(product.price, product.discount) as number;
   const finalProductPrice = +(product.price * 1);
   const finalDiscountedPrice = +(
     discountedPrice * 1
@@ -32,7 +37,6 @@ const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, product }) =
             <ProductDescriptionInfoSlider
               product={product}
               discountedPrice={discountedPrice}
-              currency={currency}
               finalDiscountedPrice={finalDiscountedPrice}
               finalProductPrice={finalProductPrice}
               cartItems={cartItems}
@@ -44,12 +48,6 @@ const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, product }) =
       </div>
     </div>
   );
-};
-
-ProductImageDescription.propTypes = {
-  product: PropTypes.shape({}),
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string,
 };
 
 export default ProductImageDescription;

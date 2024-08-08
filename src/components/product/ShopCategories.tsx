@@ -23,7 +23,7 @@ const ShopCategories: React.FC<ShopCategoryProps> = ({ getSortParams, onCategory
       try {
         const response = await getAllCategories();
         setCategories(response.data);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setLoading(false);

@@ -2,7 +2,13 @@ import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import ShopTopAction from "../../components/product/ShopTopAction";
 
-const ShopTopbar = ({
+interface ShopTopbarProps {
+  getLayout: any;
+  productCount: any;
+  sortedProductCount: any;
+};
+
+const ShopTopbar: React.FC<ShopTopbarProps> = ({
   getLayout,
   productCount,
   sortedProductCount
@@ -19,10 +25,6 @@ const ShopTopbar = ({
   );
 };
 
-ShopTopbar.propTypes = {
-  getLayout: PropTypes.func,
-  productCount: PropTypes.number,
-  sortedProductCount: PropTypes.number
-};
+
 
 export default ShopTopbar;

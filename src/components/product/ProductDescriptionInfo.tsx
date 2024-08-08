@@ -58,7 +58,7 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
       .then((response) => {
         const reviews = response.data;
         const totalRating = reviews.reduce(
-          (acc, review) => acc + review.rate,
+          (acc: any, review: any) => acc + review.rate,
           0
         );
         const avgRating = reviews.length ? totalRating / reviews.length : 0;
@@ -92,7 +92,7 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
         .then((response) => {
           const wishlistData = response.data;
           setIsProductInWishlist(
-            wishlistData.some((item) => item.productId === product.productId)
+            wishlistData.some((item: any) => item.productId === product.productId)
           );
         })
         .catch((error) => {

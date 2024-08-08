@@ -1,8 +1,13 @@
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx";
 import ProductgridList from "./ProductgridList";
 
-const ShopProducts = ({ products, layout }) => {
+interface ShopProductsProps {
+  layout?: string;
+  products?: any[];
+};
+
+const ShopProducts: React.FC<ShopProductsProps> = ({ products, layout }) => {
   return (
     <div className="shop-bottom-area mt-35">
       <div className={clsx("row", layout)}>
@@ -10,11 +15,6 @@ const ShopProducts = ({ products, layout }) => {
       </div>
     </div>
   );
-};
-
-ShopProducts.propTypes = {
-  layout: PropTypes.string,
-  products: PropTypes.array
 };
 
 export default ShopProducts;

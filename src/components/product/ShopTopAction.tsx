@@ -2,7 +2,7 @@ import React from "react";
 import { setActiveLayout } from "../../helpers/product";
 
 interface ShopTopActionProps {
-  getFilterSortParams: any;
+  getFilterSortParams?: any;
   getLayout: any;
   productCount: number;
   sortedProductCount: number;

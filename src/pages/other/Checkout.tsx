@@ -9,16 +9,16 @@ import { myVoucher } from "../../utils/VoucherService";
 import { userInfo } from "../../utils/UserService";
 import { createPayment } from "../../utils/PaymentService";
 import Cookies from "js-cookie"; // Import js-cookie
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
 
   let { pathname } = useLocation();
 
-  const { cartItems } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state: any) => state.cart);
   const [vouchers, setVouchers] = useState([]);
-  const [selectedVoucher, setSelectedVoucher] = useState(null);
+  const [selectedVoucher, setSelectedVoucher] = useState<any | null>(null);
   const authToken = Cookies.get("authToken");
 
   const [user, setUser] = useState(null);
@@ -27,7 +27,7 @@ const Checkout = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [orderNotes, setOrderNotes] = useState(""); // Đã thêm state for order notes
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
   const [shippingMethod, setShippingMethod] = useState();
 
   let navigate = useNavigate();
@@ -36,14 +36,14 @@ const Checkout = () => {
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<any>(token);
       const userRole = decodedToken.role;
       if (userRole !== "MEMBER") {
         navigate("/admin");
-      } 
+      }
     }
   }, [navigate]);
-  
+
   useEffect(() => {
     const fetchVouchers = async () => {
       try {
@@ -76,11 +76,13 @@ const Checkout = () => {
     fetchUserInfo();
   }, []);
 
-  const handleVoucherChange = (event) => {
+  const handleVoucherChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedVoucherId = event.target.value;
-    const selectedVoucher = vouchers.find(
-      (voucher) => voucher.voucherId === parseInt(selectedVoucherId)
-    );
+    const selectedVoucher =
+      vouchers.find(
+        (voucher: any) => voucher.voucherId === parseInt(selectedVoucherId)
+      ) || null; // Default to null if no voucher is found
+
     setSelectedVoucher(selectedVoucher);
   };
 
@@ -90,7 +92,7 @@ const Checkout = () => {
   }
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors = {} as any;
     if (!fullName) newErrors.fullName = "Họ tên là bắt buộc";
     if (!address) newErrors.address = "Địa chỉ là bắt buộc";
     if (!email) newErrors.email = "Email là bắt buộc";
@@ -99,7 +101,7 @@ const Checkout = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const placeOrder = async (amount) => {
+  const placeOrder = async (amount: number) => {
     if (!validateForm()) {
       return;
     }
@@ -154,7 +156,10 @@ const Checkout = () => {
         <Breadcrumb
           pages={[
             { label: "Trang Chủ", path: import.meta.env.VITE_PUBLIC_URL + "/" },
-            { label: "Thanh toán", path: import.meta.env.VITE_PUBLIC_URL + pathname },
+            {
+              label: "Thanh toán",
+              path: import.meta.env.VITE_PUBLIC_URL + pathname,
+            },
           ]}
         />
         <div className="checkout-area pt-95 pb-100">
@@ -174,7 +179,7 @@ const Checkout = () => {
                             onChange={(e) => setFullName(e.target.value)}
                             required
                           />
-                           {errors.fullName && (
+                          {errors.fullName && (
                             <div className="error-text">{errors.fullName}</div>
                           )}
                         </div>
@@ -230,7 +235,7 @@ const Checkout = () => {
                           <label>Voucher</label>
                           <select onChange={handleVoucherChange}>
                             <option value="">Chọn voucher</option>
-                            {vouchers.map((voucher) => (
+                            {vouchers.map((voucher: any) => (
                               <option
                                 key={voucher.voucherId}
                                 value={voucher.voucherId}
@@ -270,14 +275,15 @@ const Checkout = () => {
                         </div>
                         <div className="your-order-middle">
                           <ul>
-                            {cartItems.map((cartItem, key) => {
+                            {cartItems.map((cartItem: any, key: any) => {
                               console.log(cartItems);
                               const discountedPrice = getDiscountPrice(
                                 cartItem.price,
                                 cartItem.discount
                               );
                               const finalProductPrice = cartItem.price;
-                              const finalDiscountedPrice = discountedPrice * 1;
+                              const finalDiscountedPrice =
+                                discountedPrice as number;
 
                               discountedPrice != null
                                 ? (cartTotalPrice +=
@@ -293,8 +299,8 @@ const Checkout = () => {
                                     cartItem.stock > 0 &&
                                     authToken ? (
                                       <>
-                                        {cartItem.productName}{" "}{"(Đặt trước)"} X{" "}
-                                        {cartItem.quantity} 
+                                        {cartItem.productName} {"(Đặt trước)"} X{" "}
+                                        {cartItem.quantity}
                                       </>
                                     ) : (
                                       <>
@@ -328,13 +334,7 @@ const Checkout = () => {
                               <ul>
                                 <li className="order-discount">Giảm giá</li>
                                 <li>
-                                  {(
-                                    cartTotalPrice -
-                                    getDiscountPrice(
-                                      cartTotalPrice,
-                                      selectedVoucher.discount
-                                    )
-                                  ).toLocaleString("vi-VN") + " VND"}
+                                  {(cartTotalPrice-getDiscountPrice(cartTotalPrice, selectedVoucher.discount)).toLocaleString("vi-VN") + " VND"}
                                 </li>
                               </ul>
                             </div>
@@ -345,10 +345,7 @@ const Checkout = () => {
                             <li className="order-total">Tổng</li>
                             <li>
                               {selectedVoucher
-                                ? getDiscountPrice(
-                                    cartTotalPrice,
-                                    selectedVoucher.discount
-                                  ).toLocaleString("vi-VN") + " VND"
+                                ? getDiscountPrice(cartTotalPrice, selectedVoucher.discount).toLocaleString("vi-VN") + " VND"
                                 : cartTotalPrice.toLocaleString("vi-VN") +
                                   " VND"}
                             </li>
@@ -356,15 +353,17 @@ const Checkout = () => {
                         </div>
                       </div>
                       <div className="payment-method">
-                      <ul>Phương thức thanh toán</ul>
-                          <select
-                            value={shippingMethod}
-                            onChange={(e) => setShippingMethod(JSON.parse(e.target.value))}
-                            required
-                          >
-                            <option value= {false}>Chuyển khoản ngân hàng</option>
-                            <option value= {true}>Thanh toán COD</option>                           
-                          </select>
+                        <ul>Phương thức thanh toán</ul>
+                        <select
+                          value={shippingMethod}
+                          onChange={(e) =>
+                            setShippingMethod(JSON.parse(e.target.value))
+                          }
+                          required
+                        >
+                          <option value="false">Chuyển khoản ngân hàng</option>
+                          <option value="true">Thanh toán COD</option>
+                        </select>
                       </div>
                     </div>
                     <div className="place-order mt-25">

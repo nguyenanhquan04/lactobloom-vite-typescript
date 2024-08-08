@@ -1,11 +1,17 @@
-import PropTypes from "prop-types";
 import clsx from "clsx";
+import React from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SectionTitle from "../../components/section-title/SectionTitle";
 import ProductGrid from "./ProductGrid";
 
-const TabProduct = ({
+interface TabProductProps {
+  bgColorClass?: string;
+  spaceBottomClass?: string;
+  spaceTopClass?: string;
+};
+
+const TabProduct: React.FC<TabProductProps> = ({
   spaceTopClass,
   spaceBottomClass,
   bgColorClass
@@ -37,13 +43,6 @@ const TabProduct = ({
       </div>
     </div>
   );
-};
-
-TabProduct.propTypes = {
-  bgColorClass: PropTypes.string,
-  category: PropTypes.string,
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default TabProduct;

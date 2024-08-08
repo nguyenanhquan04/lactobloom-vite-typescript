@@ -1,11 +1,15 @@
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx";
 import ShopSearch from "../../components/product/ShopSearch";
 import ShopCategoryAndBrand from "../../components/product/ShopCategoryAndBrand";
 
-const ShopSidebar = ({
-  products,
-  getSortParams,
+interface ShopSidebarProps {
+  sideSpaceClass: string;
+  onCategorySelect: any;
+  onBrandSelect: any;
+};
+
+const ShopSidebar: React.FC<ShopSidebarProps> = ({
   sideSpaceClass,
   onCategorySelect,
   onBrandSelect,
@@ -16,7 +20,6 @@ const ShopSidebar = ({
       <ShopSearch />
 
       <ShopCategoryAndBrand
-      getSortParams={getSortParams}
       onCategorySelect={onCategorySelect}
       onBrandSelect={onBrandSelect}
       />
@@ -24,12 +27,6 @@ const ShopSidebar = ({
   );
 };
 
-ShopSidebar.propTypes = {
-  getSortParams: PropTypes.func,
-  products: PropTypes.array,
-  sideSpaceClass: PropTypes.string,
-  onCategorySelect: PropTypes.func, // Add this prop type
-  onBrandSelect: PropTypes.func, // Add this prop type
-};
+
 
 export default ShopSidebar;

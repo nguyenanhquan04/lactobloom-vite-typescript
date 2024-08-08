@@ -1,6 +1,12 @@
 import React from "react";
 
-const ShopSearch = ({ searchTerm, handleSearchChange, handleSubmit }) => {
+interface ShopSearchProps {
+  searchTerm?: string;
+  handleSearchChange?: any;
+  handleSubmit?: any;
+}
+
+const ShopSearch: React.FC<ShopSearchProps> = ({ searchTerm, handleSearchChange, handleSubmit }) => {
   return (
     <div className="sidebar-widget">
       <h3 className="pro-sidebar-title">Tìm Kiếm</h3>

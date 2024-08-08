@@ -1,19 +1,21 @@
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductDescriptionInfo from "../../components/product/ProductDescriptionInfo";
 import ProductImageGallerySticky from "../../components/product/ProductImageGallerySticky";
 
-const ProductImageDescriptionSticky = ({ spaceTopClass, spaceBottomClass, product }) => {
-  const currency = useSelector((state) => state.currency);
-  const { cartItems } = useSelector((state) => state.cart);
-  const { wishlistItems } = useSelector((state) => state.wishlist);
-  const { compareItems } = useSelector((state) => state.compare);
-  const wishlistItem = wishlistItems.find(item => item.productId === product.productId);
-  const compareItem = compareItems.find(item => item.productId === product.productId);
+interface ProductImageDescriptionStickyProps {
+  product?: any;
+  spaceBottomClass?: string;
+  spaceTopClass?: string;
+};
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
+
+const ProductImageDescriptionSticky: React.FC<ProductImageDescriptionStickyProps> = ({ spaceTopClass, spaceBottomClass, product }) => {
+  const { cartItems } = useSelector((state: any) => state.cart);
+  const { compareItems } = useSelector((state: any) => state.compare);
+  const compareItem = compareItems.find((item: any) => item.productId === product.productId);
+  const discountedPrice = getDiscountPrice(product.price, product.discount) as number;
   const finalProductPrice = +(product.price * 1);
   const finalDiscountedPrice = +(
     discountedPrice * 1
@@ -35,11 +37,9 @@ const ProductImageDescriptionSticky = ({ spaceTopClass, spaceBottomClass, produc
               <ProductDescriptionInfo
                 product={product}
                 discountedPrice={discountedPrice}
-                currency={currency}
                 finalDiscountedPrice={finalDiscountedPrice}
                 finalProductPrice={finalProductPrice}
                 cartItems={cartItems}
-                wishlistItem={wishlistItem}
                 compareItem={compareItem}
               />
             </div>
@@ -48,12 +48,6 @@ const ProductImageDescriptionSticky = ({ spaceTopClass, spaceBottomClass, produc
       </div>
     </div>
   );
-};
-
-ProductImageDescriptionSticky.propTypes = {
-  product: PropTypes.shape({}),
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string,
 };
 
 export default ProductImageDescriptionSticky;

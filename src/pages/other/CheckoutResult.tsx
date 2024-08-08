@@ -19,10 +19,10 @@ const CheckoutResult = () => {
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(1000);
-  const [orderInfo, setOrderInfo] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [orderInfo, setOrderInfo] = useState<any|null>(null);
+  const [status, setStatus] = useState<boolean|string|null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string|null>(null);
 
   const query = new URLSearchParams(search);
   const transactionId = query.get("transactionId");
@@ -30,7 +30,7 @@ const CheckoutResult = () => {
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<any>(token);
       const userRole = decodedToken.role;
       if (userRole !== "MEMBER") {
         navigate("/admin");
@@ -98,7 +98,7 @@ const CheckoutResult = () => {
     }, 1000);
   };
 
-  const saveOrder = (orderData, isCOD = false) => {
+  const saveOrder = (orderData: any, isCOD = false) => {
     const token = Cookies.get("authToken");
     const now = new Date();
     now.setHours(now.getHours() + 7);
@@ -122,7 +122,7 @@ const CheckoutResult = () => {
       .then((response) => {
         const orderId = response.data.orderId;
   
-        const orderDetailPromises = orderData.cartItems.map((item) => {
+        const orderDetailPromises = orderData.cartItems.map((item: any) => {
           return saveOrderProduct(token, orderId, item.productId,
             {
               quantity: item.quantity,
@@ -227,7 +227,7 @@ const CheckoutResult = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {orderInfo.cartItems.map((item, index) => (
+                      {orderInfo.cartItems.map((item: any, index: any) => (
                         <tr key={index}>
                           <td className="short-column">{item.productName} {item.preOrder ? "(Đặt trước)" : ""}</td>
                           <td>{item.quantity}</td>
@@ -237,14 +237,14 @@ const CheckoutResult = () => {
                         </tr>
                       ))}
                       <tr>
-                        <td colSpan="3"></td>
+                        <td colSpan={3}></td>
                         <th className="long-column">Voucher:</th>
                         <td>
                           -{orderInfo.selectedVoucher ? orderInfo.discountAmount.toLocaleString("vi-VN") : "0"} VND
                         </td>
                       </tr>
                       <tr>
-                        <td colSpan="3"></td>
+                        <td colSpan={3}></td>
                         <th className="long-column">Tổng tiền:</th>
                         <td>{orderInfo.totalAmount.toLocaleString("vi-VN")} VND</td>
                       </tr>

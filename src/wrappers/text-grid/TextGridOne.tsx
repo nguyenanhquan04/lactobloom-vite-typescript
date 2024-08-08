@@ -1,9 +1,13 @@
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx";
 import textGridData from "../../data/text-grid/text-grid-one.json";
-import TextGridOneSingle from "../../components/text-grid/TextGridOneSingle.jsx";
+import TextGridOneSingle from "../../components/text-grid/TextGridOneSingle.js";
 
-const TextGridOne = ({ spaceBottomClass }) => {
+interface TextGridOneProps {
+  spaceBottomClass: string;
+};
+
+const TextGridOne: React.FC<TextGridOneProps> = ({ spaceBottomClass }) => {
   return (
     <div className={clsx("about-mission-area", spaceBottomClass)}>
       <div className="container">
@@ -20,10 +24,6 @@ const TextGridOne = ({ spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-TextGridOne.propTypes = {
-  spaceBottomClass: PropTypes.string
 };
 
 export default TextGridOne;

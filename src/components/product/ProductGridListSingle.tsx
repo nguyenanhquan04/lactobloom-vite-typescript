@@ -24,12 +24,12 @@ interface ProductGridListSingleProps {
     preOrder: boolean;
     shortDescription: string;
   };
-  cartItem: {
+  cartItem?: {
     quantity: number;
   };
-  wishlistItem: object;
-  compareItem: object;
-  spaceBottomClass: string;
+  wishlistItem?: object;
+  compareItem?: object;
+  spaceBottomClass?: string;
 }
 
 const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
@@ -42,8 +42,8 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
   const [modalShow, setModalShow] = useState(false);
   const [productImages, setProductImages] = useState("/assets/img/no-image.png");
   const [averageRating, setAverageRating] = useState(0);
-  const [wishlistData, setWishlistData] = useState([]);
-  const [authToken, setAuthToken] = useState(null);
+  const [wishlistData, setWishlistData] = useState<any[]>([]);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const discountedPrice = getDiscountPrice(product.price, product.discount) as number;
   const finalProductPrice = +(product.price * 1);
@@ -64,7 +64,7 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
       try {
         const response = await getProductReviewByProductId(product.productId);
         const reviews = response.data;
-        const totalRating = reviews.reduce((acc, review) => acc + review.rate, 0);
+        const totalRating = reviews.reduce((acc: any, review: any) => acc + review.rate, 0);
         const avgRating = reviews.length ? totalRating / reviews.length : 0;
         setAverageRating(avgRating);
       } catch (error) {
@@ -74,15 +74,17 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
 
     const fetchWishlistData = async () => {
       try {
-        const token = Cookies.get("authToken");
+        const token = Cookies.get("authToken") || null; // Handle undefined case by defaulting to null
         setAuthToken(token);
-        const response = await myWishlist(token);
-        setWishlistData(response.data);
-        response.data.forEach((item) => {
-          if (item.productId === product.productId) {
-            dispatch(addToWishlistFormAPI(product));
-          }
-        });
+        if (token) {
+          const response = await myWishlist(token);
+          setWishlistData(response.data);
+          response.data.forEach((item: any) => {
+            if (item.productId === product.productId) {
+              dispatch(addToWishlistFormAPI(product));
+            }
+          });
+        }
       } catch (error) {
         console.error("Error fetching wishlist data:", error);
       }
@@ -97,7 +99,7 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
     (wishlistItem: any) => wishlistItem.productId === product.productId
   );
 
-  const handleWishlistClick = async (product) => {
+  const handleWishlistClick = async (product: any) => {
     if (authToken) {
       try {
         await saveWishlist(authToken, product.productId);

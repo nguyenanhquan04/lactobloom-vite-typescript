@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import clsx from "clsx";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
@@ -10,9 +9,8 @@ import {
   saveProductReview,
   updateProductReview,
 } from "../../utils/ProductReviewService";
-
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsisV,
@@ -20,22 +18,40 @@ import {
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-const ProductDescriptionTab = ({
+interface ProductDescriptionTabProps {
+  spaceBottomClass?: string;
+  productFullDesc: string;
+  productId: string | number;
+}
+
+interface Review {
+  reviewId: number;
+  email: string;
+  comment: string;
+  rate: number;
+  reviewDate: string;
+}
+
+interface DecodedToken {
+  sub: string;
+}
+
+const ProductDescriptionTab: React.FC<ProductDescriptionTabProps> = ({
   spaceBottomClass,
   productFullDesc,
   productId,
 }) => {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [newReview, setNewReview] = useState({ comment: "", rating: 0 });
   const [authToken] = useState(Cookies.get("authToken"));
-  const [authEmail, setAuthEmail] = useState(null);
-  const [actionReviewId, setActionReviewId] = useState(null);
-  const [editReviewId, setEditReviewId] = useState(null);
+  const [authEmail, setAuthEmail] = useState<string | null>(null);
+  const [actionReviewId, setActionReviewId] = useState<number | null>(null);
+  const [editReviewId, setEditReviewId] = useState<number | null>(null);
   const [editedReview, setEditedReview] = useState({ comment: "", rating: 0 });
 
   useEffect(() => {
     if (authToken) {
-      const decodedToken = jwtDecode(authToken);
+      const decodedToken = jwtDecode<DecodedToken>(authToken);
       setAuthEmail(decodedToken.sub);
     }
   }, [authToken]);
@@ -50,16 +66,16 @@ const ProductDescriptionTab = ({
       });
   }, [productId]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewReview({ ...newReview, [name]: value });
   };
 
-  const handleRatingChange = (rating) => {
+  const handleRatingChange = (rating: number) => {
     setNewReview({ ...newReview, rating });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const currentDate = new Date();
@@ -82,7 +98,7 @@ const ProductDescriptionTab = ({
     };
 
     try {
-      const response = await saveProductReview(productId, reviewData, config);
+      await saveProductReview(productId, reviewData, config);
       setNewReview({ comment: "", rating: 0 });
       getProductReviewByProductId(productId)
         .then((response) => {
@@ -96,11 +112,11 @@ const ProductDescriptionTab = ({
     }
   };
 
-  const handleActionButtonClick = (reviewId) => {
+  const handleActionButtonClick = (reviewId: number) => {
     setActionReviewId(actionReviewId === reviewId ? null : reviewId);
   };
 
-  const handleEditClick = (reviewId, currentComment, currentRating) => {
+  const handleEditClick = (reviewId: number, currentComment: string, currentRating: number) => {
     setEditReviewId(reviewId);
     setEditedReview({ comment: currentComment, rating: currentRating });
   };
@@ -110,7 +126,7 @@ const ProductDescriptionTab = ({
     setEditedReview({ comment: "", rating: 0 });
   };
 
-  const handleUpdateClick = async (reviewId) => {
+  const handleUpdateClick = async (reviewId: number) => {
     const config = {
       headers: {
         Authorization: `Bearer ${authToken}`,
@@ -132,7 +148,7 @@ const ProductDescriptionTab = ({
     }
   };
 
-  const handleDeleteClick = async (reviewId) => {
+  const handleDeleteClick = async (reviewId: number) => {
     const config = {
       headers: {
         Authorization: `Bearer ${authToken}`,
@@ -165,7 +181,7 @@ const ProductDescriptionTab = ({
             </Nav>
             <Tab.Content className="description-review-bottom">
               <Tab.Pane eventKey="productDescription">
-              <div dangerouslySetInnerHTML={{ __html: productFullDesc}} />
+                <div dangerouslySetInnerHTML={{ __html: productFullDesc }} />
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
                 <div className="row">
@@ -179,7 +195,6 @@ const ProductDescriptionTab = ({
                             <div className="review-img">
                               <img
                                 src={
-                                  import.meta.env.VITE_PUBLIC_URL +
                                   "/assets/img/user.jpg"
                                 }
                                 alt="Customer"
@@ -337,12 +352,6 @@ const ProductDescriptionTab = ({
       </div>
     </div>
   );
-};
-
-ProductDescriptionTab.propTypes = {
-  productFullDesc: PropTypes.string,
-  spaceBottomClass: PropTypes.string,
-  productId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default ProductDescriptionTab;

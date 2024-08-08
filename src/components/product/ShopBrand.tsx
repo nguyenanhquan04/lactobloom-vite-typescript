@@ -22,7 +22,7 @@ const ShopBrand: React.FC<ShopBrandProps> = ({ getSortParams, onBrandSelect }) =
       try {
         const response = await getAllBrands();
         setBrands(response.data);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setLoading(false);

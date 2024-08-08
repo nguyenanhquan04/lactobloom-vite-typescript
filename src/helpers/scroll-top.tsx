@@ -1,12 +1,16 @@
-import { useLayoutEffect } from "react";
-import { useLocation } from 'react-router-dom'
+import React, { useLayoutEffect, ReactNode } from "react";
+import { useLocation } from 'react-router-dom';
 
-const ScrollToTop = ({children}) => {
+interface ScrollToTopProps {
+    children: ReactNode;
+}
+
+const ScrollToTop = ({ children }: ScrollToTopProps) => {
     const location = useLocation();
     useLayoutEffect(() => {
-      document.documentElement.scrollTo(0, 0);
+        document.documentElement.scrollTo(0, 0);
     }, [location.pathname]);
-    return children
+    return <>{children}</>;
 };
 
 export default ScrollToTop;

@@ -148,7 +148,7 @@ const ProductDescriptionInfoSlider: React.FC<ProductDescriptionInfoSliderProps> 
         <div className="pro-details-meta justify-content-center">
           <span>Danh mục :</span>
           <ul>
-            {product.category.map((single, key) => {
+            {product.category.map((single: any, key: any) => {
               return (
                 <li key={key}>
                   <Link to={"/shop"}>{single}</Link>

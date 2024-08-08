@@ -5,8 +5,8 @@ import SectionTitle from "../../components/section-title/SectionTitle";
 import { getAllBlogs } from "../../utils/BlogService";
 
 interface BlogFeaturedProps {
-  spaceBottomClass: string;
-  spaceTopClass: string;
+  spaceBottomClass?: string;
+  spaceTopClass?: string;
 };
 
 const BlogFeatured: React.FC<BlogFeaturedProps> = ({ spaceTopClass, spaceBottomClass }) => {

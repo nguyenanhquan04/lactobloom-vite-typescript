@@ -13,13 +13,12 @@ import { myWishlist, saveWishlist } from "../../utils/WishlistService";
 
 
 interface ProductGridSingleProps {
-  cartItem: any,
-  compareItem: any,
-  wishlistItem: any,
-  currency: any,
-  product: any,
-  sliderClassName: string,
-  spaceBottomClass: string,
+  cartItem?: any,
+  compareItem?: any,
+  wishlistItem?: any,
+  product?: any,
+  sliderClassName?: string,
+  spaceBottomClass?: string,
 };
 
 const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
@@ -32,7 +31,7 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
   const [modalShow, setModalShow] = useState(false);
   const [productImages, setProductImages] = useState("/assets/img/no-image.png");
   const [isProductInWishlist, setIsProductInWishlist] = useState(false);
-  const [authToken, setAuthToken] = useState(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const discountedPrice = getDiscountPrice(product.price, product.discount) as number;
   const finalProductPrice = +(product.price * 1);
@@ -53,12 +52,12 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
 
     const fetchWishlistData = async () => {
       try {
-        const token = Cookies.get("authToken");
+        const token = Cookies.get("authToken") || null;
         setAuthToken(token);
         if (token) {
           const response = await myWishlist(token);
           const wishlistData = response.data;
-          setIsProductInWishlist(wishlistData.some(item => item.productId === product.productId));
+          setIsProductInWishlist(wishlistData.some((item: any) => item.productId === product.productId));
         }
       } catch (error) {
         console.error("Error fetching wishlist data:", error);

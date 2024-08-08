@@ -1,10 +1,15 @@
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx";
 import SectionTitleTwo from "../../components/section-title/SectionTitleTwo";
 import teamMemberData from "../../data/team-members/team-member-one.json";
 import TeamMemberOneSingle from "../../components/team-member/TeamMemberOneSingle";
 
-const TeamMemberOne = ({ spaceTopClass, spaceBottomClass }) => {
+interface TeamMemberOneProps {
+  spaceBottomClass: string;
+  spaceTopClass: string;
+};
+
+const TeamMemberOne: React.FC<TeamMemberOneProps> = ({ spaceTopClass, spaceBottomClass }) => {
   return (
     <div className={clsx("team-area", spaceTopClass, spaceBottomClass)}>
       <div className="container">
@@ -29,11 +34,6 @@ const TeamMemberOne = ({ spaceTopClass, spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-TeamMemberOne.propTypes = {
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default TeamMemberOne;

@@ -317,20 +317,12 @@ function ProductModal({
               </div>
               {category && (
                 <div className="pro-details-category">
-                  <span>Danh mục: </span>
-                  <ul>
-                    <li>
-                      <Link>{category.categoryName}</Link>
-                    </li>
-                  </ul>
+                  <span>Danh mục: <Link>{category.categoryName}</Link></span>
                 </div>
               )}
               {brand && (
                 <div className="pro-details-category">
-                  <span>Thương hiệu: </span>
-                  <ul>
-                    <Link>{brand.brandName}</Link>
-                  </ul>
+                  <span>Thương hiệu: <Link>{brand.brandName}</Link></span>
                 </div>
               )}
               <div className="pro-details-social">
