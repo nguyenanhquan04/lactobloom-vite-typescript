@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button,
   TextField, IconButton, TablePagination, MenuItem, Select, FormControl, InputLabel, Grid, Dialog, DialogContent, DialogTitle
@@ -12,10 +11,26 @@ import ProductForm from './form/ProductForm';
 import ImageForm from './form/ImageForm';
 import { getAllBrands } from '../../utils/BrandService';
 import { deleteProductByProductId, getAllProducts } from '../../utils/ProductService';
+import { number, string } from 'prop-types';
+
+interface Product {
+  productId: number;
+  productName: string;
+  brandName: string;
+  categoryName: string;
+  price: number;
+  stock: number;
+}
+
+interface Brand {
+  brandId: number;
+  brandName: string;
+}
+
 
 const ProductManagement = () => {
-  const [products, setProducts] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -48,12 +63,12 @@ const ProductManagement = () => {
     fetchProducts();
   }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (productId) => {
-    const token = Cookies.get('authToken');
+  const handleDelete = async (productId: number) => {
+    const token = Cookies.get('authToken') as string;
     if (window.confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
       try {
         await deleteProductByProductId(token, productId);
@@ -64,16 +79,16 @@ const ProductManagement = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleBrandChange = (event) => {
+  const handleBrandChange = (event: any) => {
     setSelectedBrand(event.target.value);
     setPage(0);
   };
@@ -83,7 +98,7 @@ const ProductManagement = () => {
     setOpen(true);
   };
 
-  const handleEditProduct = (product) => {
+  const handleEditProduct = (product: any) => {
     setInitialProduct(product);
     setOpen(true);
   };
@@ -104,7 +119,7 @@ const ProductManagement = () => {
     setOpen(false);
   };
 
-  const handleOpenImageDialog = (product) => {
+  const handleOpenImageDialog = (product: any) => {
     setSelectedProduct(product);
     setImageDialogOpen(true);
   };

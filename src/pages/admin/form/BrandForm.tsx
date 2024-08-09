@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Button, TextField, Grid
 } from '@mui/material';
 import Cookies from 'js-cookie';
 import { saveBrand, updateBrandByBrandId } from '../../../utils/BrandService';
 
-const BrandForm = ({ onSave, initialBrand }) => {
+interface BrandFormProps {
+  onSave: () => void;
+  initialBrand: any;
+}
+
+const BrandForm: React.FC<BrandFormProps> = ({ onSave, initialBrand }) => {
   const [brand, setBrand] = useState({
     brandName: ''
   });
@@ -19,7 +23,7 @@ const BrandForm = ({ onSave, initialBrand }) => {
     }
   }, [initialBrand]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setBrand({
       ...brand,
@@ -27,9 +31,9 @@ const BrandForm = ({ onSave, initialBrand }) => {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       if (initialBrand) {
         await updateBrandByBrandId(token, brand, initialBrand.brandId);

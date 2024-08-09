@@ -16,8 +16,19 @@ import {
   getBlogCategoryByBlogId,
 } from "../../../utils/BlogCategoryService";
 import { saveBlog, updateBlogByBlogId } from "../../../utils/BlogService";
-const BlogForm = ({ onSave, initialBlog }) => {
-  const [blog, setBlog] = useState({
+
+interface BlogFormProps {
+  onSave: () => void;
+  initialBlog?: any;
+}
+
+interface BlogCategoryProps {
+  blogCategoryId: number;
+  blogCategoryName: string;
+}
+
+const BlogForm: React.FC<BlogFormProps> = ({ onSave, initialBlog }) => {
+  const [blog, setBlog] = useState<any>({
     blogCategoryId: "",
     title: "",
     shortDescription: "",
@@ -26,8 +37,8 @@ const BlogForm = ({ onSave, initialBlog }) => {
       .toISOString()
       .slice(0, 16),
   });
-  const [blogCategories, setBlogCategories] = useState([]);
-  const [file, setFile] = useState(null);
+  const [blogCategories, setBlogCategories] = useState<BlogCategoryProps[]>([]);
+  const [file, setFile] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -65,37 +76,39 @@ const BlogForm = ({ onSave, initialBlog }) => {
     fetchBlogData();
   }, [initialBlog]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
-    setBlog((prevBlog) => ({
+    setBlog((prevBlog: any) => ({
       ...prevBlog,
       [name]: value || "",
     }));
   };
 
-  const handleEditorChange = (content) => {
-    setBlog((prevBlog) => ({
+  const handleEditorChange = (content: any) => {
+    setBlog((prevBlog: any) => ({
       ...prevBlog,
       content: content,
     }));
   };
 
-  const onDrop = (acceptedFiles) => {
+  const onDrop = (acceptedFiles: any) => {
     setFile(acceptedFiles[0]);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: "image/*",
+    accept: {
+      'image/*': []
+    },
     maxFiles: 1,
   });
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get("authToken");
+    const token = Cookies.get("authToken") as string;
     const blogCategoryId = blogCategories.find(
       (blogCategory) => blogCategory.blogCategoryId === blog.blogCategoryId
-    )?.blogCategoryId;
+    )?.blogCategoryId as number;
 
     const formData = new FormData();
     const formData2 = new FormData();
@@ -125,10 +138,10 @@ const BlogForm = ({ onSave, initialBlog }) => {
     try {
       if (initialBlog) {
         await updateBlogByBlogId(
-          token,
+          token as string,
           formData2,
           initialBlog.blogId,
-          blogCategoryId
+          blogCategoryId as number
         );
       } else {
         await saveBlog(token, formData, blogCategoryId);
@@ -221,7 +234,7 @@ const BlogForm = ({ onSave, initialBlog }) => {
         </Grid>
         <Grid item xs={12}>
           <Editor
-            apiKey="36mfugt4eg3kx7ijc7n42t12i9py5q635msod4bu5jybwe6e"
+            apiKey="ulxmohd7vjbrnhgat12h8yffnqdp4qh2q5xcns8iqs1zdv27"
             init={{
               height: 500,
               menubar: false,

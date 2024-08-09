@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'; // Import jwtDecode
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button,
@@ -11,7 +10,17 @@ import Cookies from 'js-cookie';
 import UserForm from './form/UserForm'; // Import the UserForm component
 import { deleteUserByUserId, getAllUsers } from '../../utils/UserService';
 
-const translateRole = (role) => {
+interface User {
+  userId: number;
+  fullName: string;
+  role: string;
+  email: string;
+  phone: string;
+  address: string;
+  point: number;
+}
+
+const translateRole = (role: string) => {
   switch (role) {
     case 'ADMIN':
       return 'Admin';
@@ -25,7 +34,7 @@ const translateRole = (role) => {
 };
 
 const UserManagement = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -36,10 +45,10 @@ const UserManagement = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const token = Cookies.get('authToken');
+      const token = Cookies.get('authToken') as string;
       try {
         const decodedToken = jwtDecode(token);
-        const userEmail = decodedToken.sub;
+        const userEmail = decodedToken.sub as string;
         setCurrentUserEmail(userEmail);
 
         const response = await getAllUsers(token);
@@ -52,12 +61,12 @@ const UserManagement = () => {
     fetchUsers();
   }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (userId) => {
-    const token = Cookies.get('authToken');
+  const handleDelete = async (userId: number) => {
+    const token = Cookies.get('authToken') as string;
     if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
       try {
         await deleteUserByUserId(token, userId);
@@ -68,21 +77,21 @@ const UserManagement = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleRoleChange = (event) => {
+  const handleRoleChange = (event: any) => {
     setSelectedRole(event.target.value);
     setPage(0);
   };
 
-  const handleEditUser = (user) => {
+  const handleEditUser = (user: any) => {
     setEditUser(user);
     setOpen(true);
   };
@@ -95,7 +104,7 @@ const UserManagement = () => {
   const handleSave = () => {
     // Fetch updated users after saving
     const fetchUsers = async () => {
-      const token = Cookies.get('authToken');
+      const token = Cookies.get('authToken') as string;
       try {
         const response = await getAllUsers(token);
         setUsers(response.data);

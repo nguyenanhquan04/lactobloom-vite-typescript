@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Button, TextField, Grid
 } from '@mui/material';
 import Cookies from 'js-cookie';
 import { saveCategory, updateCategoryByCategoryId } from '../../../utils/CategoryService';
 
-const CategoryForm = ({ onSave, initialCategory }) => {
+interface CategoryProps {
+  onSave: () => void;
+  initialCategory: any;
+}
+
+const CategoryForm: React.FC<CategoryProps> = ({ onSave, initialCategory }) => {
   const [category, setCategory] = useState({
     categoryName: ''
   });
@@ -19,7 +23,7 @@ const CategoryForm = ({ onSave, initialCategory }) => {
     }
   }, [initialCategory]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setCategory({
       ...category,
@@ -27,9 +31,9 @@ const CategoryForm = ({ onSave, initialCategory }) => {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');    
+    const token = Cookies.get('authToken') as string;    
     try {
       if (initialCategory) {
         await updateCategoryByCategoryId(token, category, initialCategory.categoryId);

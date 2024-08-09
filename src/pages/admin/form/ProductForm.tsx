@@ -8,9 +8,23 @@ import { getAllBrands, getBrandByProductId } from '../../../utils/BrandService';
 import { getAllCategories, getCategoryByProductId } from '../../../utils/CategoryService';
 import { saveProduct, updateProductByProductId } from '../../../utils/ProductService';
 
+interface ProductFormProps {
+  onSave: () => void;
+  initialProduct: any;
+}
 
-const ProductForm = ({ onSave, initialProduct }) => {
-  const [product, setProduct] = useState({
+interface BrandProps {
+  brandId: number;
+  brandName: string;
+}
+
+interface CategoryProps {
+  categoryId: number;
+  categoryName: string;
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({ onSave, initialProduct }) => {
+  const [product, setProduct] = useState<any>({
     productName: '',
     brandId: '',
     categoryId: '',
@@ -56,24 +70,25 @@ const ProductForm = ({ onSave, initialProduct }) => {
     fetchProductData();
   }, [initialProduct]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
-    setProduct(prevProduct => ({
+    setProduct((prevProduct: any) => ({
       ...prevProduct,
-      [name]: name === 'preOrder' ? JSON.parse(value) : value || ''
+      [name]: name === 'preOrder' ? value === 'true' : value || ''
     }));
   };
+  
 
-  const handleLongDescriptionChange = (content) => {
-    setProduct(prevProduct => ({
+  const handleLongDescriptionChange = (content: any) => {
+    setProduct((prevProduct: any) => ({
       ...prevProduct,
       longDescription: content
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     const { brandId, categoryId } = product;
     try {
       if (initialProduct) {
@@ -111,7 +126,7 @@ const ProductForm = ({ onSave, initialProduct }) => {
               label="Brand"
               required
             >
-              {brands.map((brand) => (
+              {brands.map((brand: BrandProps) => (
                 <MenuItem key={brand.brandId} value={brand.brandId}>
                   {brand.brandName}
                 </MenuItem>
@@ -129,7 +144,7 @@ const ProductForm = ({ onSave, initialProduct }) => {
               label="Category"
               required
             >
-              {categories.map((category) => (
+              {categories.map((category: CategoryProps) => (
                 <MenuItem key={category.categoryId} value={category.categoryId}>
                   {category.categoryName}
                 </MenuItem>
@@ -150,7 +165,7 @@ const ProductForm = ({ onSave, initialProduct }) => {
         </Grid>
         <Grid item xs={12}>
         <Editor
-            apiKey="36mfugt4eg3kx7ijc7n42t12i9py5q635msod4bu5jybwe6e"
+            apiKey="ulxmohd7vjbrnhgat12h8yffnqdp4qh2q5xcns8iqs1zdv27"
             init={{
               height: 500,
               menubar: false,
@@ -210,8 +225,8 @@ const ProductForm = ({ onSave, initialProduct }) => {
               label="Pre Order"
               required
             >
-              <MenuItem value={true}>Cho phép đặt trước</MenuItem>
-              <MenuItem value={false}>Không cho phép đặt trước</MenuItem>
+              <MenuItem value="true">Cho phép đặt trước</MenuItem>
+              <MenuItem value="false">Không cho phép đặt trước</MenuItem>
             </Select>
           </FormControl>
         </Grid>

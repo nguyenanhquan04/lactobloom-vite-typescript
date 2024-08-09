@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button,
   IconButton, TablePagination, Grid, FormControl, InputLabel, Select, MenuItem, Dialog,
@@ -13,8 +12,19 @@ import OrderForm from './form/OrderForm'; // Ensure this path is correct
 import {jwtDecode} from "jwt-decode"; // Import jwtDecode correctly
 import { deleteOrderByOrderId, deliverOrderByOrderId, getAllOrders, getStaffOrders } from '../../utils/OrderService';
 
+interface Order {
+  status: string;
+  orderId: number;
+  fullName: string;
+  orderDate: any;
+  totalPrice: number;
+  phone: any;
+  address: string;
+  cod: boolean;
+  staffName: string;
+}
 
-const translateStatus = (status) => {
+const translateStatus = (status: string) => {
   switch (status.toLowerCase()) {
     case 'pending':
       return 'Đang chờ xử lý';
@@ -28,7 +38,7 @@ const translateStatus = (status) => {
 };
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -38,8 +48,8 @@ const OrderManagement = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const token = Cookies.get("authToken");
-      const decodedToken = jwtDecode(token);
+      const token = Cookies.get("authToken") as string;
+      const decodedToken = jwtDecode<any>(token);
 
       try {
         let response;
@@ -51,7 +61,7 @@ const OrderManagement = () => {
 
         if (response) {
           // Sort orders by orderDate in descending order
-          const sortedOrders = response.data.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+          const sortedOrders = response.data.sort((a: Order, b: Order) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime());
           setOrders(sortedOrders);
         }
       } catch (error) {
@@ -62,8 +72,8 @@ const OrderManagement = () => {
     fetchOrders();
   }, []);
 
-  const handleDelete = async (orderId) => {
-    const token = Cookies.get("authToken");
+  const handleDelete = async (orderId: number) => {
+    const token = Cookies.get("authToken") as string;
     if (window.confirm('Bạn có chắc muốn xóa đơn hàng này?')) {
       try {
         await deleteOrderByOrderId(token, orderId);
@@ -74,21 +84,21 @@ const OrderManagement = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleStatusChange = (event) => {
+  const handleStatusChange = (event: any) => {
     setSelectedStatus(event.target.value);
     setPage(0);
   };
 
-  const handleEdit = (order) => {
+  const handleEdit = (order: any) => {
     setEditOrder(order);
     setOpen(true);
   };
@@ -102,11 +112,11 @@ const OrderManagement = () => {
     handleClose();
     // Refresh the order list after saving
     const fetchOrders = async () => {
-      const token = Cookies.get("authToken");
+      const token = Cookies.get("authToken") as string;
       try {
         const response = await getAllOrders(token);
         // Sort orders by orderDate in descending order
-        const sortedOrders = response.data.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+        const sortedOrders = response.data.sort((a: any, b: any) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime());
         setOrders(sortedOrders);
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -115,8 +125,8 @@ const OrderManagement = () => {
     fetchOrders();
   };
 
-  const handleDeliver = async (orderId) => {
-    const token = Cookies.get("authToken");
+  const handleDeliver = async (orderId: number) => {
+    const token = Cookies.get("authToken") as string;
     try {
       await deliverOrderByOrderId(token, orderId);
       setOrders(orders.map(order => 
@@ -127,7 +137,7 @@ const OrderManagement = () => {
     }
   };
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 

@@ -9,8 +9,28 @@ import { getOrderProducts } from '../../../utils/OrderDetailService';
 import { getAllStaffs } from '../../../utils/UserService';
 import { updateOrder } from '../../../utils/OrderService';
 
-const OrderForm = ({ onSave, initialOrder }) => {
-  const [order, setOrder] = useState({
+interface OrderProps {
+  onSave: () => void;
+  initialOrder: any;
+}
+
+interface Staff {
+  userId: number;
+  fullName: string;
+}
+
+interface OrderDetail {
+  orderDetailId: number;
+  orderId: number;
+  productId: number;
+  productName: string;
+  quantity: number;
+  totalPrice: number;
+  preOrder: boolean;
+}
+
+const OrderForm: React.FC<OrderProps> = ({ onSave, initialOrder }) => {
+  const [order, setOrder] = useState<any>({
     fullName: '',
     email: '',
     phone: '',
@@ -19,17 +39,17 @@ const OrderForm = ({ onSave, initialOrder }) => {
     shippingFee: '',
     totalPrice: '',
     status: 'PENDING', // default status
-    orderDate: ''
+    orderDate: '',
   });
   const [orderDetails, setOrderDetails] = useState([]);
   const [staffList, setStaffList] = useState([]);
-  const [selectedStaffId, setSelectedStaffId] = useState('');
+  const [selectedStaffId, setSelectedStaffId] = useState<any>('');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<any>(token);
       setIsAdmin(decodedToken.role === 'ADMIN');
       fetchStaffList(token);
     }
@@ -41,7 +61,7 @@ const OrderForm = ({ onSave, initialOrder }) => {
 
   useEffect(() => {
     if (order.staffName && staffList.length > 0) {
-      const matchedStaff = staffList.find(staff => staff.fullName === order.staffName);
+      const matchedStaff = staffList.find((staff: Staff) => staff.fullName === order.staffName) as any;
       if (matchedStaff) {
         setSelectedStaffId(matchedStaff.userId);
       } else {
@@ -50,8 +70,8 @@ const OrderForm = ({ onSave, initialOrder }) => {
     }
   }, [order.staffName, staffList]);
 
-  const fetchOrderDetails = async (orderId) => {
-    const token = Cookies.get('authToken');
+  const fetchOrderDetails = async (orderId: number) => {
+    const token = Cookies.get('authToken') as string;
     try {
       const response = await getOrderProducts(token, orderId);
       setOrderDetails(response.data);
@@ -60,7 +80,7 @@ const OrderForm = ({ onSave, initialOrder }) => {
     }
   };
 
-  const fetchStaffList = async (token) => {
+  const fetchStaffList = async (token: string) => {
     try {
       const response = await getAllStaffs(token);
       setStaffList(response.data);
@@ -69,7 +89,7 @@ const OrderForm = ({ onSave, initialOrder }) => {
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setOrder({
       ...order,
@@ -77,13 +97,13 @@ const OrderForm = ({ onSave, initialOrder }) => {
     });
   };
 
-  const handleStaffChange = (event) => {
+  const handleStaffChange = (event: any) => {
     setSelectedStaffId(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');    
+    const token = Cookies.get('authToken') as string;    
     try {
       await updateOrder(token, order, order.orderId, selectedStaffId);
       onSave();
@@ -206,7 +226,7 @@ const OrderForm = ({ onSave, initialOrder }) => {
               required
               disabled={!isAdmin}
             >
-              {staffList.map((staff) => (
+              {staffList.map((staff: Staff) => (
                 <MenuItem key={staff.userId} value={staff.userId}>
                   {staff.fullName}
                 </MenuItem>
@@ -240,7 +260,7 @@ const OrderForm = ({ onSave, initialOrder }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {orderDetails.map((detail) => (
+                  {orderDetails.map((detail: OrderDetail) => (
                     <TableRow key={detail.orderDetailId}>
                       <TableCell>{detail.productName}{detail.preOrder ? " (Đặt trước)": ""}</TableCell>
                       <TableCell>{detail.quantity}</TableCell>

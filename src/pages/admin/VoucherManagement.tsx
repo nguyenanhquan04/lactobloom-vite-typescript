@@ -28,8 +28,17 @@ import Cookies from "js-cookie";
 import VoucherForm from "./form/VoucherForm"; // Import the VoucherForm component
 import { deleteVoucherByVoucherId, getAllVouchers } from "../../utils/VoucherService";
 
+interface Voucher {
+  voucherId: number;
+  point: number;
+  discount: number;
+  expirationDate: any;
+  available: boolean;
+  owner: string;
+}
+
 const VoucherManagement = () => {
-  const [vouchers, setVouchers] = useState([]);
+  const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -39,7 +48,7 @@ const VoucherManagement = () => {
 
   useEffect(() => {
     const fetchVouchers = async () => {
-      const token = Cookies.get("authToken");
+      const token = Cookies.get("authToken") as string;
       try {
         const response = await getAllVouchers(token);
         setVouchers(response.data);
@@ -51,12 +60,12 @@ const VoucherManagement = () => {
     fetchVouchers();
   }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
   };
 
-  const handleDelete = async (voucherId) => {
-    const token = Cookies.get("authToken");
+  const handleDelete = async (voucherId: number) => {
+    const token = Cookies.get("authToken") as string;
     if (window.confirm("Bạn có chắc muốn xóa voucher này?")) {
       try {
         await deleteVoucherByVoucherId(token, voucherId);
@@ -69,21 +78,21 @@ const VoucherManagement = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleAvailabilityChange = (event) => {
+  const handleAvailabilityChange = (event: any) => {
     setSelectedAvailability(event.target.value);
     setPage(0);
   };
 
-  const handleEditVoucher = (voucher) => {
+  const handleEditVoucher = (voucher: any) => {
     setEditVoucher(voucher);
     setOpen(true);
   };
@@ -101,7 +110,7 @@ const VoucherManagement = () => {
   const handleSave = () => {
     // Fetch updated vouchers after saving
     const fetchVouchers = async () => {
-      const token = Cookies.get("authToken");
+      const token = Cookies.get("authToken") as string;
       try {
         const response = await getAllVouchers(token);
         setVouchers(response.data);

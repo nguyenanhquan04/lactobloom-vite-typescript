@@ -23,11 +23,29 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import { getMonthRevenue, getSalesByDayOfMonth, getSalesByMonthOfYear, getTodayOrders, getTodayRevenue, getTop5RecentOrders, getTop5SellingProducts, getTotalRevenue } from '../../utils/DashboardService';
 import { getAllProducts, getProductByProductId } from '../../utils/ProductService';
 import { getShopMembers } from '../../utils/UserService';
+
+interface Order {
+  orderId: number;
+  fullName: string;
+  orderDate: any;
+  totalPrice: number;
+}
+
+interface SalesData {
+  month: number;
+  revenue: any;
+  orderCounts: number;
+}
+
+interface SalesByDate {
+  date: number;
+  revenue: any;
+  orderCounts: number;
+}
 
 const Dashboard = () => {
   const [topSellingProducts, setTopSellingProducts] = useState([]);
@@ -83,7 +101,7 @@ const Dashboard = () => {
     const token = Cookies.get('authToken') as string;
     try {
       const response = await getTop5RecentOrders(token);
-      const orders = response.data.map(order => ({
+      const orders = response.data.map((order: Order) => ({
         id: order.orderId,
         customer: order.fullName,
         date: order.orderDate.split('T')[0],
@@ -120,7 +138,7 @@ const Dashboard = () => {
     try {
       const year = new Date().getFullYear();
       const response = await getSalesByMonthOfYear(token, year);
-      const salesData = response.data.map(item => ({
+      const salesData = response.data.map((item: SalesData) => ({
         month: item.month,
         'Doanh Thu (Triệu)': parseFloat(item.revenue) / 1000000, // Adjust revenue scale here
         'Số Đơn Hàng': item.orderCounts
@@ -164,7 +182,7 @@ const Dashboard = () => {
     try {
       const year = new Date().getFullYear();
       const response = await getSalesByDayOfMonth(token, selectedMonth, year);
-      const salesDateData = response.data.map(item => ({
+      const salesDateData = response.data.map((item: SalesByDate) => ({
         date: item.date,
         'Doanh Thu (Triệu)': parseFloat(item.revenue) / 1000000, // Adjust revenue scale here
         'Số Đơn Hàng': item.orderCounts

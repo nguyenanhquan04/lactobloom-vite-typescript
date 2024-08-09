@@ -23,8 +23,13 @@ interface ProductCountMap {
   [key: string]: any;
 }
 
+interface Category {
+  categoryId: number;
+  categoryName: string;
+}
+
 const CategoryManagement = () => {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [productCounts, setProductCounts] = useState<ProductCountMap>({});
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(0);

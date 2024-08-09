@@ -20,9 +20,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDropzone } from "react-dropzone";
 import { deleteImageByImageId, getImagesByProductId, saveImageByProductId } from "../../../utils/ImageService";
 
-const ImageForm = ({ open, onClose, product, onSave }) => {
-  const [productImages, setProductImages] = useState([]);
-  const [deleteIndex, setDeleteIndex] = useState(null);
+interface ImageFormProps {
+  open: boolean;
+  onClose: () => void;
+  product: any;
+  onSave: () => void;
+}
+
+const ImageForm: React.FC<ImageFormProps> = ({ open, onClose, product, onSave }) => {
+  const [productImages, setProductImages] = useState<any>([]);
+  const [deleteIndex, setDeleteIndex] = useState<any|null>(null);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -50,7 +57,7 @@ const ImageForm = ({ open, onClose, product, onSave }) => {
   };
 
   const handleDeleteImage = async () => {
-    const token = Cookies.get("authToken");
+    const token = Cookies.get("authToken") as string;
     try {
       const imageId = productImages[deleteIndex].imageId;
       await deleteImageByImageId(token, imageId);
@@ -63,12 +70,12 @@ const ImageForm = ({ open, onClose, product, onSave }) => {
   };
 
   const onDrop = useCallback(
-    async (acceptedFiles) => {
+    async (acceptedFiles: any) => {
       const file = acceptedFiles[0];
       const formData = new FormData();
       formData.append("files", file);
 
-      const token = Cookies.get("authToken");
+      const token = Cookies.get("authToken") as string;
       setUploading(true);
 
       try {
@@ -86,7 +93,7 @@ const ImageForm = ({ open, onClose, product, onSave }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: "image/*",
+    accept:{ "image/*": []},
   });
 
   return (
@@ -120,7 +127,7 @@ const ImageForm = ({ open, onClose, product, onSave }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {productImages.map((img, index) => (
+              {productImages.map((img: any, index: any) => (
                 <TableRow key={img.imageId}>
                   <TableCell>
                     <img

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Button, TextField, Grid
 } from '@mui/material';
 import Cookies from 'js-cookie';
 import { saveBlogCategory, updateBlogCategoryByBlogCategoryId } from '../../../utils/BlogCategoryService';
 
-const BlogCategoryForm = ({ onSave, initialCategory }) => {
+interface BlogCategoryProps {
+  onSave: () => void;
+  initialCategory: any;
+}
+
+const BlogCategoryForm: React.FC<BlogCategoryProps> = ({ onSave, initialCategory }) => {
   const [blogCategory, setBlogCategory] = useState({
     blogCategoryName: ''
   });
@@ -19,7 +23,7 @@ const BlogCategoryForm = ({ onSave, initialCategory }) => {
     }
   }, [initialCategory]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setBlogCategory({
       ...blogCategory,
@@ -27,9 +31,9 @@ const BlogCategoryForm = ({ onSave, initialCategory }) => {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     try {
       if (initialCategory) {
         await updateBlogCategoryByBlogCategoryId(token, blogCategory, initialCategory.blogCategoryId);
