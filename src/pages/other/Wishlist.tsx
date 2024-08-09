@@ -55,7 +55,7 @@ const Wishlist = () => {
           const response = await myWishlist(authToken);
           const wishlistData = response.data;
 
-          const productPromises = wishlistData.map(async item => {
+          const productPromises = wishlistData.map(async (item: any) => {
             const productResponse = await getProductByProductId(item.productId);
             return {
               ...productResponse.data,
@@ -101,7 +101,7 @@ const Wishlist = () => {
     if (authToken) {
       try {
         await deleteWishlist(authToken, wishlistId);
-        setWishlistItems(wishlistItems.filter(item => item.productId !== productId));
+        setWishlistItems(wishlistItems.filter((item: any) => item.productId !== productId));
         dispatch(deleteFromWishlist(productId));
       } catch (error) {
         console.error("Error removing from wishlist:", error);
@@ -157,7 +157,7 @@ const Wishlist = () => {
                             );
                             const finalDiscountedPrice = discountedPrice as number;
                             const cartItem = cartItems.find(
-                              item => item.productId === wishlistItem.productId
+                              (item: any) => item.productId === wishlistItem.productId
                             );
                             return (
                               <tr key={key}>

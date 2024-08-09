@@ -6,7 +6,12 @@ import {
 import Cookies from 'js-cookie';
 import { saveVoucher, updateVoucherByVoucherId } from '../../../utils/VoucherService';
 
-const VoucherForm = ({ onSave, initialVoucher }) => {
+interface VoucherFormProps {
+  onSave: () => void;
+  initialVoucher: any;
+}
+
+const VoucherForm: React.FC<VoucherFormProps> = ({ onSave, initialVoucher }) => {
   const [voucher, setVoucher] = useState({
     point: '',
     discount: '',
@@ -24,7 +29,7 @@ const VoucherForm = ({ onSave, initialVoucher }) => {
     }
   }, [initialVoucher]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setVoucher(prevVoucher => ({
       ...prevVoucher,
@@ -32,9 +37,9 @@ const VoucherForm = ({ onSave, initialVoucher }) => {
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
     const voucherData = {
       point: voucher.point,
       discount: voucher.discount,

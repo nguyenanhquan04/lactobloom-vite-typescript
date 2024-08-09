@@ -6,33 +6,47 @@ import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const BlogComment = () => {
-  const { blogId } = useParams();
-  const [comments, setComments] = useState<any[]>([]);
+interface Comment {
+  reviewId: number;
+  comment: string;
+  reviewDate: string;
+  email: string;
+}
+
+interface DecodedToken {
+  sub: string; // Assuming 'sub' contains the email
+}
+
+interface BlogCommentProps {
+  blogId: number;
+}
+
+const BlogComment: React.FC<BlogCommentProps> = ({ blogId }) => {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newReview, setNewReview] = useState({ comment: "" });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any | null>(null);
-  const [actionCommentId, setActionCommentId] = useState(null);
-  const [authEmail, setAuthEmail] = useState(null);
-  const [editCommentId, setEditCommentId] = useState(null);
-  const [editedComment, setEditedComment] = useState("");
+  const [error, setError] = useState<Error | null>(null);
+  const [actionCommentId, setActionCommentId] = useState<number | null>(null);
+  const [authEmail, setAuthEmail] = useState<string | null>(null);
+  const [editCommentId, setEditCommentId] = useState<number | null>(null);
+  const [editedComment, setEditedComment] = useState<string>("");
 
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
-      const decodedToken = jwtDecode(token) as any;
+      const decodedToken = jwtDecode<DecodedToken>(token);
       setAuthEmail(decodedToken.sub);
     }
   }, []);
 
   useEffect(() => {
+
     setLoading(true);
     setError(null);
 
     getBlogReviewByBlogId(blogId)
       .then((response) => {
-        const data = response.data;
-        setComments(data);
+        setComments(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -41,22 +55,15 @@ const BlogComment = () => {
       });
   }, [blogId]);
 
-  if (loading) {
-    return <div>Loading comments...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewReview({ ...newReview, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!blogId) return;
     const currentDate = new Date();
     const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
     const formattedDate = localDate.toISOString().slice(0, 19);
@@ -75,7 +82,6 @@ const BlogComment = () => {
 
     try {
       const response = await saveBlogReview(blogId, reviewData, config);
-      console.log("Review submitted:", response.data);
       setComments([...comments, response.data]);
       setNewReview({ comment: "" });
     } catch (error) {
@@ -83,11 +89,11 @@ const BlogComment = () => {
     }
   };
 
-  const handleActionButtonClick = (reviewId) => {
+  const handleActionButtonClick = (reviewId: number) => {
     setActionCommentId(actionCommentId === reviewId ? null : reviewId);
   };
 
-  const handleEditClick = (reviewId, currentComment) => {
+  const handleEditClick = (reviewId: number, currentComment: string) => {
     setEditCommentId(reviewId);
     setEditedComment(currentComment);
   };
@@ -97,7 +103,7 @@ const BlogComment = () => {
     setEditedComment("");
   };
 
-  const handleUpdateClick = async (reviewId) => {
+  const handleUpdateClick = async (reviewId: number) => {
     const config = {
       headers: {
         Authorization: `Bearer ${Cookies.get("authToken")}`,
@@ -115,7 +121,7 @@ const BlogComment = () => {
     }
   };
 
-  const handleDeleteClick = async (reviewId) => {
+  const handleDeleteClick = async (reviewId: number) => {
     const config = {
       headers: {
         Authorization: `Bearer ${Cookies.get("authToken")}`,
@@ -130,6 +136,14 @@ const BlogComment = () => {
       console.error("Error deleting the comment:", error);
     }
   };
+
+  if (loading) {
+    return <div>Loading comments...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <Fragment>

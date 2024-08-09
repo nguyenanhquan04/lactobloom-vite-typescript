@@ -15,7 +15,7 @@ import {
 const MyAccount = () => {
   let { pathname } = useLocation();
   let navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any | null>(null);
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -88,10 +88,10 @@ const MyAccount = () => {
 
     try {
       const response = await resetPassword(
-        {
+        JSON.stringify({
           password: oldPassword,
           newPassword,
-        },
+        }),
         {
           headers: {
             Authorization: `Bearer ${token}`,

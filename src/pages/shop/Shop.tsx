@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect, useCallback } from "react";
-
 import Paginator from "react-hooks-paginator";
 import { useLocation, useNavigate } from "react-router-dom";
 import SEO from "../../components/seo";

@@ -88,7 +88,7 @@ const Compare = () => {
                             <th className="title-column">Thông tin sản phẩm</th>
                             {compareItems.map((compareItem: any, key: any) => {
                               const cartItem = cartItems.find(
-                                item => item.productId === compareItem.productId
+                                (item: any) => item.productId === compareItem.productId
                               );
                               return (
                                 <td className="product-image-title" key={key}>

@@ -99,7 +99,7 @@ const CheckoutResult = () => {
   };
 
   const saveOrder = (orderData: any, isCOD = false) => {
-    const token = Cookies.get("authToken");
+    const token = Cookies.get("authToken") as string;
     const now = new Date();
     now.setHours(now.getHours() + 7);
     const orderDate = now.toISOString();

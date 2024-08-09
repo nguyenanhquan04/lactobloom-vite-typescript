@@ -334,7 +334,7 @@ const Checkout = () => {
                               <ul>
                                 <li className="order-discount">Giảm giá</li>
                                 <li>
-                                  {(cartTotalPrice-getDiscountPrice(cartTotalPrice, selectedVoucher.discount)).toLocaleString("vi-VN") + " VND"}
+                                  {(cartTotalPrice-(getDiscountPrice(cartTotalPrice, selectedVoucher.discount) as number)).toLocaleString("vi-VN") + " VND"}
                                 </li>
                               </ul>
                             </div>
@@ -345,7 +345,7 @@ const Checkout = () => {
                             <li className="order-total">Tổng</li>
                             <li>
                               {selectedVoucher
-                                ? getDiscountPrice(cartTotalPrice, selectedVoucher.discount).toLocaleString("vi-VN") + " VND"
+                                ? (getDiscountPrice(cartTotalPrice, selectedVoucher.discount) as number).toLocaleString("vi-VN") + " VND"
                                 : cartTotalPrice.toLocaleString("vi-VN") +
                                   " VND"}
                             </li>

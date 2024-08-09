@@ -47,8 +47,8 @@ const Register = () => {
       return;
     }
     try {
-      const response = await register(registerData.fullName, registerData.email, registerData.password);
-      alert("Đăng ký thành công", response.data);
+      await register(registerData.fullName, registerData.email, registerData.password);
+      alert("Đăng ký thành công");
       // console.log("Registration successful", response.data);
       // Navigate to a different page on successful registration
       navigate("/login"); // Adjust the path as needed

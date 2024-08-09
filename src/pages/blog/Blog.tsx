@@ -7,9 +7,23 @@ import { getAllBlogs, getBlogByBlogCategoryId, searchBlog } from "../../utils/Bl
 import { getAllBlogCategories } from "../../utils/BlogCategoryService";
 import { getBlogReviewByBlogId } from "../../utils/BlogReviewService";
 import BlogPagination from "../../wrappers/blog/BlogPagination"; // Adjust the import path as needed
-
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode";
+
+interface Blog{
+  blogId: number;
+  title: string;
+  imageUrl: string;
+  publishDate: any;
+  shortDescription: string;
+  blogCategoryName: string;
+  category: string;
+}
+
+interface Category{
+  blogCategoryId: number;
+  blogCategoryName: string;
+}
 
 const BlogStandard = () => {
   let { pathname, search } = useLocation();
@@ -17,10 +31,10 @@ const BlogStandard = () => {
   const [categories, setCategories] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState<any>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [blogsPerPage] = useState(4);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<any|null>(null);
   const [searchTerm, setSearchTerm] = useState(new URLSearchParams(search).get("search") || "");
 
   let navigate = useNavigate();
@@ -28,7 +42,7 @@ const BlogStandard = () => {
     useEffect(() => {
       const token = Cookies.get("authToken");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<any>(token);
         const userRole = decodedToken.role;
         if (userRole !== "MEMBER") {
           navigate("/admin");
@@ -50,18 +64,18 @@ const BlogStandard = () => {
         const categoriesData = categoriesResponse.data;
 
         // Sort blogs by publishDate in descending order to get the latest posts
-        const sortedBlogs = blogsData.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+        const sortedBlogs = blogsData.sort((a: any, b: any) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
         // Get the top 4 latest posts
         setLatestBlogs(sortedBlogs.slice(0, 4));
         setBlogs(blogsData);
         setFilteredBlogs(blogsData);
 
         // Fetch comments for each blog
-        blogsData.forEach(blog => {
+        blogsData.forEach((blog: Blog) => {
           getBlogReviewByBlogId(blog.blogId)
             .then(response => {
               const commentsData = response.data;
-              setComments(prevComments => ({
+              setComments((prevComments: any) => ({
                 ...prevComments,
                 [blog.blogId]: commentsData.length
               }));
@@ -79,18 +93,18 @@ const BlogStandard = () => {
     fetchData();
   }, []);
 
-  const handleCategoryChange = (categoryId) => {
+  const handleCategoryChange = (categoryId: any) => {
     setSelectedCategory(categoryId);
     applyFilters(searchTerm, categoryId);
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: any) => {
     event.preventDefault();
     navigate(`/blog?search=${searchTerm}`);
     applyFilters(searchTerm, selectedCategory);
   };
 
-  const applyFilters = (searchTerm, categoryId) => {
+  const applyFilters = (searchTerm: any, categoryId?: any) => {
     // Fetch blogs based on search term
     searchBlog(searchTerm)
       .then(response => {
@@ -111,11 +125,11 @@ const BlogStandard = () => {
       .catch(error => console.error('Error fetching blogs by search:', error));
   };
 
-  const filterBlogs = (searchResults, categoryBlogs) => {
+  const filterBlogs = (searchResults: any, categoryBlogs: any) => {
     if (categoryBlogs) {
       // Get blogIds that are present in both searchResults and categoryBlogs
-      const categoryBlogIds = new Set(categoryBlogs.map(blog => blog.blogId));
-      const filteredByCategoryAndSearch = searchResults.filter(blog => categoryBlogIds.has(blog.blogId));
+      const categoryBlogIds = new Set(categoryBlogs.map((blog: Blog) => blog.blogId));
+      const filteredByCategoryAndSearch = searchResults.filter((blog: Blog) => categoryBlogIds.has(blog.blogId));
       setFilteredBlogs(filteredByCategoryAndSearch);
     } else {
       setFilteredBlogs(searchResults);
@@ -149,7 +163,7 @@ const BlogStandard = () => {
               <div className="col-lg-9">
                 <div className="ml-20">
                   <div className="row">
-                    {currentBlogs.map(blog => (
+                    {currentBlogs.map((blog: Blog) => (
                       <div className="col-lg-6 col-md-6 col-sm-12" key={blog.blogId}>
                         <div className="blog-wrap-2 mb-30">
                           <div className="blog-img-2">
@@ -178,7 +192,7 @@ const BlogStandard = () => {
                             </h4>
                             <h5>
                               Danh mục:{" "}
-                              <Link>
+                              <Link to ="#">
                                 {blog.blogCategoryName}
                               </Link>
                             </h5>
@@ -245,7 +259,7 @@ const BlogStandard = () => {
                   <div className="sidebar-widget">
                     <h4 className="pro-sidebar-title">Bài viết gần đây </h4>
                     <div className="sidebar-project-wrap mt-30">
-                      {latestBlogs.map(blog => (
+                      {latestBlogs.map((blog: Blog) => (
                         <div className="single-sidebar-blog" key={blog.blogId}>
                           <div className="sidebar-blog-img">
                             <Link to={`${import.meta.env.VITE_PUBLIC_URL}/blog-details/${blog.blogId}`}>
@@ -281,13 +295,13 @@ const BlogStandard = () => {
                               checked={selectedCategory === "all"}
                               onChange={() => handleCategoryChange("all")}
                             />
-                            <Link>
+                            <Link to="#">
                               Tất cả danh mục
                             </Link>
                             <span className="checkmark" />
                           </div>
                         </li>
-                        {categories.map(category => (
+                        {categories.map((category: Category) => (
                           <li key={category.blogCategoryId}>
                             <div className="sidebar-widget-list-left">
                               <input
@@ -298,7 +312,7 @@ const BlogStandard = () => {
                                 checked={selectedCategory === category.blogCategoryId}
                                 onChange={() => handleCategoryChange(category.blogCategoryId)}
                               />
-                              <Link>
+                              <Link to ="#">
                                 {category.blogCategoryName}
                               </Link>
                               <span className="checkmark" />

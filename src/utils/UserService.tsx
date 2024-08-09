@@ -21,7 +21,7 @@ const logOut = (authToken: string) => {
       });
 }
 
-const userInfo =(authToken: string) => {
+const userInfo =(authToken?: string) => {
     return request.get("user/info", {
         headers: {
           Authorization: `Bearer ${authToken}`

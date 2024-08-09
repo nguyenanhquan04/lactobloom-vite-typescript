@@ -100,7 +100,7 @@ const ForgotPassword = () => {
     setLoading(true);
 
     try {
-      const response = await changePassword(formData.email, formData.otp, 
+      const response = await changePassword(formData.email, Number(formData.otp), 
         {
           password: formData.password,
           repeatPassword: formData.reenterPassword

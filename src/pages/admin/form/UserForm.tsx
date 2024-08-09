@@ -6,8 +6,13 @@ import {
 import Cookies from 'js-cookie';
 import { updateUserByUserId } from '../../../utils/UserService';
 
-const UserForm = ({ onSave, initialUser }) => {
-  const [user, setUser] = useState({
+interface UserFormProps {
+  onSave: () => void;
+  initialUser: any;
+}
+
+const UserForm: React.FC<UserFormProps> = ({ onSave, initialUser }) => {
+  const [user, setUser] = useState<any>({
     fullName: '',
     role: '',
     email: '',
@@ -22,7 +27,7 @@ const UserForm = ({ onSave, initialUser }) => {
     }
   }, [initialUser]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setUser({
       ...user,
@@ -30,9 +35,9 @@ const UserForm = ({ onSave, initialUser }) => {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as string;
 
     try {
       await updateUserByUserId(token, user, user.userId);

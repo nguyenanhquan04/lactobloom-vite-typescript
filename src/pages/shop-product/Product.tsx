@@ -14,7 +14,7 @@ const Product = () => {
   let { pathname } = useLocation();
   let { id } = useParams();
   const { products } = useSelector((state: any) => state.product);
-  const product = products.find(product => String(product.productId) === id);
+  const product = products.find((product: any) => product.productId === id);
   let navigate = useNavigate();
     // Check for authToken cookie and redirect to homepage if it exists
     useEffect(() => {

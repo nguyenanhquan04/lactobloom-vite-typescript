@@ -7,35 +7,63 @@ import BlogSidebar from "../../wrappers/blog/BlogSidebar";
 import BlogComment from "../../wrappers/blog/BlogComment";
 import BlogPost from "../../wrappers/blog/BlogPost";
 import { getBlogByBlogId } from "../../utils/BlogService";
-import Cookies from "js-cookie"; // Import js-cookie
+import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
 
-const BlogDetailsStandard = () => {
-  let { blogId } = useParams();
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface Blog {
+  id: number;
+  title: string;
+  content: string;
+  // Add other fields relevant to your Blog object
+}
 
-  let navigate = useNavigate();
-    // Check for authToken cookie and redirect to homepage if it exists
-    useEffect(() => {
-      const token = Cookies.get("authToken");
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        const userRole = decodedToken.role;
-        if (userRole !== "MEMBER") {
-          navigate("/admin");
-        } 
-      }
-    }, [navigate]);
+interface DecodedToken {
+  role: string;
+}
+
+const BlogDetailsStandard: React.FC = () => {
+  const { blogId } = useParams<{blogId: string}>();
+  const [blog, setBlog] = useState<Blog | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [numericBlogId, setNumericBlogId] = useState<any>(undefined); // State for numericBlogId
+
+  const navigate = useNavigate();
+
+  // Check for authToken cookie and redirect to homepage if the role is not MEMBER
+  useEffect(() => {
+    const token = Cookies.get("authToken");
+    if (token) {
+      const decodedToken = jwtDecode<DecodedToken>(token);
+      const userRole = decodedToken.role;
+      if (userRole !== "MEMBER") {
+        navigate("/admin");
+      } 
+    }
+  }, [navigate]);
 
   useEffect(() => {
+    if (!blogId) {
+      setError(new Error("Blog ID is undefined"));
+      setLoading(false);
+      return;
+    }
+
+    const numBlogId = parseInt(blogId, 10);
+
+    if (isNaN(numBlogId)) {
+      setError(new Error("Invalid Blog ID"));
+      setLoading(false);
+      return;
+    }
+
+    setNumericBlogId(numBlogId);
     setLoading(true);
     setError(null);
 
-    getBlogByBlogId(blogId)
+    getBlogByBlogId(numBlogId)
       .then((response) => {
-        const data = response.data; // Accessing data directly from Axios response
+        const data = response.data; 
         setBlog(data);
         setLoading(false);
       })
@@ -60,7 +88,6 @@ const BlogDetailsStandard = () => {
         description="Lactobloom Blog Post Page."
       />
       <LayoutOne headerTop="visible">
-        {/* breadcrumb */}
         <Breadcrumb 
           pages={[
             { label: "Trang chủ", path: import.meta.env.VITE_PUBLIC_URL + "/" },
@@ -73,10 +100,9 @@ const BlogDetailsStandard = () => {
               <div className="col-lg-9">
                 <div className="blog-details-wrapper ml-20">
                   {/* blog post */}
-                  <BlogPost blog={blog} />
-
+                  {blog && <BlogPost blog={blog} />}
                   {/* blog post comment */}
-                  <BlogComment blogId={blogId} />
+                  <BlogComment blogId={numericBlogId} />
                 </div>
               </div>
               <div className="col-lg-3">

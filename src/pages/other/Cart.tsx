@@ -12,7 +12,7 @@ import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode"; // Update import
 
 interface CartItem {
-  productId: string;
+  productId: number;
   productName: string;
   price: number;
   discount: number | null;

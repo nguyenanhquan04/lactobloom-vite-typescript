@@ -91,7 +91,7 @@ const OrderHistory: React.FC = () => {
       })
       .catch(error => {
         console.error("There was an error fetching the order details!", error);
-        setOrderDetails(prevState => ({
+        setOrderDetails((prevState: any) => ({
           ...prevState,
           [orderId]: null
         }));
@@ -99,7 +99,7 @@ const OrderHistory: React.FC = () => {
   };
 
   const cancelOrder = () => {
-    const token = Cookies.get("authToken");
+    const token = Cookies.get("authToken") as string;
     if (orderToCancel !== null) {
       cancelOrderByOrderId(token, orderToCancel)
         .then(response => {
