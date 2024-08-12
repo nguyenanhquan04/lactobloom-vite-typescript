@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
 import ProductGridListSingle from "../../components/product/ProductGridListSingle";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 interface ProductGridListProps {
   products?: any[];
@@ -11,9 +13,13 @@ const ProductGridList: React.FC<ProductGridListProps> = ({
   products,
   spaceBottomClass
 }) => {
-  const { cartItems } = useSelector((state: any) => state.cart);
-  const { wishlistItems } = useSelector((state: any) => state.wishlist);
-  const { compareItems } = useSelector((state: any) => state.compare);
+  const { cartItemsState } = useCart();
+  const { wishlistItemsState } = useWishlist();
+  const { compareItemsState } = useCompare();
+
+  const { cartItems } = cartItemsState;
+  const { wishlistItems } = wishlistItemsState;
+  const { compareItems } = compareItemsState;
   
   return (
     <Fragment>

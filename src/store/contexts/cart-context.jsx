@@ -1,8 +1,8 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import cogoToast from 'cogo-toast';
 
-const CartContext = createContext();
+const CartContext = createContext(null);
 
 const cartReducer = (state, action) => {
   switch (action.type) {
@@ -109,7 +109,14 @@ const cartReducer = (state, action) => {
 };
 
 const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, { cartItems: [] });
+  // Khôi phục trạng thái từ localStorage
+  const initialState = JSON.parse(localStorage.getItem('cartState')) || { cartItems: [] };
+  const [cartItemsState, dispatch] = useReducer(cartReducer, initialState);
+
+  // Lưu trạng thái vào localStorage mỗi khi trạng thái thay đổi
+  useEffect(() => {
+    localStorage.setItem('cartState', JSON.stringify(cartItemsState));
+  }, [cartItemsState]);
 
   const addToCart = (product) => {
     dispatch({ type: 'ADD_TO_CART', payload: product });
@@ -135,7 +142,7 @@ const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ state, addToCart, deleteFromCart, decreaseQuantity, deleteAllFromCart }}>
+    <CartContext.Provider value={{ cartItemsState, addToCart, deleteFromCart, decreaseQuantity, deleteAllFromCart }}>
       {children}
     </CartContext.Provider>
   );

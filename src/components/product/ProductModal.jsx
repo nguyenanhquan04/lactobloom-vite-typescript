@@ -2,14 +2,15 @@ import { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { EffectFade, Thumbs } from "swiper";
 import { Modal } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Rating from "./sub-components/ProductRating";
 import Swiper, { SwiperSlide } from "../../components/swiper";
 import { getProductCartQuantity } from "../../helpers/product";
-import { addToCart } from "../../store/slices/cart-slice";
-import { addToWishlist } from "../../store/slices/wishlist-slice";
-import { addToCompare } from "../../store/slices/compare-slice";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
+
 import Cookies from "js-cookie";
 
 import { getProductReviewByProductId } from "../../utils/ProductReviewService";
@@ -29,8 +30,10 @@ function ProductModal({
   compareItem,
 }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector((state) => state.cart);
+  const { addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
+  const { addToCompare } = useCompare();
+    const { cartItems } = useSelector((state) => state.cart);
 
   const [quantityCount, setQuantityCount] = useState(1);
   const productCartQty = getProductCartQuantity(cartItems, product);
@@ -100,13 +103,13 @@ function ProductModal({
     if (authToken) {
       try {
         await saveWishlist(authToken, product.productId);
-        dispatch(addToWishlist(product));
+        addToWishlist(product);
         setIsProductInWishlist(true);
       } catch (error) {
         console.error("Error saving to wishlist:", error);
       }
     } else {
-      dispatch(addToWishlist(product));
+      addToWishlist(product);
       setIsProductInWishlist(true);
     }
   };
@@ -256,12 +259,10 @@ function ProductModal({
                   product.preOrder === false ? (
                     <button
                       onClick={() =>
-                        dispatch(
                           addToCart({
                             ...product,
                             quantity: quantityCount,
                           })
-                        )
                       }
                       disabled={productCartQty >= product.stock}
                     >
@@ -270,13 +271,11 @@ function ProductModal({
                   ) : product.stock > 0 && product.preOrder && authToken ? (
                     <button
                       onClick={() =>
-                        dispatch(
                           addToCart({
                             ...product,
                             quantity: quantityCount,
                             preOrder: true,
                           })
-                        )
                       }
                       disabled={productCartQty >= product.stock}
                     >
@@ -309,7 +308,7 @@ function ProductModal({
                         ? "Đã thêm vào so sánh"
                         : "Thêm vào so sánh"
                     }
-                    onClick={() => dispatch(addToCompare(product))}
+                    onClick={() => addToCompare(product)}
                   >
                     <i className="pe-7s-shuffle" />
                   </button>

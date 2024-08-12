@@ -5,11 +5,11 @@ import { useDispatch } from "react-redux";
 import Rating from "./sub-components/ProductRating";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductModal from "./ProductModal";
-import { addToCart } from "../../store/slices/cart-slice";
-import { addToWishlist} from "../../store/slices/wishlist-slice";
 import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie";
 import { myWishlist, saveWishlist } from "../../utils/WishlistService";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCart } from "../../store/contexts/cart-context";
 
 
 interface ProductGridSingleProps {
@@ -28,6 +28,12 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
   compareItem,
   spaceBottomClass
 }) => {
+  const { addToWishlist, wishlistItemsState } = useWishlist();
+  const { addToCart, cartItemsState } = useCart();
+
+  const {wishlistItems} = wishlistItemsState;
+  const {cartItems} = cartItemsState;
+
   const [modalShow, setModalShow] = useState(false);
   const [productImages, setProductImages] = useState("/assets/img/no-image.png");
   const [isProductInWishlist, setIsProductInWishlist] = useState(false);
@@ -57,7 +63,7 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
         if (token) {
           const response = await myWishlist(token);
           const wishlistData = response.data;
-          setIsProductInWishlist(wishlistData.some((item: any) => item.productId === product.productId));
+          setIsProductInWishlist(wishlistItems.some((item: any) => item.productId === product.productId));
         }
       } catch (error) {
         console.error("Error fetching wishlist data:", error);
@@ -72,13 +78,13 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
     if (authToken) {
       try {
         await saveWishlist(authToken, product.productId);
-        dispatch(addToWishlist(product));
+        addToWishlist(product);
         setIsProductInWishlist(true);
       } catch (error) {
         console.error("Error saving to wishlist:", error);
       }
     } else {
-      dispatch(addToWishlist(product));
+      addToWishlist(product);
       setIsProductInWishlist(true);
     }
   };
@@ -125,7 +131,7 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
             <div className="pro-same-action pro-cart">
               {product.preOrder === false && product.stock && product.stock > 0 ? (
                 <button
-                  onClick={() => dispatch(addToCart(product))}
+                  onClick={() => addToCart(product)}
                   className={
                     cartItem !== undefined && cartItem.quantity > 0
                       ? "active"
@@ -144,7 +150,7 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
                 </button>
               ) : product.stock > 0 && product.preOrder && authToken ? (
                 <button
-                  onClick={() => dispatch(addToCart(product))}
+                  onClick={() => addToCart(product)}
                   className={
                     cartItem !== undefined && cartItem.quantity > 0
                       ? "active"

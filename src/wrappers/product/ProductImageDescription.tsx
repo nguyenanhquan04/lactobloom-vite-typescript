@@ -6,6 +6,9 @@ import ProductImageGallery from "../../components/product/ProductImageGallery";
 import ProductDescriptionInfo from "../../components/product/ProductDescriptionInfo";
 import ProductImageGallerySideThumb from "../../components/product/ProductImageGallerySideThumb";
 import ProductImageFixed from "../../components/product/ProductImageFixed";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 interface ProductImageDescriptionProps {
   galleryType?: string;
@@ -16,9 +19,12 @@ interface ProductImageDescriptionProps {
 
 
 const ProductImageDescription: React.FC<ProductImageDescriptionProps> = ({ spaceTopClass, spaceBottomClass, galleryType, product }) => {
-  const { cartItems } = useSelector((state: any) => state.cart);
-  const { wishlistItems } = useSelector((state: any) => state.wishlist);
-  const { compareItems } = useSelector((state: any) => state.compare);
+  const {cartItemsState} = useCart();
+  const { wishlistItemsState} = useWishlist();
+  const {compareItemsState} = useCompare();
+  const { cartItems } = cartItemsState;
+  const { wishlistItems } = wishlistItemsState;
+  const { compareItems } = compareItemsState;
   const compareItem = compareItems.find((item: any) => item.productId === product.productId);
 
   const discountedPrice = getDiscountPrice(product.price, product.discount) as number;

@@ -2,6 +2,10 @@ import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { getProducts } from "../../helpers/product";
 import ProductGridSingle from "../../components/product/ProductGridSingle";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
+import { useProduct } from "../../store/contexts/product-context";
 
 interface ProductGridProps {
   spaceBottomClass: string;
@@ -14,11 +18,15 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   type,
   limit
 }) => {
-  const { products } = useSelector((state: any) => state.product);
+  const {cartItemsState} = useCart();
+  const { wishlistItemsState} = useWishlist();
+  const {compareItemsState} = useCompare();
+  const { productsItemsState } = useProduct();
+  const { products } = productsItemsState;
   const currency = useSelector((state: any) => state.currency);
-  const { cartItems } = useSelector((state: any) => state.cart);
-  const { wishlistItems } = useSelector((state: any) => state.wishlist);
-  const { compareItems } = useSelector((state: any) => state.compare);
+  const { cartItems } = cartItemsState;
+  const { wishlistItems } = wishlistItemsState;
+  const { compareItems } = compareItemsState;
   const prods = getProducts(products, type, limit)
   
   return (

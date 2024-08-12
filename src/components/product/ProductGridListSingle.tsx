@@ -1,17 +1,16 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import clsx from "clsx";
-import { getDiscountPrice } from "../../helpers/product";
-import Rating from "./sub-components/ProductRating";
-import ProductModal from "./ProductModal";
-import { addToCart } from "../../store/slices/cart-slice";
-import { addToWishlist, addToWishlistFormAPI } from "../../store/slices/wishlist-slice";
-import { addToCompare } from "../../store/slices/compare-slice";
-import { getImagesByProductId } from "../../utils/ImageService";
-import { getProductReviewByProductId } from "../../utils/ProductReviewService";
-import Cookies from "js-cookie";
-import { myWishlist, saveWishlist } from "../../utils/WishlistService";
+import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import clsx from 'clsx';
+import { getDiscountPrice } from '../../helpers/product';
+import Rating from './sub-components/ProductRating';
+import ProductModal from './ProductModal';
+import { useCart } from '../../store/contexts/cart-context';
+import { useWishlist } from '../../store/contexts/wishlist-context';
+import { useCompare } from '../../store/contexts/compare-context';
+import { getImagesByProductId } from '../../utils/ImageService';
+import { getProductReviewByProductId } from '../../utils/ProductReviewService';
+import Cookies from 'js-cookie';
+import { myWishlist, saveWishlist } from '../../utils/WishlistService';
 
 interface ProductGridListSingleProps {
   product: {
@@ -40,15 +39,20 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
   spaceBottomClass
 }) => {
   const [modalShow, setModalShow] = useState(false);
-  const [productImages, setProductImages] = useState("/assets/img/no-image.png");
+  const [productImages, setProductImages] = useState('/assets/img/no-image.png');
   const [averageRating, setAverageRating] = useState(0);
   const [wishlistData, setWishlistData] = useState<any[]>([]);
   const [authToken, setAuthToken] = useState<string | null>(null);
-
   const discountedPrice = getDiscountPrice(product.price, product.discount) as number;
   const finalProductPrice = +(product.price * 1);
   const finalDiscountedPrice = +(discountedPrice * 1);
-  const dispatch = useDispatch();
+
+  const { addToCart, cartItemsState } = useCart();
+  const { addToWishlist, wishlistItemsState } = useWishlist();
+  const { addToCompare, compareItemsState } = useCompare();
+  const { cartItems } = cartItemsState;
+  const { wishlistItems } = wishlistItemsState;
+  const { compareItems } = compareItemsState;
 
   useEffect(() => {
     const fetchProductImages = async () => {
@@ -56,7 +60,7 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
         const response = await getImagesByProductId(product.productId);
         setProductImages(response.data[0].imageUrl);
       } catch (error) {
-        console.error("Error fetching images:", error);
+        console.error('Error fetching images:', error);
       }
     };
 
@@ -68,34 +72,34 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
         const avgRating = reviews.length ? totalRating / reviews.length : 0;
         setAverageRating(avgRating);
       } catch (error) {
-        console.error("Error fetching reviews:", error);
+        console.error('Error fetching reviews:', error);
       }
     };
 
     const fetchWishlistData = async () => {
       try {
-        const token = Cookies.get("authToken") || null; // Handle undefined case by defaulting to null
+        const token = Cookies.get('authToken') || null;
         setAuthToken(token);
         if (token) {
           const response = await myWishlist(token);
           setWishlistData(response.data);
           response.data.forEach((item: any) => {
             if (item.productId === product.productId) {
-              dispatch(addToWishlistFormAPI(product));
+              addToWishlist(product);
             }
           });
         }
       } catch (error) {
-        console.error("Error fetching wishlist data:", error);
+        console.error('Error fetching wishlist data:', error);
       }
     };
 
     fetchProductImages();
     fetchProductReviews();
     fetchWishlistData();
-  }, [product.productId, dispatch, product]);
+  }, [product.productId, addToWishlist, product]);
 
-  const isProductInWishlist = wishlistData.some(
+  const isProductInWishlist = wishlistItems.some(
     (wishlistItem: any) => wishlistItem.productId === product.productId
   );
 
@@ -103,20 +107,20 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
     if (authToken) {
       try {
         await saveWishlist(authToken, product.productId);
-        dispatch(addToWishlist(product));
+        addToWishlist(product);
       } catch (error) {
-        console.error("Error saving to wishlist:", error);
+        console.error('Error saving to wishlist:', error);
       }
     } else {
-      dispatch(addToWishlist(product));
+      addToWishlist(product);
     }
   };
 
   return (
     <Fragment>
-      <div className={clsx("product-wrap", spaceBottomClass)}>
+      <div className={clsx('product-wrap', spaceBottomClass)}>
         <div className="product-img">
-          <Link to={"/product/" + product.productId}>
+          <Link to={'/product/' + product.productId}>
             <img
               className="default-img"
               src={productImages}
@@ -128,23 +132,23 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
               {product.discount ? (
                 <span className="pink">-{product.discount}%</span>
               ) : (
-                ""
+                ''
               )}
-              {product.new ? <span className="purple">New</span> : ""}
+              {product.new ? <span className="purple">New</span> : ''}
             </div>
           ) : (
-            ""
+            ''
           )}
 
           <div className="product-action">
             <div className="pro-same-action pro-wishlist">
               <button
-                className={isProductInWishlist ? "active" : ""}
+                className={isProductInWishlist ? 'active' : ''}
                 disabled={isProductInWishlist}
                 title={
                   isProductInWishlist
-                    ? "Đã thêm vào yêu thích"
-                    : "Thêm vào yêu thích"
+                    ? 'Đã thêm vào yêu thích'
+                    : 'Thêm vào yêu thích'
                 }
                 onClick={() => handleWishlistClick(product)}
               >
@@ -154,41 +158,43 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
             <div className="pro-same-action pro-cart">
               {product.stock && product.stock > 0 && product.preOrder === false ? (
                 <button
-                  onClick={() => dispatch(addToCart(product))}
+                  onClick={() => addToCart(product)}
                   className={
                     cartItem !== undefined && cartItem.quantity > 0
-                      ? "active"
-                      : ""
+                      ? 'active'
+                      : ''
                   }
                   disabled={cartItem !== undefined && cartItem.quantity > 0}
                   title={
-                    cartItem !== undefined ? "Đã thêm" : "Thêm vào giỏ"
+                    cartItem !== undefined ? 'Đã thêm' : 'Thêm vào giỏ'
                   }
                 >
-                  {" "}
-                  <i className="pe-7s-cart"></i>{" "}
+                  {' '}
+                  <i className="pe-7s-cart"></i>{' '}
                   {cartItem !== undefined && cartItem.quantity > 0
-                    ? "Đã thêm"
-                    : "Thêm vào giỏ"}
+                    ? 'Đã thêm'
+                    : 'Thêm vào giỏ'}
                 </button>
               ) : product.stock > 0 && product.preOrder && authToken ? (
                 <button
-                  onClick={() => dispatch(addToCart(product))}
+                  onClick={() => addToCart(product)}
                   className={
                     cartItem !== undefined && cartItem.quantity > 0
-                      ? "active"
-                      : ""
+                      ? 'active'
+                      : ''
                   }
                   disabled={cartItem !== undefined && cartItem.quantity > 0}
                   title={
-                    cartItem !== undefined ? "Đã thêm vào giỏ hàng" : "Đặt trước"
+                    cartItem !== undefined
+                      ? 'Đã thêm vào giỏ hàng'
+                      : 'Đặt trước'
                   }
                 >
-                  {" "}
-                  <i className="pe-7s-cart"></i>{" "}
+                  {' '}
+                  <i className="pe-7s-cart"></i>{' '}
                   {cartItem !== undefined && cartItem.quantity > 0
-                    ? "Đã thêm"
-                    : "Đặt trước"}
+                    ? 'Đã thêm'
+                    : 'Đặt trước'}
                 </button>
               ) : (
                 <button disabled className="active">
@@ -206,13 +212,13 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
         <div className="product-content text-center">
           {(product.stock <= 0 && product.preOrder && authToken) ?
           <h3>
-            <Link to={"/product/" + product.productId}>
-              {product.productName}{" "}(Đặt trước)
+            <Link to={'/product/' + product.productId}>
+              {product.productName} (Đặt trước)
             </Link> 
           </h3>
           :
           <h3>
-            <Link to={"/product/" + product.productId}>
+            <Link to={'/product/' + product.productId}>
               {product.productName}
             </Link>
           </h3>}
@@ -312,7 +318,7 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
                 <div className="shop-list-btn btn-hover">
                   {product.stock && product.stock > 0 && product.preOrder === false ? (
                     <button
-                      onClick={() => dispatch(addToCart(product))}
+                      onClick={() => addToCart(product)}
                       className={
                         cartItem !== undefined && cartItem.quantity > 0
                           ? "active"
@@ -331,7 +337,7 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
                     </button>
                   ) : product.stock >= 0 && product.preOrder && authToken ? (
                     <button
-                      onClick={() => dispatch(addToCart(product))}
+                      onClick={() => addToCart(product)}
                       className="active"
                       title="Pre Order"
                     >
@@ -367,7 +373,7 @@ const ProductGridListSingle: React.FC<ProductGridListSingleProps> = ({
                         ? "Đã thêm vào so sánh"
                         : "Thêm vào so sánh"
                     }
-                    onClick={() => dispatch(addToCompare(product))}
+                    onClick={() => addToCompare(product)}
                   >
                     <i className="pe-7s-shuffle" />
                   </button>

@@ -1,16 +1,16 @@
 import { Fragment, useState, useEffect } from "react";
 import { Link, useLocation,useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import Rating from "../../components/product/sub-components/ProductRating";
 import { addToCart } from "../../store/slices/cart-slice";
-import { deleteFromCompare } from "../../store/slices/compare-slice";
 import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode";
+import { useCompare } from "../../store/contexts/compare-context";
+import { useCart } from "../../store/contexts/cart-context";
 
 interface ImagesMap {
   [key: string]: string;
@@ -21,11 +21,12 @@ interface compareImages {
 }
 
 const Compare = () => {
-  const dispatch = useDispatch();
   let { pathname } = useLocation();
+  const {compareItemsState, deleteFromCompare} = useCompare();
+  const {cartItemsState} = useCart();
 
-  const { compareItems } = useSelector((state: any) => state.compare);
-  const { cartItems } = useSelector((state: any) => state.cart);
+  const { compareItems } = compareItemsState;
+  const { cartItems } = cartItemsState;
 
   const [compareImages, setCompareImages] = useState<compareImages>({});
   let navigate = useNavigate();
@@ -95,7 +96,7 @@ const Compare = () => {
                                   <div className="compare-remove">
                                     <button
                                       onClick={() =>
-                                        dispatch(deleteFromCompare(compareItem.productId))
+                                        deleteFromCompare(compareItem.productId)
                                       }
                                     >
                                       <i className="pe-7s-trash" />
@@ -150,7 +151,7 @@ const Compare = () => {
                                       compareItem.stock > 0 ? (
                                       <button
                                         onClick={() =>
-                                          dispatch(addToCart(compareItem))
+                                          addToCart(compareItem)
                                         }
                                         className={
                                           cartItem !== undefined &&

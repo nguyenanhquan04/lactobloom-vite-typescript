@@ -20,7 +20,7 @@ import {
 
 interface ProductDescriptionTabProps {
   spaceBottomClass?: string;
-  productFullDesc: string;
+  productFullDesc?: string;
   productId: string | number;
 }
 
@@ -57,7 +57,7 @@ const ProductDescriptionTab: React.FC<ProductDescriptionTabProps> = ({
   }, [authToken]);
 
   useEffect(() => {
-    getProductReviewByProductId(productId)
+    getProductReviewByProductId(productId as number)
       .then((response) => {
         setReviews(response.data);
       })
@@ -98,9 +98,9 @@ const ProductDescriptionTab: React.FC<ProductDescriptionTabProps> = ({
     };
 
     try {
-      await saveProductReview(productId, reviewData, config);
+      await saveProductReview(productId as number, reviewData, config);
       setNewReview({ comment: "", rating: 0 });
-      getProductReviewByProductId(productId)
+      getProductReviewByProductId(productId as number)
         .then((response) => {
           setReviews(response.data);
         })
@@ -181,7 +181,7 @@ const ProductDescriptionTab: React.FC<ProductDescriptionTabProps> = ({
             </Nav>
             <Tab.Content className="description-review-bottom">
               <Tab.Pane eventKey="productDescription">
-                <div dangerouslySetInnerHTML={{ __html: productFullDesc }} />
+                <div dangerouslySetInnerHTML={{ __html: productFullDesc || '' }} />
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
                 <div className="row">

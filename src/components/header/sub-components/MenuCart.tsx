@@ -1,33 +1,32 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useCart } from "../../../store/contexts/cart-context";
 import { getDiscountPrice } from "../../../helpers/product";
-import { deleteFromCart } from "../../../store/slices/cart-slice";
 import { getImagesByProductId } from "../../../utils/ImageService";
 
 const MenuCart: React.FC = () => {
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector((state: any) => state.cart);
+  const { cartItemsState, deleteFromCart } = useCart(); // Sử dụng useCart để truy cập state và deleteFromCart
+  const { cartItems } = cartItemsState;
   const [cartItemsWithImages, setCartItemsWithImages] = useState([]);
-  const defaultImage = "/assets/img/no-image.png"; // Default image URL
+  const defaultImage = "/assets/img/no-image.png";
   let cartTotalPrice = 0;
 
   useEffect(() => {
     const fetchImagesForCartItems = async () => {
       const updatedCartItems: any = await Promise.all(
-        cartItems.map(async (item) => {
+        cartItems.map(async (item: any) => {
           try {
             const response = await getImagesByProductId(item.productId);
-            const images = response.data.map((img) => img.imageUrl);
+            const images = response.data.map((img: any) => img.imageUrl);
             return {
               ...item,
-              image: images.length > 0 ? images : [defaultImage]
+              image: images.length > 0 ? images : [defaultImage],
             };
           } catch (error) {
             console.error("Error fetching images:", error);
             return {
               ...item,
-              image: [defaultImage]
+              image: [defaultImage],
             };
           }
         })
@@ -49,7 +48,7 @@ const MenuCart: React.FC = () => {
           <ul>
             {cartItemsWithImages.map((item: any) => {
               const discountedPrice = getDiscountPrice(item.price, item.discount);
-              const finalProductPrice = item.price ;
+              const finalProductPrice = item.price;
               const finalDiscountedPrice = discountedPrice !== null ? discountedPrice : finalProductPrice;
 
               cartTotalPrice += finalDiscountedPrice * item.quantity;
@@ -79,7 +78,7 @@ const MenuCart: React.FC = () => {
                     </span>
                   </div>
                   <div className="shopping-cart-delete">
-                    <button onClick={() => dispatch(deleteFromCart(item.cartItemId))}>
+                    <button onClick={() => deleteFromCart(item.cartItemId)}>
                       <i className="fa fa-times-circle" />
                     </button>
                   </div>
@@ -112,4 +111,3 @@ const MenuCart: React.FC = () => {
 };
 
 export default MenuCart;
-

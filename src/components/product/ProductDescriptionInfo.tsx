@@ -1,10 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { getProductCartQuantity } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
-import { addToCart } from "../../store/slices/cart-slice";
-import { addToWishlist } from "../../store/slices/wishlist-slice";
-import { addToCompare } from "../../store/slices/compare-slice";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 import { getProductReviewByProductId } from "../../utils/ProductReviewService";
 import { getCategoryByProductId } from "../../utils/CategoryService";
 import { getBrandByProductId } from "../../utils/BrandService";
@@ -42,7 +41,9 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
   cartItems,
   compareItem,
 }) => {
-  const dispatch = useDispatch();
+  const { addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
+  const { addToCompare } = useCompare();
   const [quantityCount, setQuantityCount] = useState(1);
   const [averageRating, setAverageRating] = useState(0);
   const [category, setCategory] = useState<Category | null>(null);
@@ -105,13 +106,13 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
     if (authToken) {
       try {
         await saveWishlist(authToken, product.productId);
-        dispatch(addToWishlist(product));
+        addToWishlist(product);
         setIsProductInWishlist(true);
       } catch (error) {
         console.error("Error saving to wishlist:", error);
       }
     } else {
-      dispatch(addToWishlist(product));
+      addToWishlist(product);
       setIsProductInWishlist(true);
     }
   };
@@ -191,12 +192,10 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
           {product.stock && product.stock > 0 && product.preOrder === false ? (
             <button
               onClick={() =>
-                dispatch(
                   addToCart({
                     ...product,
                     quantity: quantityCount,
                   })
-                )
               }
               disabled={productCartQty >= product.stock}
             >
@@ -205,12 +204,10 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
           ) : product.stock > 0 && product.preOrder && authToken ? (
             <button
               onClick={() =>
-                dispatch(
                   addToCart({
                     ...product,
                     quantity: quantityCount,
                   })
-                )
               }
               disabled={productCartQty >= product.stock}
             >
@@ -243,7 +240,7 @@ const ProductDescriptionInfo: React.FC<ProductDescriptionInfoProps> = ({
                 ? "Đã thêm vào so sánh"
                 : "Thêm vào so sánh"
             }
-            onClick={() => dispatch(addToCompare(product))}
+            onClick={() => addToCompare(product)}
           >
             <i className="pe-7s-shuffle" />
           </button>

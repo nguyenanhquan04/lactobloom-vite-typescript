@@ -1,14 +1,13 @@
-import PropTypes, { string } from "prop-types";
 import React, { useState, useEffect } from "react";
 import { Link} from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
 import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode'; 
 import { logOut, userInfo } from "../../utils/UserService";
-import { deleteAllFromCart } from "../../store/slices/cart-slice";
-import { deleteAllFromWishlist } from "../../store/slices/wishlist-slice";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 interface IconGroupProps {
   iconWhiteClass?: string;
@@ -18,11 +17,15 @@ interface CustomJwtPayload {
   role: string;
 }
 
-
 const IconGroup: React.FC<IconGroupProps> = ({ iconWhiteClass }) => {
-  const dispatch = useDispatch();
+  const { compareItemsState } = useCompare();
+  const { wishlistItemsState } = useWishlist();
+  const { cartItemsState } = useCart();
+  const { compareItems } = compareItemsState;
+  const {cartItems} = cartItemsState;
+  const {wishlistItems} = wishlistItemsState;
 
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
 
@@ -33,16 +36,12 @@ const IconGroup: React.FC<IconGroupProps> = ({ iconWhiteClass }) => {
   }
   };
 
-  const { compareItems } = useSelector((state: any) => state.compare);
-  const { wishlistItems } = useSelector((state: any) => state.wishlist);
-  const { cartItems } = useSelector((state: any) => state.cart);
-
   const [authToken, setAuthToken] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [fullName, setFullName] = useState("");
 
   useEffect(() => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken') as any;
     setAuthToken(token);
     if (token) {
       try {
@@ -56,7 +55,7 @@ const IconGroup: React.FC<IconGroupProps> = ({ iconWhiteClass }) => {
     }
   }, []);
 
-  const fetchUserInfo = async (token) => {
+  const fetchUserInfo = async (token: any) => {
     try {
       const response = await userInfo(token);
       setFullName(response.data.fullName);
@@ -68,10 +67,11 @@ const IconGroup: React.FC<IconGroupProps> = ({ iconWhiteClass }) => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("Bạn có chắc chắn muốn đăng xuất?");
     if (confirmLogout) {
-      logOut(Cookies.get('authToken'));
+      logOut(Cookies.get('authToken') as string);
       Cookies.remove('authToken'); 
-      dispatch(deleteAllFromCart());
-      dispatch(deleteAllFromWishlist());
+      clearCart();
+      clearWishlist();
+      clearCompare();
     }
   };
 

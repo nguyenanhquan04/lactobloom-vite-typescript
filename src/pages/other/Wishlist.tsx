@@ -5,9 +5,8 @@ import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { addToCart } from "../../store/slices/cart-slice";
-import { addToWishlistFormAPI, deleteFromWishlist, deleteAllFromWishlist } from "../../store/slices/wishlist-slice";
-
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
 import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode";
@@ -25,9 +24,11 @@ interface WishlistImages {
 const Wishlist = () => {
   const dispatch = useDispatch();
   let { pathname } = useLocation();
+  const { wishlistItemsState, deleteFromWishlist, addToWishlistFormAPI } = useWishlist();
+  const { cartItemsState, addToCart } = useCart();
 
-  const { wishlistItems: reduxWishlistItems } = useSelector((state: any) => state.wishlist);
-  const { cartItems } = useSelector((state: any) => state.cart);
+  const { wishlistItems: reduxWishlistItems } = wishlistItemsState;
+  const { cartItems } = cartItemsState;
 
   const [wishlistItems, setWishlistItems] = useState([]);
   const [wishlistImages, setWishlistImages] = useState<WishlistImages>({});
@@ -213,7 +214,7 @@ const Wishlist = () => {
                                   {wishlistItem.stock && wishlistItem.stock > 0 && wishlistItem.preOrder === false ? (
                                     <button
                                       onClick={() =>
-                                        dispatch(addToCart(wishlistItem))
+                                        addToCart(wishlistItem)
                                       }
                                       className={
                                         cartItem !== undefined &&
@@ -238,7 +239,7 @@ const Wishlist = () => {
                                     </button>
                                   ) : wishlistItem.stock > 0 && wishlistItem.preOrder && authToken ? (
                                     <button
-                                      onClick={() => dispatch(addToCart(wishlistItem))}
+                                      onClick={() => addToCart(wishlistItem)}
                                       className={
                                         cartItem !== undefined && cartItem.quantity > 0
                                           ? "active"

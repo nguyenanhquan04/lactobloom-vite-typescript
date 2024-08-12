@@ -7,6 +7,9 @@ import Swiper, { SwiperSlide } from "../../components/swiper";
 import SectionTitle from "../../components/section-title/SectionTitle";
 import ProductGridSingle from "../../components/product/ProductGridSingle";
 import { get4RandomProducts } from "../../utils/ProductService";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 const settings = {
   loop: false,
@@ -31,10 +34,13 @@ const settings = {
 
 const RelatedProductSlider = ({ spaceBottomClass }) => {
   const [randomProducts, setRandomProducts] = useState([]);
+  const {cartItemsState} = useCart();
+  const { wishlistItemsState} = useWishlist();
+  const {compareItemsState} = useCompare();
   const currency = useSelector((state) => state.currency);
-  const { cartItems } = useSelector((state) => state.cart);
-  const { wishlistItems } = useSelector((state) => state.wishlist);
-  const { compareItems } = useSelector((state) => state.compare);
+  const { cartItems } = cartItemsState;
+  const { wishlistItems } = wishlistItemsState;
+  const { compareItems } = compareItemsState;
 
   useEffect(() => {
     const fetchRandomProducts = async () => {

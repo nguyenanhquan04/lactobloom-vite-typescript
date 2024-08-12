@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect } from "react"; 
-import { useSelector } from "react-redux";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
@@ -9,12 +8,14 @@ import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab"
 import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode";
+import { useProduct } from "../../store/contexts/product-context";
 
 const Product = () => {
+  const { productsItemsState } = useProduct();
   let { pathname } = useLocation();
   let { id } = useParams();
-  const { products } = useSelector((state: any) => state.product);
-  const product = products.find((product: any) => product.productId === id);
+  const { products } = productsItemsState;
+  const product = products.find((product: any) => product.productId == id);
   let navigate = useNavigate();
     // Check for authToken cookie and redirect to homepage if it exists
     useEffect(() => {
@@ -30,6 +31,7 @@ const Product = () => {
   
 
   return (
+    console.log("Product", products),
     <Fragment>
       <SEO
         titleTemplate="Product"

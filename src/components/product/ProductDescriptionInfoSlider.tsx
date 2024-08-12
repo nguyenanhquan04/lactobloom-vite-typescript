@@ -1,15 +1,11 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getProductCartQuantity } from "../../helpers/product";
+import { useCart } from "../../store/contexts/cart-context";  // Sử dụng Context
 import Rating from "./sub-components/ProductRating";
-import { addToCart } from "../../store/slices/cart-slice";
-import { addToWishlist } from "../../store/slices/wishlist-slice";
-import { addToCompare } from "../../store/slices/compare-slice";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 interface ProductDescriptionInfoSliderProps {
-  cartItems: any[];
-  compareItem: any;
   discountedPrice: number;
   finalDiscountedPrice: number;
   finalProductPrice: number;
@@ -18,11 +14,10 @@ interface ProductDescriptionInfoSliderProps {
     rating: number;
     description: string;
     stock: number;
-    category: any;
+    category: any[];
   };
-  wishlistItem: {
-
-  };
+  wishlistItem: any;
+  compareItem: any;
 }
 
 const ProductDescriptionInfoSlider: React.FC<ProductDescriptionInfoSliderProps> = ({
@@ -30,14 +25,17 @@ const ProductDescriptionInfoSlider: React.FC<ProductDescriptionInfoSliderProps> 
   discountedPrice,
   finalDiscountedPrice,
   finalProductPrice,
-  cartItems,
   wishlistItem,
   compareItem,
 }) => {
-  const dispatch = useDispatch();
+  const { cartItemsState, addToCart } = useCart();  // Sử dụng context
+  const { addToWishlist} = useWishlist();
+  const { addToCompare } = useCompare();
+
+  const { cartItems } = cartItemsState;
   const [quantityCount, setQuantityCount] = useState(1);
 
-  const productCartQty = getProductCartQuantity(cartItems, product);
+  const productCartQty = cartItems.find((item: any) => item.productId === product.productId)?.quantity || 0;
 
   return (
     <div className="product-details-content pro-details-slider-content">
@@ -67,88 +65,87 @@ const ProductDescriptionInfoSlider: React.FC<ProductDescriptionInfoSliderProps> 
         <p>{product.description}</p>
       </div>
 
-      {<div className="pro-details-quality justify-content-center">
-          <div className="cart-plus-minus">
-            <button
-              onClick={() =>
-                setQuantityCount(quantityCount > 1 ? quantityCount - 1 : 1)
-              }
-              className="dec qtybutton"
-            >
-              -
-            </button>
-            <input
-              className="cart-plus-minus-box"
-              type="text"
-              value={quantityCount}
-              readOnly
-            />
-            <button
-              onClick={() =>
-                setQuantityCount(
-                  quantityCount < product.stock - productCartQty
-                    ? quantityCount + 1
-                    : quantityCount
-                )
-              }
-              className="inc qtybutton"
-            >
-              +
-            </button>
-          </div>
-          <div className="pro-details-cart btn-hover">
-            {product.stock && product.stock > 0 ? (
-              <button
-                onClick={() =>
-                  dispatch(addToCart({
-                    ...product,
-                    quantity: quantityCount,
-                  }))
-                }
-                disabled={productCartQty >= product.stock}
-              >
-                {" "}
-                Thêm vào giỏ{" "}
-              </button>
-            ) : (
-              <button disabled>Hết hàng</button>
-            )}
-          </div>
-          <div className="pro-details-wishlist">
-            <button
-              className={wishlistItem !== undefined ? "active" : ""}
-              disabled={wishlistItem !== undefined}
-              title={
-                wishlistItem !== undefined
-                  ? "Đã thêm vào yêu thích"
-                  : "Thêm vào yêu thích"
-              }
-              onClick={() => dispatch(addToWishlist(product))}
-            >
-              <i className="pe-7s-like" />
-            </button>
-          </div>
-          <div className="pro-details-compare">
-            <button
-              className={compareItem !== undefined ? "active" : ""}
-              disabled={compareItem !== undefined}
-              title={
-                compareItem !== undefined
-                  ? "Đã thêm vào so sánh"
-                  : "Thêm vào so sánh"
-              }
-              onClick={() => dispatch(addToCompare(product))}
-            >
-              <i className="pe-7s-shuffle" />
-            </button>
-          </div>
+      <div className="pro-details-quality justify-content-center">
+        <div className="cart-plus-minus">
+          <button
+            onClick={() =>
+              setQuantityCount(quantityCount > 1 ? quantityCount - 1 : 1)
+            }
+            className="dec qtybutton"
+          >
+            -
+          </button>
+          <input
+            className="cart-plus-minus-box"
+            type="text"
+            value={quantityCount}
+            readOnly
+          />
+          <button
+            onClick={() =>
+              setQuantityCount(
+                quantityCount < product.stock - productCartQty
+                  ? quantityCount + 1
+                  : quantityCount
+              )
+            }
+            className="inc qtybutton"
+          >
+            +
+          </button>
         </div>
-      }
+        <div className="pro-details-cart btn-hover">
+          {product.stock && product.stock > 0 ? (
+            <button
+              onClick={() =>
+                addToCart({
+                  ...product,
+                  quantity: quantityCount,
+                })
+              }
+              disabled={productCartQty >= product.stock}
+            >
+              {" "}
+              Thêm vào Giỏ{" "}
+            </button>
+          ) : (
+            <button disabled>Hết hàng</button>
+          )}
+        </div>
+        <div className="pro-details-wishlist">
+          <button
+            className={wishlistItem !== undefined ? "active" : ""}
+            disabled={wishlistItem !== undefined}
+            title={
+              wishlistItem !== undefined
+                ? "Đã thêm vào yêu thích"
+                : "Thêm vào yêu thích"
+            }
+            onClick={() => addToWishlist(product)}
+          >
+            <i className="pe-7s-like" />
+          </button>
+        </div>
+        <div className="pro-details-compare">
+          <button
+            className={compareItem !== undefined ? "active" : ""}
+            disabled={compareItem !== undefined}
+            title={
+              compareItem !== undefined
+                ? "Đã thêm vào so sánh"
+                : "Thêm vào so sánh"
+            }
+            onClick={() => addToCompare(product)}
+          >
+            <i className="pe-7s-shuffle" />
+          </button>
+        </div>
+      </div>
       {product.category ? (
         <div className="pro-details-meta justify-content-center">
           <span>Danh mục :</span>
           <ul>
-            {product.category.map((single: any, key: any) => {
+            {product.category.map((single, key) => {
               return (
                 <li key={key}>
                   <Link to={"/shop"}>{single}</Link>

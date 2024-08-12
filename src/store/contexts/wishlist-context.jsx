@@ -1,7 +1,7 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import cogoToast from 'cogo-toast';
 
-const WishlistContext = createContext();
+const WishlistContext = createContext(null);
 
 const initialState = {
   wishlistItems: []
@@ -9,7 +9,7 @@ const initialState = {
 
 const wishlistReducer = (state, action) => {
   switch (action.type) {
-    case 'ADD_TO_WISHLIST':
+    case 'ADD_TO_WISHLIST': {
       const isInWishlist = state.wishlistItems.findIndex(item => item.productId === action.payload.productId);
       if (isInWishlist > -1) {
         cogoToast.info("Sản phẩm đã tồn tại", { position: "bottom-left" });
@@ -21,7 +21,8 @@ const wishlistReducer = (state, action) => {
           wishlistItems: [...state.wishlistItems, action.payload]
         };
       }
-    case 'ADD_TO_WISHLIST_FROM_API':
+    }
+    case 'ADD_TO_WISHLIST_FROM_API': {
       const isInWishlistAPI = state.wishlistItems.findIndex(item => item.productId === action.payload.productId);
       if (isInWishlistAPI <= -1) {
         return {
@@ -30,24 +31,34 @@ const wishlistReducer = (state, action) => {
         };
       }
       return state;
-    case 'DELETE_FROM_WISHLIST':
+    }
+    case 'DELETE_FROM_WISHLIST': {
       cogoToast.error("Đã xóa khỏi yêu thích", { position: "bottom-left" });
       return {
         ...state,
         wishlistItems: state.wishlistItems.filter(item => item.productId !== action.payload)
       };
-    case 'DELETE_ALL_FROM_WISHLIST':
+    }
+    case 'DELETE_ALL_FROM_WISHLIST': {
       return {
         ...state,
         wishlistItems: []
       };
+    }
     default:
       return state;
   }
 };
 
 const WishlistProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(wishlistReducer, initialState);
+  // Khôi phục trạng thái từ localStorage
+  const initialWishlistState = JSON.parse(localStorage.getItem('wishlistState')) || initialState;
+  const [wishlistItemsState, dispatch] = useReducer(wishlistReducer, initialWishlistState);
+
+  // Lưu trạng thái vào localStorage mỗi khi trạng thái thay đổi
+  useEffect(() => {
+    localStorage.setItem('wishlistState', JSON.stringify(wishlistItemsState));
+  }, [wishlistItemsState]);
 
   const addToWishlist = (product) => {
     dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
@@ -66,7 +77,7 @@ const WishlistProvider = ({ children }) => {
   };
 
   return (
-    <WishlistContext.Provider value={{ state, addToWishlist, addToWishlistFromAPI, deleteFromWishlist, deleteAllFromWishlist }}>
+    <WishlistContext.Provider value={{ wishlistItemsState, addToWishlist, addToWishlistFromAPI, deleteFromWishlist, deleteAllFromWishlist }}>
       {children}
     </WishlistContext.Provider>
   );

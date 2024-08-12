@@ -10,13 +10,15 @@ import { userInfo } from "../../utils/UserService";
 import { createPayment } from "../../utils/PaymentService";
 import Cookies from "js-cookie"; // Import js-cookie
 import { jwtDecode } from "jwt-decode";
+import { useCart } from "../../store/contexts/cart-context";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
 
   let { pathname } = useLocation();
+  const {cartItemsState} = useCart();
 
-  const { cartItems } = useSelector((state: any) => state.cart);
+  const { cartItems } = cartItemsState;
   const [vouchers, setVouchers] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState<any | null>(null);
   const authToken = Cookies.get("authToken");

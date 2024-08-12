@@ -5,7 +5,7 @@ import SEO from "../../components/seo";
 import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
+import { useCart } from "../../store/contexts/cart-context";
 import { cartItemStock } from "../../helpers/product1";
 import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie"; // Import js-cookie
@@ -29,9 +29,9 @@ interface RootState {
 
 const Cart: React.FC = () => {
   const [quantityCount] = useState<number>(1);
-  const dispatch = useDispatch();
+  const { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart, cartItemsState } = useCart();
   const { pathname } = useLocation();
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  const {cartItems} = cartItemsState;
   const [cartImages, setCartImages] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
 
@@ -155,7 +155,7 @@ const Cart: React.FC = () => {
                                   <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
-                                      onClick={() => dispatch(decreaseQuantity(cartItem))}
+                                      onClick={() => decreaseQuantity(cartItem)}
                                     >
                                       -
                                     </button>
@@ -168,10 +168,10 @@ const Cart: React.FC = () => {
                                     <button
                                       className="inc qtybutton"
                                       onClick={() =>
-                                        dispatch(addToCart({
+                                        addToCart({
                                           ...cartItem,
                                           quantity: quantityCount
-                                        }))
+                                        })
                                       }
                                       disabled={
                                         cartItem !== undefined &&
@@ -198,7 +198,7 @@ const Cart: React.FC = () => {
 
                                 <td className="product-remove">
                                   <button
-                                    onClick={() => dispatch(deleteFromCart(cartItem.cartItemId))}
+                                    onClick={() => deleteFromCart(cartItem.cartItemId)}
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>
@@ -218,7 +218,7 @@ const Cart: React.FC = () => {
                         <Link to="/shop">Tiếp tục mua hàng</Link>
                       </div>
                       <div className="cart-clear">
-                        <button onClick={() => dispatch(deleteAllFromCart())}>Xóa giỏ hàng</button>
+                        <button onClick={() => deleteAllFromCart()}>Xóa giỏ hàng</button>
                       </div>
                     </div>
                   </div>
