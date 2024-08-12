@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getToken } from './auth'; // Adjust the import path as needed
 
 const request = axios.create({
-  baseURL: 'https://lactobloom-api-arcfcafeh5ejabaa.eastus-01.azurewebsites.net/', // Adjust the base URL as needed
+  baseURL: 'http://localhost:8080/', // Adjust the base URL as needed
 });
 
 request.interceptors.request.use(
