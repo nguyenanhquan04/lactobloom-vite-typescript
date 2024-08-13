@@ -1,22 +1,20 @@
-import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { setCurrency } from "../../../store/slices/currency-slice"
-import React from "react";
+import { useCurrency } from "../../../store/contexts/currency-context";
 
 const MobileLangCurrChange = () => {
+  const {currencyState, setCurrency} = useCurrency();
   const { i18n } = useTranslation();
-  const dispatch = useDispatch();
-  const currency = useSelector((state: any) => state.currency);
+  const currency = currencyState;
 
-  const changeLanguageTrigger = e => {
+  const changeLanguageTrigger = (e: any) => {
     const languageCode = e.target.value;
     i18n.changeLanguage(languageCode);
     closeMobileMenu();
   };
 
-  const setCurrencyTrigger = e => {
+  const setCurrencyTrigger = (e: any) => {
     const currencyName = e.target.value;
-    dispatch(setCurrency(currencyName));
+    setCurrency(currencyName);
     closeMobileMenu();
   };
 

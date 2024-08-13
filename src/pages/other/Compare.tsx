@@ -5,7 +5,6 @@ import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import Rating from "../../components/product/sub-components/ProductRating";
-import { addToCart } from "../../store/slices/cart-slice";
 import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode";
@@ -23,7 +22,7 @@ interface compareImages {
 const Compare = () => {
   let { pathname } = useLocation();
   const {compareItemsState, deleteFromCompare} = useCompare();
-  const {cartItemsState} = useCart();
+  const {cartItemsState, addToCart} = useCart();
 
   const { compareItems } = compareItemsState;
   const { cartItems } = cartItemsState;

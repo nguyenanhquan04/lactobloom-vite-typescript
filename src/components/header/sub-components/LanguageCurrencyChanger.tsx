@@ -1,7 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { setCurrency } from "../../../store/slices/currency-slice"
+import { useCurrency } from "../../../store/contexts/currency-context";
 
 interface LanguageCurrencyChangerProps {
   currency: {
@@ -10,16 +9,16 @@ interface LanguageCurrencyChangerProps {
 }
 
 const LanguageCurrencyChanger: React.FC<LanguageCurrencyChangerProps> = ({ currency }) => {
+  const {setCurrency} = useCurrency();
   const { i18n } = useTranslation();
-  const dispatch = useDispatch();
-  const changeLanguageTrigger = e => {
+  const changeLanguageTrigger = (e: any) => {
     const languageCode = e.target.value;
     i18n.changeLanguage(languageCode);
   };
 
-  const setCurrencyTrigger = e => {
+  const setCurrencyTrigger = (e: any) => {
     const currencyName = e.target.value;
-    dispatch(setCurrency(currencyName));
+    setCurrency(currencyName);
   };
 
   return (

@@ -1,9 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductImageGallerySlider from "../../components/product/ProductImageGallerySlider";
 import ProductDescriptionInfoSlider from "../../components/product/ProductDescriptionInfoSlider";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 interface ProductImageDescriptionProps {
   product: any;
@@ -12,9 +14,13 @@ interface ProductImageDescriptionProps {
 };
 
 const ProductImageDescription: React.FC<ProductImageDescriptionProps> = ({ spaceTopClass, spaceBottomClass, product }) => {
-  const { cartItems } = useSelector((state: any) => state.cart);
-  const { wishlistItems } = useSelector((state: any) => state.wishlist);
-  const { compareItems } = useSelector((state: any) => state.compare);
+  const { cartItemsState } = useCart();
+  const { wishlistItemsState } = useWishlist();
+  const { compareItemsState } = useCompare();
+
+  const { cartItems } = cartItemsState;
+  const { wishlistItems } = wishlistItemsState;
+  const { compareItems } = compareItemsState;
   const wishlistItem = wishlistItems.find((item: any) => item.productId === product.productId);
   const compareItem = compareItems.find((item: any) => item.productId === product.productId);
 

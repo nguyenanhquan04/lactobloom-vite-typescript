@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
 import { getProducts } from "../../helpers/product";
 import ProductGridSingle from "../../components/product/ProductGridSingle";
 import { useCart } from "../../store/contexts/cart-context";
@@ -23,7 +22,6 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   const {compareItemsState} = useCompare();
   const { productsItemsState } = useProduct();
   const { products } = productsItemsState;
-  const currency = useSelector((state: any) => state.currency);
   const { cartItems } = cartItemsState;
   const { wishlistItems } = wishlistItemsState;
   const { compareItems } = compareItemsState;

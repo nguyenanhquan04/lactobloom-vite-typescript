@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SEO from "../../components/seo";
 import { getDiscountPrice } from "../../helpers/product";

@@ -5,9 +5,7 @@ import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons"
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-
-import { useDispatch } from "react-redux";
-import { deleteAllFromCart } from "../../store/slices/cart-slice";
+import { useCart } from "../../store/contexts/cart-context";
 import { transactionStatus } from "../../utils/PaymentService";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -15,9 +13,9 @@ import { calculateOrderTotal, saveOrderInfo } from "../../utils/OrderService";
 import { saveOrderProduct } from "../../utils/OrderDetailService";
 
 const CheckoutResult = () => {
-  const dispatch = useDispatch();
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
+  const {deleteAllFromCart} = useCart();
   const [countdown, setCountdown] = useState(1000);
   const [orderInfo, setOrderInfo] = useState<any|null>(null);
   const [status, setStatus] = useState<boolean|string|null>(null);
@@ -49,7 +47,7 @@ const CheckoutResult = () => {
         setLoading(false);
         saveOrder(orderData, true);
         localStorage.removeItem("orderInfo");
-        dispatch(deleteAllFromCart());
+        deleteAllFromCart();
         startCountdown();
         return;
       }
@@ -74,7 +72,7 @@ const CheckoutResult = () => {
         if (data.status === true) {
           saveOrder(JSON.parse(savedOrderInfo));
           localStorage.removeItem("orderInfo");
-          dispatch(deleteAllFromCart());
+          deleteAllFromCart();
         }
 
         startCountdown();
@@ -84,7 +82,7 @@ const CheckoutResult = () => {
         setLoading(false);
         startCountdown();
       });
-  }, [transactionId, navigate, dispatch]);
+  }, [transactionId, navigate]);
 
   const startCountdown = () => {
     const countdownInterval = setInterval(() => {

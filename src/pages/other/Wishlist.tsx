@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate  } from "react-router-dom";
 import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
@@ -22,9 +21,8 @@ interface WishlistImages {
 }
 
 const Wishlist = () => {
-  const dispatch = useDispatch();
   let { pathname } = useLocation();
-  const { wishlistItemsState, deleteFromWishlist, addToWishlistFormAPI } = useWishlist();
+  const { wishlistItemsState, deleteFromWishlist} = useWishlist();
   const { cartItemsState, addToCart } = useCart();
 
   const { wishlistItems: reduxWishlistItems } = wishlistItemsState;
@@ -103,12 +101,12 @@ const Wishlist = () => {
       try {
         await deleteWishlist(authToken, wishlistId);
         setWishlistItems(wishlistItems.filter((item: any) => item.productId !== productId));
-        dispatch(deleteFromWishlist(productId));
+        deleteFromWishlist(productId);
       } catch (error) {
         console.error("Error removing from wishlist:", error);
       }
     } else {
-      dispatch(deleteFromWishlist(productId));
+      deleteFromWishlist(productId);
     }
   };
 
@@ -291,11 +289,6 @@ const Wishlist = () => {
                           Tiếp tục mua hàng
                         </Link>
                       </div>
-                      {/* <div className="cart-clear">
-                        <button onClick={() => dispatch(deleteAllFromWishlist())}>
-                          Clear Wishlist
-                        </button>
-                      </div> */}
                     </div>
                   </div>
                 </div>

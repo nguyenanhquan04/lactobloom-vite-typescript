@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import clsx from "clsx";
-
 import Swiper, { SwiperSlide } from "../../components/swiper";
 import SectionTitle from "../../components/section-title/SectionTitle";
 import ProductGridSingle from "../../components/product/ProductGridSingle";
@@ -10,6 +8,7 @@ import { get4RandomProducts } from "../../utils/ProductService";
 import { useCart } from "../../store/contexts/cart-context";
 import { useWishlist } from "../../store/contexts/wishlist-context";
 import { useCompare } from "../../store/contexts/compare-context";
+import { useCurrency } from "../../store/contexts/currency-context";
 
 const settings = {
   loop: false,
@@ -37,7 +36,9 @@ const RelatedProductSlider = ({ spaceBottomClass }) => {
   const {cartItemsState} = useCart();
   const { wishlistItemsState} = useWishlist();
   const {compareItemsState} = useCompare();
-  const currency = useSelector((state) => state.currency);
+  const { currencyState } = useCurrency();
+
+  const currency = currencyState;
   const { cartItems } = cartItemsState;
   const { wishlistItems } = wishlistItemsState;
   const { compareItems } = compareItemsState;

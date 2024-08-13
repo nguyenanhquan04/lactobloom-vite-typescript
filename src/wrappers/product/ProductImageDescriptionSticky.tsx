@@ -1,8 +1,9 @@
-import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductDescriptionInfo from "../../components/product/ProductDescriptionInfo";
 import ProductImageGallerySticky from "../../components/product/ProductImageGallerySticky";
+import { useCart } from "../../store/contexts/cart-context";
+import { useCompare } from "../../store/contexts/compare-context";
 
 interface ProductImageDescriptionStickyProps {
   product?: any;
@@ -12,8 +13,11 @@ interface ProductImageDescriptionStickyProps {
 
 
 const ProductImageDescriptionSticky: React.FC<ProductImageDescriptionStickyProps> = ({ spaceTopClass, spaceBottomClass, product }) => {
-  const { cartItems } = useSelector((state: any) => state.cart);
-  const { compareItems } = useSelector((state: any) => state.compare);
+  const { cartItemsState } = useCart();
+  const { compareItemsState } = useCompare();
+  
+  const { cartItems } = cartItemsState;
+  const { compareItems } = compareItemsState;
   const compareItem = compareItems.find((item: any) => item.productId === product.productId);
   const discountedPrice = getDiscountPrice(product.price, product.discount) as number;
   const finalProductPrice = +(product.price * 1);

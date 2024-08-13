@@ -1,16 +1,13 @@
 import React, { useEffect, FC } from "react";
 import { createRoot } from 'react-dom/client';
-import { useDispatch, Provider } from 'react-redux';
 import App from "./App";
-import { store } from "./store/store";
-import PersistProvider from "./store/providers/persist-provider";
-import { setProducts } from "./store/slices/product-slice";
 import { useProduct } from "./store/contexts/product-context";
 import { getAllProducts } from "./utils/ProductService";
 import CartProvider from './store/contexts/cart-context';
 import WishlistProvider from "./store/contexts/wishlist-context";
 import CompareProvider from "./store/contexts/compare-context";
 import ProductProvider from "./store/contexts/product-context";
+import CurrencyProvider from "./store/contexts/currency-context";
 import 'animate.css';
 import 'swiper/swiper-bundle.min.css';
 import "yet-another-react-lightbox/styles.css";
@@ -22,7 +19,6 @@ interface RootProps {}
 
 const Root: FC<RootProps> = () => {
     const { setProduct } = useProduct();
-    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -35,10 +31,10 @@ const Root: FC<RootProps> = () => {
         };
 
         fetchProducts();
-    }, [dispatch]);
+    }, []);
 
     return (
-        <PersistProvider>
+        <CurrencyProvider>
             <CartProvider>
                 <WishlistProvider>
                     <CompareProvider>
@@ -48,7 +44,7 @@ const Root: FC<RootProps> = () => {
                     </CompareProvider>
                     </WishlistProvider>
             </CartProvider>
-        </PersistProvider>
+            </CurrencyProvider>
     );
 };
 
@@ -56,10 +52,8 @@ const container: HTMLElement | null = document.getElementById('root');
 if (container) {
 const root = createRoot(container);
 root.render(
-    <Provider store={store}>
         <ProductProvider>
             <Root />
         </ProductProvider>
-    </Provider>
 );
 }

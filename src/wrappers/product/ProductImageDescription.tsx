@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductImageGallery from "../../components/product/ProductImageGallery";

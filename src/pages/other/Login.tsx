@@ -7,15 +7,16 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { login } from "../../utils/UserService"; // Adjust the import path as needed
 import Cookies from "js-cookie"; // Import js-cookie
-import { useDispatch } from "react-redux";
-import { deleteAllFromCart } from "../../store/slices/cart-slice";
-import { deleteAllFromWishlist } from "../../store/slices/wishlist-slice";
 import {jwtDecode} from "jwt-decode";
+import { useCart } from "../../store/contexts/cart-context";
+import { useWishlist } from "../../store/contexts/wishlist-context";
 
 const Login = () => {
-  let dispatch = useDispatch();
   let { pathname } = useLocation();
   let navigate = useNavigate();
+
+  const {deleteAllFromCart} = useCart();
+  const {deleteAllFromWishlist} = useWishlist();
 
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
@@ -51,8 +52,8 @@ const Login = () => {
         sameSite: "strict",
       }); // Store the token in a cookie
       alert("Đăng nhập thành công");
-      dispatch(deleteAllFromCart());
-      dispatch(deleteAllFromWishlist());
+      deleteAllFromCart();
+      deleteAllFromWishlist();
       const authToken = Cookies.get("authToken") as string;
       const decodedToken = jwtDecode<any>(authToken);
       // console.log("Login successful", response.data);

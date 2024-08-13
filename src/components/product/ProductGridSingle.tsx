@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Rating from "./sub-components/ProductRating";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductModal from "./ProductModal";
@@ -44,7 +43,6 @@ const ProductGridSingle: React.FC<ProductGridSingleProps> = ({
   const finalDiscountedPrice = +(
     discountedPrice * 1
   );
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProductImages = async () => {

@@ -33,14 +33,14 @@ const currencyReducer = (state, action) => {
 };
 
 const CurrencyProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(currencyReducer, initialState);
+  const [currencyState, dispatch] = useReducer(currencyReducer, initialState);
 
   const setCurrency = (currencyName) => {
     dispatch({ type: 'SET_CURRENCY', payload: currencyName });
   };
 
   return (
-    <CurrencyContext.Provider value={{ state, setCurrency }}>
+    <CurrencyContext.Provider value={{ currencyState, setCurrency }}>
       {children}
     </CurrencyContext.Provider>
   );

@@ -1,14 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import clsx from "clsx";
 import LanguageCurrencyChanger from "./sub-components/LanguageCurrencyChanger";
+import { useCurrency } from "../../store/contexts/currency-context";
 
 interface HeaderTopProps {
   borderStyle: string;
 }
 
 const HeaderTop: React.FC<HeaderTopProps> = ({ borderStyle }) => {
-  const currency = useSelector((state: any) => state.currency);
+  const {currencyState} = useCurrency();
+  const currency = currencyState;
   return (
     <div className={clsx("header-top-wap", borderStyle === "fluid-border" && "border-bottom")}>
       <LanguageCurrencyChanger currency={currency} />

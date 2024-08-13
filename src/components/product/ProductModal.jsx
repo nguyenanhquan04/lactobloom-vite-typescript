@@ -2,7 +2,6 @@ import { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { EffectFade, Thumbs } from "swiper";
 import { Modal } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Rating from "./sub-components/ProductRating";
 import Swiper, { SwiperSlide } from "../../components/swiper";
@@ -30,10 +29,10 @@ function ProductModal({
   compareItem,
 }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  const { addToCart } = useCart();
+  const { addToCart, cartItemsState } = useCart();
   const { addToWishlist } = useWishlist();
   const { addToCompare } = useCompare();
-    const { cartItems } = useSelector((state) => state.cart);
+    const { cartItems } = cartItemsState;
 
   const [quantityCount, setQuantityCount] = useState(1);
   const productCartQty = getProductCartQuantity(cartItems, product);
