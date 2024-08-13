@@ -131,13 +131,11 @@ const CheckoutResult = () => {
   
         // Wait for all order detail requests to complete
         Promise.all(orderDetailPromises)
-          .then(() => {
-            console.log("All order details saved to database.");
-  
+          .then(() => {  
             calculateOrderTotal(token, orderId);
           })
-          .then(() => {
-            console.log("Total updated successfully");
+          .then(() => {  
+            deleteAllFromCart();
           })
           .catch((err) => {
             console.error("Error saving order detail or updating total:", err);

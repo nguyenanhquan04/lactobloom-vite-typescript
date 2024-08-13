@@ -277,7 +277,6 @@ const Checkout = () => {
                         <div className="your-order-middle">
                           <ul>
                             {cartItems.map((cartItem: any, key: any) => {
-                              console.log(cartItems);
                               const discountedPrice = getDiscountPrice(
                                 cartItem.price,
                                 cartItem.discount
