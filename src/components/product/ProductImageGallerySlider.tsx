@@ -1,8 +1,10 @@
-import PropTypes from "prop-types";
+import Swiper, { SwiperSlide } from "../swiper";
 
-import Swiper, { SwiperSlide } from "../../components/swiper";
+interface ProductImageGallerySliderProps {
+  product?: any;
+}
 
-const ProductImageGallerySlider = ({ product }) => {
+const ProductImageGallerySlider: React.FC<ProductImageGallerySliderProps> = ({ product }) => {
   // swiper slider settings
   const gallerySwiperParams = {
     spaceBetween: 15,
@@ -28,7 +30,7 @@ const ProductImageGallerySlider = ({ product }) => {
     <div className="product-large-image-wrapper product-large-image-wrapper--slider">
       {product?.image?.length ? (
         <Swiper options={gallerySwiperParams}>
-          {product.image.map((single, key) => (
+          {product.image.map((single: any, key: any) => (
             <SwiperSlide key={key}>
               <div className="single-image">
                 <img
@@ -45,8 +47,5 @@ const ProductImageGallerySlider = ({ product }) => {
   );
 };
 
-ProductImageGallerySlider.propTypes = {
-  product: PropTypes.shape({})
-};
 
 export default ProductImageGallerySlider;

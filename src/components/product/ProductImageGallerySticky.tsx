@@ -1,7 +1,10 @@
-import PropTypes from "prop-types";
+import React from "react";
 
+interface ProductImageGalleryStickyProps {
+  product?: any;
+};
 
-const productImageGallerySticky = ({ product }) => {
+const productImageGallerySticky: React.FC<ProductImageGalleryStickyProps> = ({ product }) => {
   return (
     <div className="product-large-image-wrapper product-large-image-wrapper--sticky">
       {product.discount || product.new ? (
@@ -17,7 +20,7 @@ const productImageGallerySticky = ({ product }) => {
         ""
       )}
       <div className="product-sticky-image mb--10">
-        {product?.image?.map((single, key) => (
+        {product?.image?.map((single: any, key: any) => (
           <div className="product-sticky-image__single mb-10" key={key}>
             <img
               src={import.meta.env.VITE_PUBLIC_URL + single}
@@ -29,10 +32,6 @@ const productImageGallerySticky = ({ product }) => {
       </div>
     </div>
   );
-};
-
-productImageGallerySticky.propTypes = {
-  product: PropTypes.shape({})
 };
 
 export default productImageGallerySticky;

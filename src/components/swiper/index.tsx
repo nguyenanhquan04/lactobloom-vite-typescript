@@ -1,11 +1,19 @@
-import React, { forwardRef } from "react";
-import PropTypes from "prop-types"
+import React, { forwardRef, LegacyRef } from "react";
 import cn from "clsx";
 import { Navigation, Pagination, Autoplay, A11y } from "swiper";
 // eslint-disable-next-line import/no-unresolved
 import { Swiper, SwiperSlide } from "swiper/react";
 
-const SwiperSlider = forwardRef(
+interface SwiperSliderProps {
+    options?: any;
+    prevIcon?: string;
+    nextIcon?: string;
+    children?: any;
+    className?: string;
+    navClass?: string;
+}
+
+const SwiperSlider: React.FC<SwiperSliderProps> = forwardRef(
     (
         {
             options,
@@ -49,7 +57,7 @@ const SwiperSlider = forwardRef(
         return (
             <div
                 className={cn("swiper-wrap", className)}
-                ref={ref}
+                ref={ref as LegacyRef<HTMLDivElement>}
             >
                 <Swiper {...sliderOptions}>{children}</Swiper>
 
@@ -75,15 +83,6 @@ const SwiperSlider = forwardRef(
 );
 
 export { SwiperSlide };
-
-SwiperSlider.propTypes = {
-    options: PropTypes.shape({}),
-    prevIcon: PropTypes.string,
-    nextIcon: PropTypes.string,
-    children: PropTypes.node,
-    className: PropTypes.string,
-    navClass: PropTypes.string,
-}
 
 SwiperSlider.defaultProps = {
     prevIcon: "pe-7s-angle-left",

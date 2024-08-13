@@ -1,24 +1,32 @@
-import { Fragment, useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React,{ Fragment, useState, useEffect } from "react";
 import { EffectFade, Thumbs } from "swiper";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "./sub-components/ProductRating";
-import Swiper, { SwiperSlide } from "../../components/swiper";
+import Swiper, { SwiperSlide } from "../swiper";
 import { getProductCartQuantity } from "../../helpers/product";
 import { useCart } from "../../store/contexts/cart-context";
 import { useWishlist } from "../../store/contexts/wishlist-context";
 import { useCompare } from "../../store/contexts/compare-context";
-
 import Cookies from "js-cookie";
-
 import { getProductReviewByProductId } from "../../utils/ProductReviewService";
 import { getCategoryByProductId } from "../../utils/CategoryService";
 import { getBrandByProductId } from "../../utils/BrandService";
 import { myWishlist, saveWishlist } from "../../utils/WishlistService";
 import { getImagesByProductId } from "../../utils/ImageService";
 
-function ProductModal({
+interface ProductModalProps {
+  product?: any;
+  discountedPrice?: number;
+  finalProductPrice?: number;
+  finalDiscountedPrice?: number;
+  show?: boolean;
+  onHide?: any;
+  wishlistItem?: any;
+  compareItem?: any;
+};
+
+const ProductModal: React.FC<ProductModalProps> = ({
   product,
   discountedPrice,
   finalProductPrice,
@@ -27,19 +35,19 @@ function ProductModal({
   onHide,
   wishlistItem,
   compareItem,
-}) {
+}) =>{
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const { addToCart, cartItemsState } = useCart();
   const { addToWishlist } = useWishlist();
   const { addToCompare } = useCompare();
-    const { cartItems } = cartItemsState;
+  const { cartItems } = cartItemsState;
 
   const [quantityCount, setQuantityCount] = useState(1);
   const productCartQty = getProductCartQuantity(cartItems, product);
 
   const [averageRating, setAverageRating] = useState(0);
-  const [category, setCategory] = useState(null);
-  const [brand, setBrand] = useState(null);
+  const [category, setCategory] = useState<any | null>(null);
+  const [brand, setBrand] = useState<any | null>(null);
   const [images, setImages] = useState([]);
   const [isProductInWishlist, setIsProductInWishlist] = useState(false);
   const authToken = Cookies.get("authToken");
@@ -49,7 +57,7 @@ function ProductModal({
       .then((response) => {
         const reviews = response.data;
         const totalRating = reviews.reduce(
-          (acc, review) => acc + review.rate,
+          (acc: any, review: any) => acc + review.rate,
           0
         );
         const avgRating = reviews.length ? totalRating / reviews.length : 0;
@@ -80,7 +88,7 @@ function ProductModal({
         .then((response) => {
           const wishlistData = response.data;
           setIsProductInWishlist(
-            wishlistData.some((item) => item.productId === product.productId)
+            wishlistData.some((item: any) => item.productId === product.productId)
           );
         })
         .catch((error) => {
@@ -153,7 +161,7 @@ function ProductModal({
           <div className="col-md-5 col-sm-12 col-xs-12">
             <div className="product-large-image-wrapper">
               <Swiper options={gallerySwiperParams}>
-                {images.map((img, i) => (
+                {images.map((img: any, i) => (
                   <SwiperSlide key={i}>
                     <div className="single-image">
                       <img
@@ -168,7 +176,7 @@ function ProductModal({
             </div>
             <div className="product-small-image-wrapper mt-15">
               <Swiper options={thumbnailSwiperParams}>
-                {images.map((img, i) => (
+                {images.map((img: any, i) => (
                   <SwiperSlide key={i}>
                     <div className="single-image">
                       <img src={img.imageUrl} className="img-fluid" alt="" />
@@ -315,12 +323,12 @@ function ProductModal({
               </div>
               {category && (
                 <div className="pro-details-category">
-                  <span>Danh mục: <Link>{category.categoryName}</Link></span>
+                  <span>Danh mục: <Link to ="#">{category.categoryName}</Link></span>
                 </div>
               )}
               {brand && (
                 <div className="pro-details-category">
-                  <span>Thương hiệu: <Link>{brand.brandName}</Link></span>
+                  <span>Thương hiệu: <Link to ="#">{brand.brandName}</Link></span>
                 </div>
               )}
               <div className="pro-details-social">
@@ -359,16 +367,5 @@ function ProductModal({
     </Modal>
   );
 }
-
-ProductModal.propTypes = {
-  product: PropTypes.object,
-  discountedPrice: PropTypes.number,
-  finalProductPrice: PropTypes.number,
-  finalDiscountedPrice: PropTypes.number,
-  show: PropTypes.bool,
-  onHide: PropTypes.func,
-  wishlistItem: PropTypes.object,
-  compareItem: PropTypes.object,
-};
 
 export default ProductModal;

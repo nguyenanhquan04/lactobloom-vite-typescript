@@ -31,7 +31,6 @@ const Product = () => {
   
 
   return (
-    console.log("Product", products),
     <Fragment>
       <SEO
         titleTemplate="Product"

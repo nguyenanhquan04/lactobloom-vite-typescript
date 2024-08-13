@@ -1,17 +1,21 @@
 import { Fragment, useState } from "react";
-import PropTypes from "prop-types";
 import clsx from "clsx";
 import { EffectFade, Thumbs } from 'swiper';
 import AnotherLightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
-import Swiper, { SwiperSlide } from "../../components/swiper";
+import Swiper, { SwiperSlide } from "../swiper";
 
-const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
+interface ProductImageGalleryLeftThumbProps {
+  product?: any;
+  thumbPosition?: string;
+};
+
+const ProductImageGalleryLeftThumb: React.FC<ProductImageGalleryLeftThumbProps> = ({ product, thumbPosition }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
-  const slides = product?.image.map((img, i) => ({
+  const slides = product?.image.map((img: any, i: any) => ({
       src: import.meta.env.VITE_PUBLIC_URL + img,
       key: i,
   }));
@@ -83,7 +87,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
             )}
             {product?.image?.length ? (
               <Swiper options={gallerySwiperParams}>
-                {product?.image.map((single, key) => (
+                {product?.image.map((single: any, key: any) => (
                   <SwiperSlide key={key}>
                     <button className="lightgallery-button" onClick={() => setIndex(key)}>
                       <i className="pe-7s-expand1"></i>
@@ -116,7 +120,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
           <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
             {product?.image?.length ? (
               <Swiper options={thumbnailSwiperParams}>
-                {product.image.map((single, key) => (
+                {product.image.map((single: any, key: any) => (
                   <SwiperSlide key={key}>
                     <div className="single-image">
                       <img
@@ -135,11 +139,6 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
       </div>
     </Fragment>
   );
-};
-
-ProductImageGalleryLeftThumb.propTypes = {
-  product: PropTypes.shape({}),
-  thumbPosition: PropTypes.string
 };
 
 export default ProductImageGalleryLeftThumb;

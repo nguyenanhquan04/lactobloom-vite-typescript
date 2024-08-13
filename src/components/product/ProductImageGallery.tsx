@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { EffectFade, Thumbs } from 'swiper';
 import AnotherLightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -8,7 +7,15 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Swiper, { SwiperSlide } from "../swiper";
 import { getImagesByProductId } from "../../utils/ImageService";
 
-const ProductImageGallery = ({ product }) => {
+interface ProductImageGalleryProps {
+  product: {
+    productId: number;
+    discount?: number;
+    new?: boolean;
+  }
+};
+
+const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ product }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
   const [images, setImages] = useState([]);
@@ -30,7 +37,7 @@ const ProductImageGallery = ({ product }) => {
     }
   }, [product?.productId]);
 
-  const slides = images.length ? images.map((img, i) => ({
+  const slides = images.length ? images.map((img: any, i) => ({
     src: img.imageUrl,
     key: i,
   })) : [{ src: defaultImage, key: 0 }];
@@ -64,7 +71,7 @@ const ProductImageGallery = ({ product }) => {
         {product.discount || product.new ? (
           <div className="product-img-badges">
             {product.discount ? (
-              <span className="pink">-{product.discount}%</span>
+              <span className="pink">-{product.discount}% </span>
             ) : (
               ""
             )}
@@ -75,7 +82,7 @@ const ProductImageGallery = ({ product }) => {
         )}
         {images.length ? (
           <Swiper options={gallerySwiperParams}>
-            {images.map((single, key) => (
+            {images.map((single: any, key) => (
               <SwiperSlide key={key}>
                 <button className="lightgallery-button" onClick={() => setIndex(key)}>
                   <i className="pe-7s-expand1"></i>
@@ -102,7 +109,7 @@ const ProductImageGallery = ({ product }) => {
       <div className="product-small-image-wrapper mt-15">
         {images.length ? (
           <Swiper options={thumbnailSwiperParams}>
-            {images.map((single, key) => (
+            {images.map((single: any, key) => (
               <SwiperSlide key={key}>
                 <div className="single-image">
                   <img
@@ -118,14 +125,6 @@ const ProductImageGallery = ({ product }) => {
       </div>
     </Fragment>
   );
-};
-
-ProductImageGallery.propTypes = {
-  product: PropTypes.shape({
-    productId: PropTypes.number.isRequired,
-    discount: PropTypes.number,
-    new: PropTypes.bool,
-  }),
 };
 
 export default ProductImageGallery;

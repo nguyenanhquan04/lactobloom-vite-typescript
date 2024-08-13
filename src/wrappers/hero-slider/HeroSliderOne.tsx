@@ -1,7 +1,7 @@
 import { EffectFade } from 'swiper';
 import Swiper, { SwiperSlide } from "../../components/swiper";
 import heroSliderData from "../../data/hero-sliders/hero-slider-one.json";
-import HeroSliderOneSingle from "../../components/hero-slider/HeroSliderOneSingle.tsx";
+import HeroSliderOneSingle from "../../components/hero-slider/HeroSliderOneSingle";
 
 const params = {
   effect: "fade",
@@ -21,13 +21,9 @@ const HeroSliderOne = () => {
       <div className="slider-active nav-style-1">
         {heroSliderData && (
           <Swiper options={params}>
-            {heroSliderData.map((single, key) => (
-              <SwiperSlide key={key}>
-                <HeroSliderOneSingle
-                  data={single}
-                />
+              <SwiperSlide>
+                <HeroSliderOneSingle/>
               </SwiperSlide>
-            ))}
           </Swiper>
         )}
       </div>

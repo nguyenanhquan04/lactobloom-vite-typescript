@@ -1,8 +1,12 @@
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx"
-import Swiper, { SwiperSlide } from "../../components/swiper";
+import Swiper, { SwiperSlide } from "../../components/swiper/index.js";
 import categoryData from "../../data/category/category-one.json";
-import CategoryOneSingle from "../../components/category/CategoryOneSingle.jsx";
+import CategoryOneSingle from "../../components/category/CategoryOneSingle.js";
+
+interface CategoryOneSliderProps {
+  spaceBottomClass?: string;
+};
 
 // swiper slider settings
 const settings = {
@@ -21,7 +25,7 @@ const settings = {
   }
 };
 
-const CategoryOneSlider = ({ spaceBottomClass }) => {
+const CategoryOneSlider: React.FC<CategoryOneSliderProps> = ({ spaceBottomClass }) => {
   return (
     <div
       className={clsx("collections-area", spaceBottomClass)}
@@ -45,10 +49,6 @@ const CategoryOneSlider = ({ spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-CategoryOneSlider.propTypes = {
-  spaceBottomClass: PropTypes.string
 };
 
 export default CategoryOneSlider;
