@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import clsx from "clsx";
 import Swiper, { SwiperSlide } from "../../components/swiper";
 import SectionTitle from "../../components/section-title/SectionTitle";
@@ -8,7 +7,10 @@ import { get4RandomProducts } from "../../utils/ProductService";
 import { useCart } from "../../store/contexts/cart-context";
 import { useWishlist } from "../../store/contexts/wishlist-context";
 import { useCompare } from "../../store/contexts/compare-context";
-import { useCurrency } from "../../store/contexts/currency-context";
+
+interface RelatedProductSliderProps {
+  spaceBottomClass?: string;
+};
 
 const settings = {
   loop: false,
@@ -31,14 +33,12 @@ const settings = {
   },
 };
 
-const RelatedProductSlider = ({ spaceBottomClass }) => {
+const RelatedProductSlider: React.FC<RelatedProductSliderProps> = ({ spaceBottomClass }) => {
   const [randomProducts, setRandomProducts] = useState([]);
   const {cartItemsState} = useCart();
   const { wishlistItemsState} = useWishlist();
   const {compareItemsState} = useCompare();
-  const { currencyState } = useCurrency();
 
-  const currency = currencyState;
   const { cartItems } = cartItemsState;
   const { wishlistItems } = wishlistItemsState;
   const { compareItems } = compareItemsState;
@@ -66,19 +66,18 @@ const RelatedProductSlider = ({ spaceBottomClass }) => {
         />
         {randomProducts.length ? (
           <Swiper options={settings}>
-            {randomProducts.map((product) => (
+            {randomProducts.map((product: any) => (
               <SwiperSlide key={product.productId}>
                 <ProductGridSingle
                   product={product}
-                  currency={currency}
                   cartItem={cartItems.find(
-                    (cartItem) => cartItem.productId === product.productId
+                    (cartItem: any) => cartItem.productId === product.productId
                   )}
                   wishlistItem={wishlistItems.find(
-                    (wishlistItem) => wishlistItem.productId === product.productId
+                    (wishlistItem: any) => wishlistItem.productId === product.productId
                   )}
                   compareItem={compareItems.find(
-                    (compareItem) => compareItem.productId === product.productId
+                    (compareItem: any) => compareItem.productId === product.productId
                   )}
                 />
               </SwiperSlide>
@@ -88,10 +87,6 @@ const RelatedProductSlider = ({ spaceBottomClass }) => {
       </div>
     </div>
   );
-};
-
-RelatedProductSlider.propTypes = {
-  spaceBottomClass: PropTypes.string,
 };
 
 export default RelatedProductSlider;

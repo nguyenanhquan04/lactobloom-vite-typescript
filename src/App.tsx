@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense } from "react";
 import React from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -35,103 +35,52 @@ const NotFound = React.lazy(() => import("./pages/other/NotFound"));
 
 const App = () => {
   return (
-      <Router>
-        <ScrollToTop>
-          <Suspense
-            fallback={
-              <div className="lactobloom-preloader-wrapper">
-                <div className="lactobloom-preloader">
-                  <span></span>
-                  <span></span>
-                </div>
+    <Router>
+      <ScrollToTop>
+        <Suspense
+          fallback={
+            <div className="lactobloom-preloader-wrapper">
+              <div className="lactobloom-preloader">
+                <span></span>
+                <span></span>
               </div>
-            }
-          >
-            <Routes>
-              <Route
-                path={"/"}
-                element={<Home />}
-              />
-              
-              {/* Shop pages */}
-              <Route
-                path={"/shop"}
-                element={<Shop />}
-              />
+            </div>
+          }
+        >
+          <Routes>
+            <Route path={"/"} element={<Home />} />
 
-              {/* Shop product pages */}
-              <Route
-                path={"/product/:id"}
-                element={<Product />}
-              />
+            {/* Shop pages */}
+            <Route path={"/shop"} element={<Shop />} />
 
-              {/* Blog pages */}
-              <Route
-                path={"/blog"}
-                element={<Blog />}
-              />
-              <Route
-                path={"/blog-details/:blogId"}
-                element={<BlogDetails />}
-              /> 
+            {/* Shop product pages */}
+            <Route path={"/product/:id"} element={<Product />} />
 
-              {/* Other pages */}
-              <Route
-                path={"/my-account"}
-                element={<MyAccount />}
-              />
-              <Route
-                path={"/login"}
-                element={<Login />}
-              />
-              <Route
-                path={"/register"}
-                element={<Register />}
-              />
+            {/* Blog pages */}
+            <Route path={"/blog"} element={<Blog />} />
+            <Route path={"/blog-details/:blogId"} element={<BlogDetails />} />
 
-              <Route
-                path={"/cart"}
-                element={<Cart />}
-              />
-              <Route
-                path={"/wishlist"}
-                element={<Wishlist />}
-              />
-              <Route
-                path={"/compare"}
-                element={<Compare />}
-              />
-              <Route
-                path={"/checkout"}
-                element={<Checkout />}
-              />
-              <Route
-                path={"/voucher"}
-                element={<Voucher />}
-              /> 
-              <Route
-                path={"/order-history"}
-                element={<OrderHistory />}
-              />
-               <Route
-                path={"/checkout-result"}
-                element={<CheckoutResult />}
-              /> 
-              <Route
-                path={"/forgot-password"}
-                element={<ForgotPassword />}
-              /> 
-              <Route
-                path={"/admin"}
-                element={<Admin />}
-              /> 
+            {/* Other pages */}
+            <Route path={"/my-account"} element={<MyAccount />} />
+            <Route path={"/login"} element={<Login />} />
+            <Route path={"/register"} element={<Register />} />
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <MessengerButton />
-          </Suspense>
-        </ScrollToTop>
-      </Router>
+            <Route path={"/cart"} element={<Cart />} />
+            <Route path={"/wishlist"} element={<Wishlist />} />
+            <Route path={"/compare"} element={<Compare />} />
+            <Route path={"/checkout"} element={<Checkout />} />
+            <Route path={"/voucher"} element={<Voucher />} />
+            <Route path={"/order-history"} element={<OrderHistory />} />
+            <Route path={"/checkout-result"} element={<CheckoutResult />} />
+            <Route path={"/forgot-password"} element={<ForgotPassword />} />
+            <Route path={"/admin"} element={<Admin />} />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <MessengerButton />
+        </Suspense>
+      </ScrollToTop>
+    </Router>
   );
 };
 

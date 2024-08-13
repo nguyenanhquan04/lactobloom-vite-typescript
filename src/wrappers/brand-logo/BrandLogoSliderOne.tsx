@@ -1,8 +1,12 @@
-import PropTypes from "prop-types";
 import clsx from "clsx"
 import Swiper, { SwiperSlide } from "../../components/swiper";
 import BrandLogoOneSingle from "../../components/brand-logo/BrandLogoOneSingle";
 import brandLogoData from "../../data/brand-logos/brand-logo-one.json";
+
+interface BrandLogoSliderOneProps {
+  spaceBottomClass: string;
+  spaceTopClass: string;
+};
 
 const settings = {
   loop: true,
@@ -24,14 +28,14 @@ const settings = {
   }
 };
 
-const BrandLogoSliderOne = ({ spaceBottomClass, spaceTopClass }) => {
+const BrandLogoSliderOne: React.FC<BrandLogoSliderOneProps> = ({ spaceBottomClass, spaceTopClass }) => {
   return (
     <div className={clsx("brand-logo-area", spaceBottomClass, spaceTopClass)}>
       <div className="container">
         <div className="brand-logo-active">
           {brandLogoData && (
             <Swiper options={settings}>
-              {brandLogoData.map((single, key) => (
+              {brandLogoData.map((single: any, key: any) => (
                 <SwiperSlide key={key}>
                   <BrandLogoOneSingle
                     data={single}
@@ -45,11 +49,6 @@ const BrandLogoSliderOne = ({ spaceBottomClass, spaceTopClass }) => {
       </div>
     </div>
   );
-};
-
-BrandLogoSliderOne.propTypes = {
-  spaceBottomClass: PropTypes.string,
-  spaceTopClass: PropTypes.string
 };
 
 export default BrandLogoSliderOne;
