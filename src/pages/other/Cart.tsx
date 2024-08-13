@@ -5,7 +5,7 @@ import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useCart } from "../../store/contexts/cart-context";
-import { cartItemStock } from "../../helpers/product1";
+import { cartItemStock } from "../../helpers/product";
 import { getImagesByProductId } from "../../utils/ImageService";
 import Cookies from "js-cookie"; // Import js-cookie
 import {jwtDecode} from "jwt-decode"; // Update import
@@ -103,7 +103,7 @@ const Cart: React.FC = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {cartItems.map((cartItem: CartItem, key: number) => {
+                          {cartItems.map((cartItem: any, key: number) => {
                             const discountedPrice = getDiscountPrice(
                               cartItem.price,
                               cartItem.discount
